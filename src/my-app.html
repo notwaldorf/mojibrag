@@ -23,6 +23,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/iron-selector/iron-selector.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
 
 <link rel="import" href="my-icons.html">
 
@@ -61,7 +62,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       .drawer-list a.iron-selected {
         color: black;
-
         font-weight: bold;
       }
 
@@ -70,6 +70,28 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         bottom: 16px;
         right: 16px;
         --paper-fab-background: var(--app-primary-color);
+      }
+
+      .new-post {
+        box-sizing: border-box;
+        margin: auto;
+        width: 100%;
+        margin: 20px auto;
+        max-width: 540px;
+      }
+
+      .new-post textarea {
+        box-sizing: border-box;
+        width: 100%;
+        height: 100px;
+        font-size: 16px;
+      }
+
+      .new-post paper-button {
+        background-color: var(--app-primary-color);
+        color: white;
+        margin: 0;
+        padding: 5px;
       }
     </style>
 
@@ -100,6 +122,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           </app-toolbar>
         </app-header>
 
+        <div class="new-post" id="newPost" hidden>
+          <p>Write something</p>
+          <textarea></textarea>
+          <paper-button raised on-click="_post">Post!</paper-button>
+        </div>
+
         <iron-pages
             selected="[[page]]"
             attr-for-selected="name"
@@ -112,7 +140,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </iron-pages>
       </app-header-layout>
 
-      <paper-fab icon="icons:add"></paper-fab>
+      <paper-fab icon="icons:add" on-click="_showNewPost"></paper-fab>
 
     </app-drawer-layout>
   </template>
@@ -146,6 +174,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       _showPage404: function() {
         this.page = '404';
+      },
+
+      _showNewPost: function() {
+        this.$.newPost.hidden = false;
+      },
+
+      _post: function() {
+        this.$.newPost.hidden = true;
       }
     });
   </script>

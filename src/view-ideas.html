@@ -29,8 +29,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               <div class="name">[[item.name]]</div>
               <div class="text">[[item.post]]</div>
             </div>
+          </div>
         </div>
-      </div>
       </template>
     </iron-list>
   </template>
@@ -38,6 +38,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <script>
     Polymer({
       is: 'view-ideas',
+
+      properties: {
+        data: {
+          type: Array
+        }
+      },
 
       attached: function() {
         var data = [
