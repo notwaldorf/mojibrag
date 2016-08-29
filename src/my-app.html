@@ -15,11 +15,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/app-layout/app-header-layout/app-header-layout.html">
 <link rel="import" href="../bower_components/app-layout/app-scroll-effects/app-scroll-effects.html">
 <link rel="import" href="../bower_components/app-layout/app-toolbar/app-toolbar.html">
+
 <link rel="import" href="../bower_components/app-route/app-location.html">
 <link rel="import" href="../bower_components/app-route/app-route.html">
+
 <link rel="import" href="../bower_components/iron-pages/iron-pages.html">
 <link rel="import" href="../bower_components/iron-selector/iron-selector.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/paper-fab/paper-fab.html">
+
 <link rel="import" href="my-icons.html">
 
 <dom-module id="my-app">
@@ -32,10 +36,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         display: block;
       }
 
-      app-header {
+      app-header, .left-toolbar {
         color: #fff;
         background-color: var(--app-primary-color);
       }
+
       app-header paper-icon-button {
         --paper-icon-button-ink-color: white;
       }
@@ -46,20 +51,24 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       .drawer-list a {
         display: block;
-
         padding: 0 16px;
-
         text-decoration: none;
-
-        color: var(--app-secondary-color);
-
+        color: grey;
         line-height: 40px;
+        font-weight: 100;
       }
 
       .drawer-list a.iron-selected {
         color: black;
 
         font-weight: bold;
+      }
+
+      paper-fab {
+        position: absolute;
+        bottom: 16px;
+        right: 16px;
+        --paper-fab-background: var(--app-primary-color);
       }
     </style>
 
@@ -73,11 +82,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <app-drawer-layout fullbleed>
       <!-- Drawer content -->
       <app-drawer>
-        <app-toolbar>Menu</app-toolbar>
+        <app-toolbar class="left-toolbar">#humblebrag</app-toolbar>
         <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
-          <a name="view1" href="/view1">View One</a>
-          <a name="view2" href="/view2">View Two</a>
-          <a name="view3" href="/view3">View Three</a>
+          <a name="updates" href="/updates">Updates</a>
+          <a name="ideas" href="/ideas">Ideas</a>
+          <a name="shipped" href="/shipped">Shipped</a>
         </iron-selector>
       </app-drawer>
 
@@ -87,21 +96,24 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <app-header condenses reveals effects="waterfall">
           <app-toolbar>
             <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
-            <div main-title>#humblebrag</div>
+            <!-- <div main-title>#humblebrag</div> -->
           </app-toolbar>
         </app-header>
 
         <iron-pages
             selected="[[page]]"
             attr-for-selected="name"
-            fallback-selection="view404"
+            fallback-selection="404"
             role="main">
-          <my-view1 name="view1"></my-view1>
-          <my-view2 name="view2"></my-view2>
-          <my-view3 name="view3"></my-view3>
-          <my-view404 name="view404"></my-view404>
+          <view-updates name="updates"></view-updates>
+          <view-ideas name="ideas"></view-ideas>
+          <view-shipped name="shipped"></view-shipped>
+          <view-404 name="404"></view-404>
         </iron-pages>
       </app-header-layout>
+
+      <paper-fab icon="icons:add"></paper-fab>
+
     </app-drawer-layout>
   </template>
 
@@ -122,17 +134,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       ],
 
       _routePageChanged: function(page) {
-        this.page = page || 'view1';
+        this.page = page || 'updates';
       },
 
       _pageChanged: function(page) {
         // Load page import on demand. Show 404 page if fails
-        var resolvedPageUrl = this.resolveUrl('my-' + page + '.html');
+        var resolvedPageUrl = this.resolveUrl('view-' + page + '.html');
+        console.log(resolvedPageUrl)
         this.importHref(resolvedPageUrl, null, this._showPage404, true);
       },
 
       _showPage404: function() {
-        this.page = 'view404';
+        this.page = '404';
       }
     });
   </script>
