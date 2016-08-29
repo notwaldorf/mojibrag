@@ -16,22 +16,47 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <style include="shared-styles">
       :host {
         display: block;
-
         padding: 10px;
       }
     </style>
 
-    <div class="card">
-      <div class="circle">3</div>
-      <h1>Shipped</h1>
-      <p>Modus commodo minimum eum te, vero utinam assueverit per eu.</p>
-      <p>Ea duis bonorum nec, falli paulo aliquid ei eum.Has at minim mucius aliquam, est id tempor laoreet.Pro saepe pertinax ei, ad pri animal labores suscipiantur.</p>
-    </div>
+    <iron-list items="[[data]]" as="item">
+      <template>
+        <div>
+          <div class="item" tabindex$="[[tabIndex]]">
+            <img class="avatar" sizing="contain" src="[[item.image]]">
+            <div class="pad">
+              <div class="name">[[item.name]]</div>
+              <div class="text">[[item.post]]</div>
+            </div>
+        </div>
+      </div>
+      </template>
+    </iron-list>
   </template>
 
   <script>
     Polymer({
-      is: 'view-shipped'
+      is: 'view-shipped',
+
+      attached: function() {
+        var data = [
+          {
+            "name": "Liz Grimes",
+            "image": "https://s3.amazonaws.com/uifaces/faces/twitter/enda/73.jpg",
+            "date": "Sun Aug 14 1994 03:27:03 GMT-0700 (PDT)",
+            "post": "Lorem ipsum",
+          },
+          {
+            "name": "Frazier Lara",
+            "image": "https://s3.amazonaws.com/uifaces/faces/twitter/guillogo/73.jpg",
+            "date": "Tue May 24 1988 14:10:20 GMT-0700 (PDT)",
+            "post": "I made something awesome but I won't tell you about it",
+          }
+        ];
+
+        this.set('data', data);
+      }
     });
   </script>
 </dom-module>

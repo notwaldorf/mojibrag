@@ -16,22 +16,59 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <style include="shared-styles">
       :host {
         display: block;
-
         padding: 10px;
       }
     </style>
 
-    <div class="card">
-      <div class="circle">2</div>
-      <h1>Ideas</h1>
-      <p>Ea duis bonorum nec, falli paulo aliquid ei eum.</p>
-      <p>Id nam odio natum malorum, tibique copiosae expetenda mel ea.Detracto suavitate repudiandae no eum. Id adhuc minim soluta nam.Id nam odio natum malorum, tibique copiosae expetenda mel ea.</p>
-    </div>
+    <iron-list items="[[data]]" as="item">
+      <template>
+        <div>
+          <div class="item" tabindex$="[[tabIndex]]">
+            <img class="avatar" sizing="contain" src="[[item.image]]">
+            <div class="pad">
+              <div class="name">[[item.name]]</div>
+              <div class="text">[[item.post]]</div>
+            </div>
+        </div>
+      </div>
+      </template>
+    </iron-list>
   </template>
 
   <script>
     Polymer({
-      is: 'view-ideas'
+      is: 'view-ideas',
+
+      attached: function() {
+        var data = [
+          {
+            "name": "Rita Lopez",
+            "image": "https://s3.amazonaws.com/uifaces/faces/twitter/taherrapee/73.jpg",
+            "date": "Wed Sep 21 2011 04:03:55 GMT-0700 (PDT)",
+            "post": "Ship a summit app",
+          },
+          {
+            "name": "Wagner Shelton",
+            "image": "https://s3.amazonaws.com/uifaces/faces/twitter/ismailmayat/73.jpg",
+            "date": "Wed Jul 07 2010 05:48:57 GMT-0700 (PDT)",
+            "post": "Bake a cake",
+          },
+          {
+            "name": "Bethany Adkins",
+            "image": "https://s3.amazonaws.com/uifaces/faces/twitter/carlyson/73.jpg",
+            "date": "Sun Mar 14 1999 23:13:33 GMT-0800 (PST)",
+            "post": "Add Service Worker to everything!!!",
+          },
+          {
+            "name": "Angelia Rowe",
+            "image": "https://s3.amazonaws.com/uifaces/faces/twitter/thewillbeard/73.jpg",
+            "date": "Sat Jan 04 1992 04:10:22 GMT-0800 (PST)",
+            "post": "🗡😵👞🐕🔥🏡"
+          }
+        ];
+
+        this.set('data', data);
+      }
     });
   </script>
 </dom-module>

@@ -9,6 +9,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 -->
 
 <link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/iron-list/iron-list.html">
+
 <link rel="import" href="shared-styles.html">
 
 <dom-module id="view-updates">
@@ -16,22 +18,84 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <style include="shared-styles">
       :host {
         display: block;
-
         padding: 10px;
       }
     </style>
 
-    <div class="card">
-      <div class="circle">1</div>
-      <h1>Updates</h1>
-      <p>Ut labores minimum atomorum pro. Laudem tibique ut has.
-      <p>Lorem ipsum dolor sit amet, per in nusquam nominavi periculis, sit elit oportere ea.Lorem ipsum dolor sit amet, per in nusquam nominavi periculis, sit elit oportere ea.Cu mei vide viris gloriatur, at populo eripuit sit.</p>
-    </div>
+    <iron-list items="[[data]]" as="item">
+      <template>
+        <div>
+          <div class="item" tabindex$="[[tabIndex]]">
+            <img class="avatar" sizing="contain" src="[[item.image]]">
+            <div class="pad">
+              <div class="name">[[item.name]]</div>
+              <div class="text">[[item.post]]</div>
+            </div>
+        </div>
+      </div>
+      </template>
+    </iron-list>
+
   </template>
 
   <script>
     Polymer({
-      is: 'view-updates'
+      is: 'view-updates',
+
+      attached: function() {
+        var data = [
+          {
+            "name": "Liz Grimes",
+            "image": "https://s3.amazonaws.com/uifaces/faces/twitter/enda/73.jpg",
+            "date": "Sun Aug 14 1994 03:27:03 GMT-0700 (PDT)",
+            "post": "Non duis commodo dolore et esse non adipisicing nisi tempor. Nisi culpa adipisicing quis dolore amet anim nulla aliqua excepteur labore. Adipisicing fugiat anim commodo velit in nisi ex exercitation.",
+          },
+          {
+            "name": "Frazier Lara",
+            "image": "https://s3.amazonaws.com/uifaces/faces/twitter/guillogo/73.jpg",
+            "date": "Tue May 24 1988 14:10:20 GMT-0700 (PDT)",
+            "post": "Occaecat in do proident et deserunt quis commodo veniam occaecat mollit. Nulla enim elit nulla excepteur.",
+          },
+          {
+            "name": "Dora Griffith",
+            "image": "https://s3.amazonaws.com/uifaces/faces/twitter/iboldurev/73.jpg",
+            "date": "Sat Feb 17 1973 03:45:57 GMT-0800 (PST)",
+            "post": "Nulla ex consectetur dolore dolore cillum. Proident dolor cupidatat consequat irure enim nostrud aliqua fugiat tempor commodo et eiusmod irure. Lorem deserunt eiusmod laborum velit tempor do nostrud reprehenderit exercitation amet occaecat eiusmod aliqua sint. Dolore commodo ex ea id veniam ullamco et cupidatat dolore. Sit nostrud minim irure sint eiusmod ea est est ipsum eiusmod.",
+          },
+          {
+            "name": "Shelley Molina",
+            "image": "https://s3.amazonaws.com/uifaces/faces/twitter/smalonso/73.jpg",
+            "date": "Wed Aug 02 1995 07:03:12 GMT-0700 (PDT)",
+            "post": "Eiusmod ut magna sint ut dolor magna anim ipsum non velit. Occaecat reprehenderit ex aliquip consequat. Eu dolor non in pariatur dolore minim.",
+          },
+          {
+            "name": "Rita Lopez",
+            "image": "https://s3.amazonaws.com/uifaces/faces/twitter/taherrapee/73.jpg",
+            "date": "Wed Sep 21 2011 04:03:55 GMT-0700 (PDT)",
+            "post": "Fugiat nostrud et consectetur mollit labore incididunt est duis nostrud id tempor veniam ad. Nulla voluptate est irure ipsum commodo do nostrud. Minim aliqua voluptate officia sit tempor nulla esse pariatur eu. Ipsum deserunt est magna veniam adipisicing nisi aute officia.",
+          },
+          {
+            "name": "Wagner Shelton",
+            "image": "https://s3.amazonaws.com/uifaces/faces/twitter/ismailmayat/73.jpg",
+            "date": "Wed Jul 07 2010 05:48:57 GMT-0700 (PDT)",
+            "post": "Enim exercitation incididunt minim eiusmod est enim qui ex sit. Sit duis eiusmod officia nostrud ullamco aliquip. Minim ipsum ad fugiat dolore sint nisi tempor. Anim minim sint nisi est ea id cillum adipisicing ullamco fugiat velit aute.",
+          },
+          {
+            "name": "Bethany Adkins",
+            "image": "https://s3.amazonaws.com/uifaces/faces/twitter/carlyson/73.jpg",
+            "date": "Sun Mar 14 1999 23:13:33 GMT-0800 (PST)",
+            "post": "Lorem dolor sint labore minim eu ullamco cupidatat ea velit minim. Sint eiusmod dolor nisi adipisicing pariatur esse sint anim labore consectetur irure exercitation cillum. Quis labore nulla occaecat incididunt qui ex dolor voluptate sunt eiusmod sunt proident occaecat excepteur. Dolore quis magna adipisicing esse enim occaecat.",
+          },
+          {
+            "name": "Angelia Rowe",
+            "image": "https://s3.amazonaws.com/uifaces/faces/twitter/thewillbeard/73.jpg",
+            "date": "Sat Jan 04 1992 04:10:22 GMT-0800 (PST)",
+            "post": "Fugiat ipsum ex irure dolore. Reprehenderit laborum proident commodo ut qui ea reprehenderit duis occaecat nostrud aliqua.",
+          }
+        ];
+
+        this.set('data', data);
+      }
     });
   </script>
 </dom-module>
