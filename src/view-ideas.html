@@ -10,7 +10,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/iron-list/iron-list.html">
-
+<link rel="import" href="posts-behavior.html">
 <link rel="import" href="shared-styles.html">
 
 <dom-module id="view-ideas">
@@ -35,13 +35,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </app-indexeddb-mirror>
 
     <h2 class="page-title">✨Ideas✨</h2>
-    <iron-list items="[[posts]]" as="item">
+    <iron-list items="[[posts]]" as="item" id="list">
       <template>
         <div>
           <div class="item" tabindex$="[[tabIndex]]">
             <img class="avatar" sizing="contain" src="[[item.image]]">
             <div class="pad">
               <div class="name">[[item.name]]</div>
+              <div class="date">[[_getDate(item.createdAt)]]</div>
               <div class="text">[[item.message]]</div>
             </div>
           </div>
@@ -53,16 +54,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <script>
     Polymer({
       is: 'view-ideas',
-
-      properties: {
-        session: {
-          type: String
-        },
-
-        posts: {
-          type: Array
-        },
-      }
+      behaviors: [Polymer.PostsBehavior]
     });
   </script>
 </dom-module>
