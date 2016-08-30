@@ -122,6 +122,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       storage-bucket="thumblebrag-1cc8e.appspot.com">
     </firebase-app>
 
+    <firebase-query id="posts"
+      data="{{_fbPosts}}"
+      path="/posts">
+    </firebase-query>
+    <app-indexeddb-mirror id="postsMirror"
+      session="[[user.uid]]"
+      key="/posts"
+      data="[[_fbPosts]]"
+      persisted-data="{{posts}}"
+      online="[[online]]">
+    </app-indexeddb-mirror>
+
     <app-location route="{{route}}"></app-location>
     <app-route
         route="{{route}}"
@@ -197,13 +209,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           type: Object,
           value: null,
           notify: true
-        }
+        },
+
+        posts: {
+          type: Array,
+          observer: '_postsChanged'
+        },
       },
 
       attached: function() {
         var auth = firebase.auth();
         firebase.auth().onAuthStateChanged(function(user) {
           this.user = user;
+          console.log(user);
         }.bind(this));
       },
 
@@ -236,10 +254,22 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       _showNewPost: function() {
         this.$.newPost.hidden = false;
+
+        firebase.database().ref('/').child('posts')
+          .child(this.posts.length).set({
+            id: this.posts.length,
+            name: 'batman',
+            message: 'hi from batman',
+            createdAt: {'.sv': 'timestamp'}
+          })
       },
 
       _post: function() {
         this.$.newPost.hidden = true;
+      },
+
+      _postsChanged: function(posts) {
+        console.log('posts', posts);
       }
     });
   </script>
