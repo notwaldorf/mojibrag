@@ -27,6 +27,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/app-storage/app-indexeddb-mirror/app-indexeddb-mirror.html">
 
 <link rel="import" href="new-post.html">
+<link rel="import" href="new-team.html">
 <link rel="import" href="my-icons.html">
 
 <dom-module id="my-app">
@@ -100,10 +101,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         @apply(--layout-flex-auto);
       }
 
-      new-post {
-        max-width: 540px;
-      }
-
       .needsSignin {
         height: 100vh;
         text-align: center;
@@ -159,12 +156,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </app-header>
 
         <div class="main-content">
-          <new-post hidden hidden$="[[!user]]"></new-post>
+          <new-post hidden$="[[!user]]" team$="[[page]]"></new-post>
 
-          <div id="newTeam" hidden>
-            <input id="teamName" placeholder="Team name">
-            <paper-button raised on-click="_createTeam">Create team</paper-button>
-          </div>
+          <new-team hidden id="newTeam"></new-team>
 
           <div class="needsSignin" hidden$="[[user]]">
             <h1>#humblebrag</h1>
@@ -211,7 +205,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
 
       attached: function() {
-        this._selectedTab = 0;
+        this.set('teams', []);
         var auth = firebase.auth();
 
         firebase.auth().onAuthStateChanged(function(user) {
@@ -262,11 +256,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       ],
 
       listeners: {
-        'new-post': '_post'
+        'new-post': '_post',
+        'new-team': '_createTeam',
       },
 
       _routePageChanged: function(page) {
-        this.page = page || 'updates';
+        this.page = page;
       },
 
       // TODO: this is borked.
@@ -283,12 +278,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       _post: function(event) {
         var message = event.detail.message;
-        var type = event.detail.type;
+        var team = event.detail.team;
         var email = this.user.email;
         var name = this.user.displayName;
         var image = this.user.photoURL;
 
-        firebase.database().ref('/posts/').child(type)
+        firebase.database().ref('/posts/').child(team)
           .push({
             name: name,
             message: message,
@@ -302,9 +297,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         this.$.newTeam.hidden = false;
       },
 
-      _createTeam: function() {
-        var teamName = this.$.teamName.value.trim();
+      _createTeam: function(event) {
+        var teamName = event.detail.name;
+        var teamUsers = event.detail.users;
 
+        // Create the team.
         var fbTeam = firebase.database().ref('/teams')
           .push({
             name: teamName,
@@ -313,13 +310,27 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             createdAt: {'.sv': 'timestamp'}
           });
 
+        // Add this team to this user.
         firebase.database().ref('/users/' + this.user.uid).once('value', function(snapshot) {
           var teams = snapshot.val().teams || [];
           teams.push(fbTeam.key);
           snapshot.ref.update({teams: teams});
         });
+        this.push('teams', {name: teamName, id: fbTeam.key});
 
-        this.push('teams', teamName);
+        // For each of the users in the list, add this team to them.
+        firebase.database().ref('/users/').once('value', function(snapshot) {
+          var users = snapshot.val();
+
+          for (var user in users) {
+            if (teamUsers.indexOf(users[user].email) != -1 ) {
+              var currentUserTeams = users[user].teams || [];
+              currentUserTeams.push(fbTeam.key);
+              firebase.database().ref('/users/' + user).update({teams: currentUserTeams});
+            }
+          }
+        });
+
         this.$.newTeam.hidden = true;
       }
     });

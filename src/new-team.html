@@ -1,0 +1,89 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../bower_components/polymer/polymer.html">
+
+<dom-module id="new-team">
+  <template>
+    <style>
+      :host {
+        display: block;
+        box-sizing: border-box;
+        margin: auto;
+        width: 100%;
+        background: white;
+        margin-bottom: 40px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.14);
+        padding: 20px;
+      }
+
+      :host([hidden]) {
+        display: none !important;
+      }
+
+      paper-button {
+        margin: 0;
+        font-size: 14px;
+        color: var(--app-primary-color);
+        @apply(--layout-flex);
+        @apply(--layout-flex-auto);
+        float: right;
+      }
+
+      .title {
+        color: #aca9b3;
+        font-weight: 100;
+        font-size: 14px;
+        padding: 10px 20;
+      }
+
+      input {
+        display: block;
+        width: 100%;
+        font-size: 16px;
+        font-weight: 100;
+        border: none;
+        outline: none;
+        border-bottom: 1px solid #aca9b3;
+        margin: 10px 0 15px 0;
+      }
+
+      input:invalid {
+        border-bottom: 1px solid red;
+      }
+    </style>
+
+    <div class="title">Create new team</div>
+    <input type="text" placeholder="team-name" id="name" required>
+    <input type="email" multiple placeholder="users, comma separated" id="users">
+    <paper-button on-click="_create">Create!</paper-button>
+    <br>
+    </div>
+
+  </template>
+
+  <script>
+    Polymer({
+      is: 'new-team',
+
+      _create: function () {
+        var valid = this.$.name.validity.valid && this.$.users.validity.valid;
+        if (!valid)
+          return;
+
+        this.fire('new-team',
+          { name: this.$.name.value.trim(),
+            users: this.$.users.value.split(',')});
+
+        this.$.name.value = this.$.users.value = '';
+      }
+    });
+  </script>
+</dom-module>
