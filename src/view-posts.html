@@ -1,0 +1,137 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/iron-list/iron-list.html">
+
+<dom-module id="view-posts">
+  <template>
+    <style>
+      :host {
+        display: block;
+        max-width: 500px;
+        margin: auto;
+      }
+      #list {
+        height: 100vh;
+        max-width: 540px;
+        margin: auto;
+      }
+
+      .item {
+        @apply(--layout-horizontal);
+        margin: 8px 0;
+        background: white;
+        padding: 16px;
+      }
+
+      .avatar {
+        height: 60px;
+        width: 60px;
+        border-radius: 50%;
+        box-sizing: border-box;
+        vertical-align: middle;
+        margin-right: 16px;
+      }
+
+      .name {
+        font-size: 12px;
+        font-weight: 100;
+        margin-bottom: 10px;
+      }
+
+      .text {
+        font-size: 16px;
+        font-weight: 100;
+      }
+
+      .date {
+        padding-top: 10px;
+        font-size: 10px;
+      }
+
+      .horizontal {
+        @apply(--layout-horizontal);
+      }
+
+      .vertical {
+        @apply(--layout-vertical);
+      }
+    </style>
+
+    <firebase-query
+      data="{{_fbPosts}}"
+      path="/posts/{{team}}">
+    </firebase-query>
+    <app-indexeddb-mirror
+      session="[[user.uid]]"
+      key="/posts/{{team}}"
+      data="[[_fbPosts]]"
+      persisted-data="{{posts}}"
+      online="[[online]]">
+    </app-indexeddb-mirror>
+
+    <h1>[[team]]</h1>
+    <iron-list items="[[posts]]" as="item" id="list" hidden>
+      <template>
+        <div>
+          <div class="item">
+            <div class="horizontal">
+              <img class="avatar" sizing="contain" src="[[item.image]]">
+              <div class="vertical">
+                <span class="name">[[item.email]]</span>
+                <div class="text">[[item.message]]</div>
+                <!-- <span class="date">[[_getDate(item.createdAt)]]</span> -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </template>
+    </iron-list>
+  </template>
+
+  <script>
+    var monthNames = [
+      "January", "February", "March",
+      "April", "May", "June", "July",
+      "August", "September", "October",
+      "November", "December"
+    ];
+
+    Polymer({
+      is: 'view-posts',
+      properties: {
+        path: {
+          team: String
+        },
+
+        session: {
+          type: String
+        },
+
+        posts: {
+          type: Array,
+          observer: '_postsChanged'
+        },
+      },
+    _getDate: function(timestamp) {
+        var date = new Date(timestamp);
+        var day = date.getDate();
+        var monthIndex = date.getMonth();
+        var year = date.getFullYear();
+        return day + ' '  + monthNames[monthIndex] + ' ' + year;
+      },
+
+      _postsChanged: function() {
+        this.$.list.fire('iron-resize');
+      }
+    });
+  </script>
+</dom-module>

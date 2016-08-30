@@ -49,6 +49,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         --app-drawer-width: 150px;
       }
 
+      .main-content {
+        padding: 20px;
+      }
+
       app-header, .left-toolbar {
         color: #fff;
         background: #f5f5f5;
@@ -63,10 +67,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       app-header paper-icon-button {
         --paper-icon-button-ink-color: white;
       }*/
-
-      .main-content {
-        padding: 20px;
-      }
 
       .drawer-list {
         margin: 0 20px;
@@ -111,6 +111,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       paper-button[raised] {
         background-color: var(--app-primary-color);
         color: white;
+        font-size: 14px;
       }
     </style>
 
@@ -134,10 +135,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <app-toolbar class="left-toolbar">#humblebrag</app-toolbar>
 
         <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
-          <a name="updates" href="/updates">Updates</a>
-          <a name="ideas" href="/ideas">Ideas</a>
-          <a name="shipped" href="/shipped">Shipped</a>
+          <template is="dom-repeat" items="[[teams]]">
+            <a name="[[item]]" href="/[[item]]">[[item]]</a>
+          </template>
         </iron-selector>
+
+        <paper-button raised>Create team</paper-button>
       </app-drawer>
 
       <!-- Main content -->
@@ -148,16 +151,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <div class="spacer"></div>
 
             <div hidden$="[[!user]]" class="userInfo">
-              <!-- <span class="avatar-name">{{user.displayName}}</span> -->
               <img class="avatar" alt="github avatar" src="[[user.photoURL]]">
               <paper-button on-tap="logout">Sign out</paper-button>
             </div>
-<!-- <div main-title>#humblebrag</div> -->
           </app-toolbar>
         </app-header>
 
         <div class="main-content">
-          <new-post hidden$="[[!user]]"></new-post>
+          <new-post hidden hidden$="[[!user]]"></new-post>
 
           <div class="needsSignin" hidden$="[[user]]">
             <h1>#humblebrag</h1>
@@ -169,9 +170,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               attr-for-selected="name"
               fallback-selection="404"
               role="main">
-            <view-updates name="updates" session="[[user]]"></view-updates>
-            <view-ideas name="ideas" session="[[user]]"></view-ideas>
-            <view-shipped name="shipped" session="[[user]]"></view-shipped>
+            <template is="dom-repeat" items="[[teams]]">
+              <view-posts name="[[item]]" session="[[user]]" team="[[item]]"></view-posts>
+            </template>
             <view-404 name="404"></view-404>
           </iron-pages>
         </div>
@@ -189,6 +190,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           type: String,
           reflectToAttribute: true,
           observer: '_pageChanged'
+        },
+
+        teams: {
+          type: Array
         },
 
         user: {
@@ -212,6 +217,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             if (value) {
               console.log('already exists');
               this.user.createdAt = snapshot.val().createdAt;
+
+              // Get this user's teams
+              //this.teams = snapshot.val();
+              this.teams = ['polymer', 'emoji'];
+
             } else {
               console.log('adding new user');
               // Add this new user.
@@ -251,12 +261,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       _pageChanged: function(page) {
         // Load page import on demand. Show 404 page if fails
-        var resolvedPageUrl = this.resolveUrl('view-' + page + '.html');
+        var resolvedPageUrl = this.resolveUrl(page==='404' ? 'view-404.html' : 'view-posts.html');
         console.log(resolvedPageUrl)
         this.importHref(resolvedPageUrl, null, this._showPage404, true);
       },
 
       _showPage404: function() {
+        console.log('FALLBACK')
         this.page = '404';
       },
 
