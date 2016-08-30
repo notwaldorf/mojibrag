@@ -114,10 +114,13 @@ That is wild!</textarea>
       is: 'new-post',
 
       _post: function () {
-        // Emojify, just in case.
-        this._emojify();
-
+        // Emojify, if you haven't already.
         var nodes = this.$.preview.children;
+        if (nodes.length === 0) {
+          this._emojify();
+          nodes = this.$.preview.children;
+        }
+        
         var value = '';
         for (var i = 0; i < nodes.length; i++) {
           if (nodes[i].tagName === 'SELECT') {
@@ -225,7 +228,7 @@ That is wild!</textarea>
       _getEmoji: function(originalWord) {
         var word = originalWord.trim().toLowerCase();
 
-        if (!word || word === '' || word === 'it' || word === 'is')
+        if (!word || word === '' || word === 'a' || word === 'it' || word === 'is')
           return [originalWord];
 
         // Maybe this is a plural word but the word is the singular?
@@ -250,9 +253,8 @@ That is wild!</textarea>
             useful.push(allEmojis[emoji].char);
           }
         }
-        if (useful.length === 0) {
-          useful.push(originalWord);
-        }
+
+        useful.push(originalWord);
         return useful;
       }
     });
