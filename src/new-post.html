@@ -8,7 +8,6 @@ Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 -->
 
-<link rel="import" href="../bower_components/paper-fab/paper-fab.html">
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/paper-radio-group/paper-radio-group.html">
 <link rel="import" href="../bower_components/paper-radio-button/paper-radio-button.html">
@@ -26,10 +25,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         --paper-radio-button-label-color: #aca9b3;
         --paper-radio-button-unchecked-color: #aca9b3;
         margin-bottom: 40px;
-      }
 
-      .box {
-        border: 1px solid #cfcfcf;
+        box-shadow:0px 0px 10px rgba(0, 0, 0, 0.14);
       }
 
       textarea, #preview {
@@ -99,22 +96,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
     </style>
 
-    <div class="box">
-      <div class="title">Write a new post</div>
-      <textarea id="write">OMG!!! The house is on fire and the cat is eating all the donuts!
+    <div class="title">Write a new post</div>
+    <textarea id="write">OMG!!! The house is on fire and the cat is eating all the donuts!
 That is wild!</textarea>
-      <div class="title">Preview</div>
-      <div id="preview"></div>
+    <div class="title">Preview</div>
+    <div id="preview"></div>
 
-      <div class="bottom">
-        <paper-radio-group>
-          <paper-radio-button name="updates">Update</paper-radio-button>
-          <paper-radio-button name="ideas">Idea</paper-radio-button>
-          <paper-radio-button name="shipped">Ship</paper-radio-button>
-        </paper-radio-group>
-        <paper-button on-click="_post">Post!</paper-button>
-      </div>
+    <div class="bottom">
+      <paper-radio-group selected="updates" id="type">
+        <paper-radio-button name="updates">Update</paper-radio-button>
+        <paper-radio-button name="ideas">Idea</paper-radio-button>
+        <paper-radio-button name="shipped">Ship</paper-radio-button>
+      </paper-radio-group>
+      <paper-button on-click="_post">Post!</paper-button>
     </div>
+
   </template>
 
   <script>
@@ -137,13 +133,10 @@ That is wild!</textarea>
       },
 
       attached: function() {
-        this._selected = 0;
-
+        this._emojify();
         this.addEventListener('input', function(event) {
           this._emojify();
         });
-
-        this._emojify();
       },
 
       _post: function () {
@@ -166,7 +159,7 @@ That is wild!</textarea>
           }
         }
 
-        this.fire('new-post', {message: value, type: this.$.type.value});
+        this.fire('new-post', {message: value, type: this.$.type.selected});
       },
 
       _emojify: function() {
