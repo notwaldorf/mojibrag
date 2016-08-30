@@ -20,6 +20,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         display: block;
         padding: 10px;
       }
+
+      .item {
+        color: black;
+      }
     </style>
 
     <firebase-query
@@ -34,7 +38,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       online="[[online]]">
     </app-indexeddb-mirror>
 
-    <h2 class="page-title">⛵️Ships⛵️</h2>
     <iron-list items="[[posts]]" as="item" id="list">
       <template>
         <div>

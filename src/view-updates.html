@@ -18,7 +18,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <style include="shared-styles">
       :host {
         display: block;
-        padding: 10px;
       }
     </style>
 
@@ -34,16 +33,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       online="[[online]]">
     </app-indexeddb-mirror>
 
-    <h2 class="page-title">✌️ Updates</h2>
     <iron-list items="[[posts]]" as="item" id="list">
       <template>
-        <div>
-          <div class="item" tabindex$="[[tabIndex]]">
-            <img class="avatar" sizing="contain" src="[[item.image]]">
+        <div class="item-wrapper">
+          <div class="item">
             <div class="pad">
-              <div class="name">[[item.name]]</div>
-              <div class="date">[[_getDate(item.createdAt)]]</div>
               <div class="text">[[item.message]]</div>
+
+              <div class="horizontal">
+                <img class="avatar" sizing="contain" src="[[item.image]]">
+                <div class="vertical">
+                  <span class="name">[[item.name]]</span>
+                  <span class="date">[[_getDate(item.createdAt)]]</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>

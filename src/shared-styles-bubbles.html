@@ -11,50 +11,67 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/polymer/polymer.html">
 
 <!-- shared styles for all views -->
-<dom-module id="shared-styles">
+<dom-module id="shared-styles-bubbles">
   <template>
     <style>
       #list {
         height: 100vh;
+        max-width: 540px;
+        margin: auto;
       }
+
+      #list:before {
+        top: 0;
+        bottom: 0;
+        position: absolute;
+        content: " ";
+        width: 3px;
+        background-color: white;
+        left: 25px;
+        margin-left: -1.5px;
+        }
 
       .item {
         @apply(--layout-horizontal);
-        margin: 0;
-        max-width: 540px;
-        margin: auto;
-        color: white;
-        padding: 24px;
+        margin: 8px 0;
       }
 
-      .item-wrapper:nth-child(n+1) {
-        background: #f64373;
+      .item-wrapper:nth-child(n+1) .pad, .item-wrapper:nth-child(n+1) .avatar {
+        background: #FFE48E;
+        color: black;
       }
 
-      .item-wrapper:nth-child(2n+1) {
-        background: #20d2bb;
+      .item-wrapper:nth-child(2n+1) .pad, .item-wrapper:nth-child(2n+1) .avatar {
+        background: #FF6478;
+        color: black;
       }
 
-      .item-wrapper:nth-child(3n+1) {
-        background: #c873f4;
+      .item-wrapper:nth-child(3n+1) .pad, .item-wrapper:nth-child(3n+1) .avatar {
+        background: #42D4CB;
+        color: black;
       }
 
-      .item-wrapper:nth-child(4n+1) {
+      .item-wrapper:nth-child(4n+1) .pad, .item-wrapper:nth-child(4n+1) .avatar {
         background: #28CEDC;
+        color: black;
       }
+
+      /*.item:focus {
+        outline: 0;
+        border-color: #333;
+      }*/
 
       .avatar {
-        height: 36px;
-        width: 36px;
+        height: 60px;
+        width: 60px;
         border-radius: 50%;
         box-sizing: border-box;
-        padding: 2px;
+        padding: 5px;
         vertical-align: middle;
-        background: white;
-        margin-right: 16px;
       }
 
       .pad {
+        padding: 16px;
         @apply(--layout-flex);
         @apply(--layout-vertical);
         margin-left: 16px;
@@ -64,25 +81,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       .name {
         font-size: 16px;
-        font-weight: 100;
+        font-weight: bold;
       }
 
       .text {
         font-size: 24px;
-        margin-bottom: 30px;
         font-weight: 100;
       }
 
       .date {
+        padding-top: 10px;
         font-size: 10px;
-      }
-
-      .horizontal {
-        @apply(--layout-horizontal);
-      }
-
-      .vertical {
-        @apply(--layout-vertical);
       }
     </style>
   </template>
