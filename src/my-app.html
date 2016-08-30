@@ -25,6 +25,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-fab/paper-fab.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
 
+<link rel="import" href="../bower_components/polymerfire/polymerfire.html">
+<link rel="import" href="../bower_components/app-storage/app-indexeddb-mirror/app-indexeddb-mirror.html">
+
 <link rel="import" href="my-icons.html">
 
 <dom-module id="my-app">
@@ -41,6 +44,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         color: #fff;
         background-color: var(--app-primary-color);
         z-index: 10;
+      }
+
+      app-toolbar paper-button {
+        font-size: 14px;
       }
 
       app-header paper-icon-button {
@@ -63,6 +70,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       .drawer-list a.iron-selected {
         color: black;
         font-weight: bold;
+      }
+
+      .avatar {
+        border-radius: 50%;
+        width: 36px;
+        height: 36px;
+        vertical-align: middle;
+        margin-left: 16px;
+      }
+
+      .spacer {
+        @apply(--layout-flex);
+        @apply( --layout-flex-auto);
       }
 
       paper-fab {
@@ -95,6 +115,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
     </style>
 
+    <firebase-app
+      api-key="AIzaSyDqUICuPABxyDDgGvdZbgsO9r97qet6N_w"
+      database-url="https://humblebrag-1cc8e.firebaseio.com"
+      auth-domain="humblebrag-1cc8e.firebaseapp.com"
+      storage-bucket="thumblebrag-1cc8e.appspot.com">
+    </firebase-app>
+
     <app-location route="{{route}}"></app-location>
     <app-route
         route="{{route}}"
@@ -106,6 +133,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <!-- Drawer content -->
       <app-drawer>
         <app-toolbar class="left-toolbar">#humblebrag</app-toolbar>
+
         <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
           <a name="updates" href="/updates">Updates</a>
           <a name="ideas" href="/ideas">Ideas</a>
@@ -118,6 +146,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <app-header fixed>
           <app-toolbar>
             <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
+            <div class="spacer"></div>
+
+            <div hidden$="[[!user]]" class="userInfo">
+              <!-- <span class="avatar-name">{{user.displayName}}</span> -->
+              <img class="avatar" alt="github avatar" src="[[user.photoURL]]">
+              <paper-button on-tap="logout">Sign out</paper-button>
+            </div>
+
+            <paper-button on-tap="login" hidden$="[[user]]">Sign in with Google</paper-button>
             <!-- <div main-title>#humblebrag</div> -->
           </app-toolbar>
         </app-header>
@@ -154,7 +191,28 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           type: String,
           reflectToAttribute: true,
           observer: '_pageChanged'
+        },
+
+        user: {
+          type: Object,
+          value: null,
+          notify: true
         }
+      },
+
+      attached: function() {
+        var auth = firebase.auth();
+        firebase.auth().onAuthStateChanged(function(user) {
+          this.user = user;
+        }.bind(this));
+      },
+
+      login: function() {
+        firebase.auth().signInWithPopup(new firebase.auth.GoogleAuthProvider());
+      },
+
+      logout: function() {
+        firebase.auth().signOut();
       },
 
       observers: [
