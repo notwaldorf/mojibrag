@@ -102,6 +102,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       new-post {
         max-width: 540px;
       }
+
+      .needsSignin {
+        height: 100vh;
+        text-align: center;
+      }
+
+      paper-button[raised] {
+        background-color: var(--app-primary-color);
+        color: white;
+      }
     </style>
 
     <firebase-app
@@ -120,7 +130,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <app-drawer-layout fullbleed>
       <!-- Drawer content -->
-      <app-drawer>
+      <app-drawer hidden$="[[!user]]">
         <app-toolbar class="left-toolbar">#humblebrag</app-toolbar>
 
         <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
@@ -142,14 +152,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               <img class="avatar" alt="github avatar" src="[[user.photoURL]]">
               <paper-button on-tap="logout">Sign out</paper-button>
             </div>
-
-            <paper-button on-tap="login" hidden$="[[user]]">Sign in with Google</paper-button>
-            <!-- <div main-title>#humblebrag</div> -->
+<!-- <div main-title>#humblebrag</div> -->
           </app-toolbar>
         </app-header>
 
         <div class="main-content">
-          <new-post></new-post>
+          <new-post hidden$="[[!user]]"></new-post>
+
+          <div class="needsSignin" hidden$="[[user]]">
+            <h1>#humblebrag</h1>
+            <paper-button on-tap="login" raised>Sign in with Google</paper-button>
+          </div>
 
           <iron-pages
               selected="[[page]]"
@@ -188,9 +201,31 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       attached: function() {
         this._selectedTab = 0;
         var auth = firebase.auth();
+
         firebase.auth().onAuthStateChanged(function(user) {
           this.user = user;
           console.log(user);
+          var id = user.uid;
+
+          firebase.database().ref('/users/' + user.uid).once('value', function(snapshot) {
+            var value = snapshot.val();
+            if (value) {
+              console.log('already exists');
+              this.user.createdAt = snapshot.val().createdAt;
+            } else {
+              console.log('adding new user');
+              // Add this new user.
+              firebase.database().ref('/users/').child(user.uid)
+                .set({
+                  id: user.uid,
+                  name: user.displayName,
+                  email: user.email,
+                  photo: user.photoURL,
+                  createdAt: {'.sv': 'timestamp'}
+                });
+            }
+          }.bind(this));
+
         }.bind(this));
       },
 
