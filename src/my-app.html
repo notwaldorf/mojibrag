@@ -40,18 +40,32 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         display: block;
       }
 
+      app-header-layout, app-drawer {
+        background: #f5f5f5;
+        color: #37474F;
+        --app-drawer-content-container: {
+          background: #f5f5f5;
+        };
+        --app-drawer-width: 150px;
+      }
+
       app-header, .left-toolbar {
         color: #fff;
-        background-color: var(--app-primary-color);
+        background: #f5f5f5;
+        color: #37474F;
         z-index: 10;
       }
 
       app-toolbar paper-button {
         font-size: 14px;
       }
-
+/*
       app-header paper-icon-button {
         --paper-icon-button-ink-color: white;
+      }*/
+
+      .main-content {
+        padding: 20px;
       }
 
       .drawer-list {
@@ -117,7 +131,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       </app-drawer>
 
       <!-- Main content -->
-      <app-header-layout has-scrolling-region>
+      <app-header-layout>
         <app-header fixed>
           <app-toolbar>
             <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
@@ -134,18 +148,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           </app-toolbar>
         </app-header>
 
-        <new-post></new-post>
+        <div class="main-content">
+          <new-post></new-post>
 
-        <iron-pages
-            selected="[[page]]"
-            attr-for-selected="name"
-            fallback-selection="404"
-            role="main">
-          <view-updates name="updates" session="[[user]]"></view-updates>
-          <view-ideas name="ideas" session="[[user]]"></view-ideas>
-          <view-shipped name="shipped" session="[[user]]"></view-shipped>
-          <view-404 name="404"></view-404>
-        </iron-pages>
+          <iron-pages
+              selected="[[page]]"
+              attr-for-selected="name"
+              fallback-selection="404"
+              role="main">
+            <view-updates name="updates" session="[[user]]"></view-updates>
+            <view-ideas name="ideas" session="[[user]]"></view-ideas>
+            <view-shipped name="shipped" session="[[user]]"></view-shipped>
+            <view-404 name="404"></view-404>
+          </iron-pages>
+        </div>
       </app-header-layout>
 
     </app-drawer-layout>

@@ -8,48 +8,67 @@ Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 -->
 
-<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
-<link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="../bower_components/paper-fab/paper-fab.html">
 <link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/paper-radio-group/paper-radio-group.html">
+<link rel="import" href="../bower_components/paper-radio-button/paper-radio-button.html">
 
 <dom-module id="new-post">
   <template>
     <style>
       :host {
         display: block;
+        position: relative;
         box-sizing: border-box;
         margin: auto;
         width: 100%;
-        margin: 20px auto;
+        background: white;
+        --paper-radio-button-label-color: #aca9b3;
+        --paper-radio-button-unchecked-color: #aca9b3;
+        margin-bottom: 40px;
+      }
+
+      .box {
+        border: 1px solid #cfcfcf;
       }
 
       textarea, #preview {
         box-sizing: border-box;
-        padding: 10px;
+        padding: 0;
         margin: 0;
         width: 100%;
         height: 100px;
         font-size: 16px;
         resize: none;
-        margin-bottom: 10px;
+        border: none;
+        padding: 20px;
+      }
+
+      textarea {
+        border-bottom: 1px solid #cfcfcf;
       }
 
       #preview {
         background: white;
-        border: 1px solid black;
         color: black;
-        margin-bottom: 16px;
+        margin-bottom: 20px;
+      }
+
+      .bottom {
+        border-top: 1px solid #cfcfcf;
+      }
+
+      paper-radio-button {
+        font-weight: 100;
       }
 
       paper-button {
         margin: 0;
-        padding: 5px;
-        font-size: 16px;
-      }
-
-      paper-button.blue {
-        background-color: var(--app-primary-color);
-        color: white;
+        font-size: 14px;
+        color: var(--app-primary-color);
+        @apply(--layout-flex);
+        @apply(--layout-flex-auto);
+        float: right;
       }
 
       select {
@@ -61,50 +80,41 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         outline: 0;
         background: transparent;
         cursor: pointer;
-      }
-
-      #preview select {
         font-size: 16px;
         padding: 0 4px;
         line-height: 1.5;
         background-color: #eee;
         border-radius: 3px;
+        margin-bottom: 5px;
         box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),
                   0 1px 5px 0 rgba(0, 0, 0, 0.12),
                   0 3px 1px -2px rgba(0, 0, 0, 0.2);
       }
 
-      paper-button select {
-        font-size: 16px;
-      }
-
-      paper-button.select::after {
-        content: ' ▾';
-        pointer-events: none;
+      .title {
+        color: #aca9b3;
+        font-weight: 100;
+        font-size: 14px;
+        padding: 10px 20px 0 20px;
       }
     </style>
 
-    <paper-tabs selected="{{_selected}}">
-      <paper-tab>Write</paper-tab>
-      <paper-tab id="previewTab">Preview</paper-tab>
-    </paper-tabs>
-
-    <iron-pages selected="{{_selected}}">
+    <div class="box">
+      <div class="title">Write a new post</div>
       <textarea id="write">OMG!!! The house is on fire and the cat is eating all the donuts!
-
 That is wild!</textarea>
-      <div id="preview"></div></div>
-    </iron-pages>
+      <div class="title">Preview</div>
+      <div id="preview"></div>
 
-    <paper-button class="blue" raised on-click="_post">Post!</paper-button>
-    <paper-button class="select" raised>
-      <select id="type">
-        <option value="updates">Update</option>
-        <option value="ideas">Idea</option>
-        <option value="shipped">Shipped</option>
-      </select>
-    </paper-button>
-
+      <div class="bottom">
+        <paper-radio-group>
+          <paper-radio-button name="updates">Update</paper-radio-button>
+          <paper-radio-button name="ideas">Idea</paper-radio-button>
+          <paper-radio-button name="shipped">Ship</paper-radio-button>
+        </paper-radio-group>
+        <paper-button on-click="_post">Post!</paper-button>
+      </div>
+    </div>
   </template>
 
   <script>
@@ -112,29 +122,6 @@ That is wild!</textarea>
 
     Polymer({
       is: 'new-post',
-
-      _post: function () {
-        // Emojify, if you haven't already.
-        var nodes = this.$.preview.children;
-        if (nodes.length === 0) {
-          this._emojify();
-          nodes = this.$.preview.children;
-        }
-        
-        var value = '';
-        for (var i = 0; i < nodes.length; i++) {
-          if (nodes[i].tagName === 'SELECT') {
-            // Do this instead of .value because we want to maintain whitespace.
-            value += nodes[i].options[nodes[i].selectedIndex].textContent;
-          } else if (nodes[i].tagName === 'BR') {
-            value += '\n';
-          } else {
-            value += nodes[i].textContent;
-          }
-        }
-
-        this.fire('new-post', {message: value, type: this.$.type.value});
-      },
 
       registered: function() {
         var request = new XMLHttpRequest();
@@ -152,24 +139,34 @@ That is wild!</textarea>
       attached: function() {
         this._selected = 0;
 
-        var request = new XMLHttpRequest();
-          request.open('GET', 'bower_components/emojilib/emojis.json', true);
-          request.onload = function() {
-            if (request.status >= 200 && request.status < 400) {
-              allEmojis = JSON.parse(request.response);
-              var event = document.createEvent('HTMLEvents');
-              event.initEvent('emoji-ready', true, false);
-              document.dispatchEvent(event);
-            }
-          };
-          request.send();
-
-        this.addEventListener('iron-activate', function(event) {
-          // In the preview tab, update what we're showing
-          if (event.detail.selected === 1) {
-            this._emojify();
-          }
+        this.addEventListener('input', function(event) {
+          this._emojify();
         });
+
+        this._emojify();
+      },
+
+      _post: function () {
+        // Emojify, if you haven't already.
+        var nodes = this.$.preview.children;
+        if (nodes.length === 0) {
+          this._emojify();
+          nodes = this.$.preview.children;
+        }
+
+        var value = '';
+        for (var i = 0; i < nodes.length; i++) {
+          if (nodes[i].tagName === 'SELECT') {
+            // Do this instead of .value because we want to maintain whitespace.
+            value += nodes[i].options[nodes[i].selectedIndex].textContent;
+          } else if (nodes[i].tagName === 'BR') {
+            value += '\n';
+          } else {
+            value += nodes[i].textContent;
+          }
+        }
+
+        this.fire('new-post', {message: value, type: this.$.type.value});
       },
 
       _emojify: function() {
@@ -243,6 +240,8 @@ That is wild!</textarea>
 
         // Go through all the things and find the first one that matches.
         var useful = [];
+
+        var allEmojis = this.constructor.prototype.allEmojis;
 
         for (var emoji in allEmojis) {
           var words = allEmojis[emoji].keywords;
