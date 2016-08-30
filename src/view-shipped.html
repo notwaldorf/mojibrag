@@ -9,6 +9,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 -->
 
 <link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/iron-list/iron-list.html">
+
 <link rel="import" href="shared-styles.html">
 
 <dom-module id="view-shipped">
@@ -20,17 +22,30 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
     </style>
 
-    <iron-list items="[[data]]" as="item">
+    <firebase-query
+      data="{{_fbPosts}}"
+      path="/posts/shipped">
+    </firebase-query>
+    <app-indexeddb-mirror
+      session="[[user.uid]]"
+      key="/posts/shipped"
+      data="[[_fbPosts]]"
+      persisted-data="{{posts}}"
+      online="[[online]]">
+    </app-indexeddb-mirror>
+
+    <h2 class="page-title">⛵️Ships⛵️</h2>
+    <iron-list items="[[posts]]" as="item">
       <template>
         <div>
           <div class="item" tabindex$="[[tabIndex]]">
             <img class="avatar" sizing="contain" src="[[item.image]]">
             <div class="pad">
               <div class="name">[[item.name]]</div>
-              <div class="text">[[item.post]]</div>
+              <div class="text">[[item.message]]</div>
             </div>
+          </div>
         </div>
-      </div>
       </template>
     </iron-list>
   </template>
@@ -39,23 +54,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     Polymer({
       is: 'view-shipped',
 
-      attached: function() {
-        var data = [
-          {
-            "name": "Liz Grimes",
-            "image": "https://s3.amazonaws.com/uifaces/faces/twitter/enda/73.jpg",
-            "date": "Sun Aug 14 1994 03:27:03 GMT-0700 (PDT)",
-            "post": "Lorem ipsum",
-          },
-          {
-            "name": "Frazier Lara",
-            "image": "https://s3.amazonaws.com/uifaces/faces/twitter/guillogo/73.jpg",
-            "date": "Tue May 24 1988 14:10:20 GMT-0700 (PDT)",
-            "post": "I made something awesome but I won't tell you about it",
-          }
-        ];
+      properties: {
+        session: {
+          type: String
+        },
 
-        this.set('data', data);
+        posts: {
+          type: Array
+        },
       }
     });
   </script>

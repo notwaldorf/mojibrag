@@ -9,6 +9,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 -->
 
 <link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/iron-list/iron-list.html">
+
 <link rel="import" href="shared-styles.html">
 
 <dom-module id="view-ideas">
@@ -20,14 +22,27 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
     </style>
 
-    <iron-list items="[[data]]" as="item">
+    <firebase-query
+      data="{{_fbPosts}}"
+      path="/posts/ideas">
+    </firebase-query>
+    <app-indexeddb-mirror
+      session="[[user.uid]]"
+      key="/posts/ideas"
+      data="[[_fbPosts]]"
+      persisted-data="{{posts}}"
+      online="[[online]]">
+    </app-indexeddb-mirror>
+
+    <h2 class="page-title">✨Ideas✨</h2>
+    <iron-list items="[[posts]]" as="item">
       <template>
         <div>
           <div class="item" tabindex$="[[tabIndex]]">
             <img class="avatar" sizing="contain" src="[[item.image]]">
             <div class="pad">
               <div class="name">[[item.name]]</div>
-              <div class="text">[[item.post]]</div>
+              <div class="text">[[item.message]]</div>
             </div>
           </div>
         </div>
@@ -40,40 +55,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       is: 'view-ideas',
 
       properties: {
-        data: {
+        session: {
+          type: String
+        },
+
+        posts: {
           type: Array
-        }
-      },
-
-      attached: function() {
-        var data = [
-          {
-            "name": "Rita Lopez",
-            "image": "https://s3.amazonaws.com/uifaces/faces/twitter/taherrapee/73.jpg",
-            "date": "Wed Sep 21 2011 04:03:55 GMT-0700 (PDT)",
-            "post": "Ship a summit app",
-          },
-          {
-            "name": "Wagner Shelton",
-            "image": "https://s3.amazonaws.com/uifaces/faces/twitter/ismailmayat/73.jpg",
-            "date": "Wed Jul 07 2010 05:48:57 GMT-0700 (PDT)",
-            "post": "Bake a cake",
-          },
-          {
-            "name": "Bethany Adkins",
-            "image": "https://s3.amazonaws.com/uifaces/faces/twitter/carlyson/73.jpg",
-            "date": "Sun Mar 14 1999 23:13:33 GMT-0800 (PST)",
-            "post": "Add Service Worker to everything!!!",
-          },
-          {
-            "name": "Angelia Rowe",
-            "image": "https://s3.amazonaws.com/uifaces/faces/twitter/thewillbeard/73.jpg",
-            "date": "Sat Jan 04 1992 04:10:22 GMT-0800 (PST)",
-            "post": "🗡😵👞🐕🔥🏡"
-          }
-        ];
-
-        this.set('data', data);
+        },
       }
     });
   </script>

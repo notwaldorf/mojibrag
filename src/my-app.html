@@ -122,18 +122,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       storage-bucket="thumblebrag-1cc8e.appspot.com">
     </firebase-app>
 
-    <firebase-query id="posts"
-      data="{{_fbPosts}}"
-      path="/posts">
-    </firebase-query>
-    <app-indexeddb-mirror id="postsMirror"
-      session="[[user.uid]]"
-      key="/posts"
-      data="[[_fbPosts]]"
-      persisted-data="{{posts}}"
-      online="[[online]]">
-    </app-indexeddb-mirror>
-
     <app-location route="{{route}}"></app-location>
     <app-route
         route="{{route}}"
@@ -173,8 +161,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         <div class="new-post" id="newPost" hidden>
           <p>Write something</p>
-          <textarea></textarea>
+          <textarea id="textarea"></textarea>
           <paper-button raised on-click="_post">Post!</paper-button>
+          <select id="type">
+            <option value="updates">Update</option>
+            <option value="ideas">Idea</option>
+            <option value="shipped">Shipped</option>
+          </select>
         </div>
 
         <iron-pages
@@ -182,9 +175,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             attr-for-selected="name"
             fallback-selection="404"
             role="main">
-          <view-updates name="updates"></view-updates>
-          <view-ideas name="ideas"></view-ideas>
-          <view-shipped name="shipped"></view-shipped>
+          <view-updates name="updates" session="[[user]]"></view-updates>
+          <view-ideas name="ideas" session="[[user]]"></view-ideas>
+          <view-shipped name="shipped" session="[[user]]"></view-shipped>
           <view-404 name="404"></view-404>
         </iron-pages>
       </app-header-layout>
@@ -209,12 +202,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           type: Object,
           value: null,
           notify: true
-        },
-
-        posts: {
-          type: Array,
-          observer: '_postsChanged'
-        },
+        }
       },
 
       attached: function() {
@@ -254,22 +242,26 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       _showNewPost: function() {
         this.$.newPost.hidden = false;
-
-        firebase.database().ref('/').child('posts')
-          .child(this.posts.length).set({
-            id: this.posts.length,
-            name: 'batman',
-            message: 'hi from batman',
-            createdAt: {'.sv': 'timestamp'}
-          })
       },
 
       _post: function() {
         this.$.newPost.hidden = true;
-      },
 
-      _postsChanged: function(posts) {
-        console.log('posts', posts);
+        var message = this.$.textarea.value;
+        var email = this.user.email;
+        var name = this.user.displayName;
+        var image = this.user.photoURL;
+
+        var type = this.$.type.value;
+
+        firebase.database().ref('/posts/').child(type)
+          .push({
+            name: name,
+            message: message,
+            email: email,
+            image: this.user.photoURL,
+            createdAt: {'.sv': 'timestamp'}
+          });
       }
     });
   </script>
