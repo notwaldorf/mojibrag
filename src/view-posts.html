@@ -16,12 +16,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <style>
       :host {
         display: block;
-        max-width: 500px;
-        margin: auto;
       }
       #list {
         height: 100vh;
-        max-width: 540px;
+        max-width: 100%;
         margin: auto;
       }
 
@@ -121,7 +119,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           observer: '_postsChanged'
         },
       },
-    _getDate: function(timestamp) {
+
+      _getDate: function(timestamp) {
         var date = new Date(timestamp);
         var day = date.getDate();
         var monthIndex = date.getMonth();
@@ -130,7 +129,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
 
       _postsChanged: function() {
-        this.$.list.fire('iron-resize');
+        //this.$.list.fire('iron-resize');
       }
     });
   </script>

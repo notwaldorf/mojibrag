@@ -51,6 +51,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       .main-content {
         padding: 20px;
+        max-width: 540px;
+        margin: auto;
       }
 
       app-header, .left-toolbar {
@@ -77,7 +79,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         padding: 0 16px;
         text-decoration: none;
         color: grey;
-        line-height: 40px;
         font-weight: 100;
       }
 
@@ -136,11 +137,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
           <template is="dom-repeat" items="[[teams]]">
-            <a name="[[item]]" href="/[[item]]">[[item]]</a>
+            <a name="[[item.name]]" href="/[[item.name]]">[[item.name]]</a>
           </template>
         </iron-selector>
 
-        <paper-button raised>Create team</paper-button>
+        <paper-button raised on-click="_showCreateTeam"><iron-icon icon="icons:add"></iron-icon>Create team</paper-button>
       </app-drawer>
 
       <!-- Main content -->
@@ -160,6 +161,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <div class="main-content">
           <new-post hidden hidden$="[[!user]]"></new-post>
 
+          <div id="newTeam" hidden>
+            <input id="teamName" placeholder="Team name">
+            <paper-button raised on-click="_createTeam">Create team</paper-button>
+          </div>
+
           <div class="needsSignin" hidden$="[[user]]">
             <h1>#humblebrag</h1>
             <paper-button on-tap="login" raised>Sign in with Google</paper-button>
@@ -171,7 +177,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               fallback-selection="404"
               role="main">
             <template is="dom-repeat" items="[[teams]]">
-              <view-posts name="[[item]]" session="[[user]]" team="[[item]]"></view-posts>
+              <view-posts name="[[item.name]]" session="[[user]]" team="[[item.name]]"></view-posts>
             </template>
             <view-404 name="404"></view-404>
           </iron-pages>
@@ -193,7 +199,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         },
 
         teams: {
-          type: Array
+          type: Array,
+          value: []
         },
 
         user: {
@@ -215,13 +222,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           firebase.database().ref('/users/' + user.uid).once('value', function(snapshot) {
             var value = snapshot.val();
             if (value) {
-              console.log('already exists');
+              console.log('user already exists');
               this.user.createdAt = snapshot.val().createdAt;
 
               // Get this user's teams
-              //this.teams = snapshot.val();
-              this.teams = ['polymer', 'emoji'];
-
+              var teamIds = snapshot.val().teams || [];
+              for (var i = 0; i < teamIds.length; i++) {
+                firebase.database().ref('/teams/' + teamIds[i]).once('value', function(teamSnapshot) {
+                  this.push('teams', {name: teamSnapshot.val().name, id: teamSnapshot.key})
+                }.bind(this));
+              }
             } else {
               console.log('adding new user');
               // Add this new user.
@@ -259,6 +269,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         this.page = page || 'updates';
       },
 
+      // TODO: this is borked.
       _pageChanged: function(page) {
         // Load page import on demand. Show 404 page if fails
         var resolvedPageUrl = this.resolveUrl(page==='404' ? 'view-404.html' : 'view-posts.html');
@@ -267,7 +278,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
 
       _showPage404: function() {
-        console.log('FALLBACK')
         this.page = '404';
       },
 
@@ -286,6 +296,31 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             image: this.user.photoURL,
             createdAt: {'.sv': 'timestamp'}
           });
+      },
+
+      _showCreateTeam: function() {
+        this.$.newTeam.hidden = false;
+      },
+
+      _createTeam: function() {
+        var teamName = this.$.teamName.value.trim();
+
+        var fbTeam = firebase.database().ref('/teams')
+          .push({
+            name: teamName,
+            owner: this.user.uid,
+            ownerEmail: this.user.email,
+            createdAt: {'.sv': 'timestamp'}
+          });
+
+        firebase.database().ref('/users/' + this.user.uid).once('value', function(snapshot) {
+          var teams = snapshot.val().teams || [];
+          teams.push(fbTeam.key);
+          snapshot.ref.update({teams: teams});
+        });
+
+        this.push('teams', teamName);
+        this.$.newTeam.hidden = true;
       }
     });
   </script>
