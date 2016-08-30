@@ -11,14 +11,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/iron-list/iron-list.html">
 <link rel="import" href="posts-behavior.html">
-<link rel="import" href="shared-styles-bubbles.html">
+<link rel="import" href="shared-styles.html">
 
 <dom-module id="view-ideas">
   <template>
-    <style include="shared-styles-bubbles">
+    <style include="shared-styles">
       :host {
         display: block;
-        padding: 10px;
       }
     </style>
 
@@ -36,13 +35,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <iron-list items="[[posts]]" as="item" id="list">
       <template>
-        <div class="item-wrapper">
-          <div class="item" tabindex$="[[tabIndex]]">
-            <img class="avatar" sizing="contain" src="[[item.image]]">
-            <div class="pad">
-              <!-- <div class="name">[[item.name]]</div> -->
-              <div class="text">[[item.message]]</div>
-              <div class="date">[[_getDate(item.createdAt)]]</div>
+        <div>
+          <div class="item">
+            <div class="horizontal">
+              <img class="avatar" sizing="contain" src="[[item.image]]">
+              <div class="vertical">
+                <span class="name">[[item.email]]</span>
+                <div class="text">[[item.message]]</div>
+                <!-- <span class="date">[[_getDate(item.createdAt)]]</span> -->
+              </div>
             </div>
           </div>
         </div>

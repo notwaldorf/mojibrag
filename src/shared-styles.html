@@ -20,72 +20,30 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         margin: auto;
       }
 
-      #list:before {
-        top: 0;
-        bottom: 0;
-        position: absolute;
-        content: " ";
-        width: 3px;
-        background-color: white;
-        left: 25px;
-        margin-left: -1.5px;
-        }
-
       .item {
         @apply(--layout-horizontal);
         margin: 8px 0;
+        background: white;
+        padding: 16px;
       }
-/*
-      .item-wrapper:nth-child(n+1) .pad, .item-wrapper:nth-child(n+1) .avatar {
-        background: #FFE48E;
-        color: black;
-      }
-
-      .item-wrapper:nth-child(2n+1) .pad, .item-wrapper:nth-child(2n+1) .avatar {
-        background: #FF6478;
-        color: black;
-      }
-
-      .item-wrapper:nth-child(3n+1) .pad, .item-wrapper:nth-child(3n+1) .avatar {
-        background: #42D4CB;
-        color: black;
-      }
-
-      .item-wrapper:nth-child(4n+1) .pad, .item-wrapper:nth-child(4n+1) .avatar {
-        background: #28CEDC;
-        color: black;
-      }*/
-
-      /*.item:focus {
-        outline: 0;
-        border-color: #333;
-      }*/
 
       .avatar {
         height: 60px;
         width: 60px;
         border-radius: 50%;
         box-sizing: border-box;
-        padding: 5px;
         vertical-align: middle;
-      }
-
-      .pad {
-        padding: 16px;
-        @apply(--layout-flex);
-        @apply(--layout-vertical);
-        margin-left: 16px;
-        border-radius: 3px;
-        vertical-align: middle;
+        margin-right: 16px;
       }
 
       .name {
-        font-size: 16px;
-        font-weight: bold;
+        font-size: 12px;
+        font-weight: 100;
+        margin-bottom: 10px;
       }
 
       .text {
-        font-size: 24px;
+        font-size: 16px;
         font-weight: 100;
       }
 
@@ -93,6 +51,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         padding-top: 10px;
         font-size: 10px;
       }
+
+      .horizontal {
+        @apply(--layout-horizontal);
+      }
+
+      .vertical {
+        @apply(--layout-vertical);
+      }
+
     </style>
   </template>
 </dom-module>

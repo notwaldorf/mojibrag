@@ -18,11 +18,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <style include="shared-styles">
       :host {
         display: block;
-        padding: 10px;
-      }
-
-      .item {
-        color: black;
       }
     </style>
 
@@ -41,12 +36,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <iron-list items="[[posts]]" as="item" id="list">
       <template>
         <div>
-          <div class="item" tabindex$="[[tabIndex]]">
-            <img class="avatar" sizing="contain" src="[[item.image]]">
-            <div class="pad">
-              <div class="name">[[item.name]]</div>
-              <div class="date">[[_getDate(item.createdAt)]]</div>
-              <div class="text">[[item.message]]</div>
+          <div class="item">
+            <div class="horizontal">
+              <img class="avatar" sizing="contain" src="[[item.image]]">
+              <div class="vertical">
+                <span class="name">[[item.email]]</span>
+                <div class="text">[[item.message]]</div>
+                <!-- <span class="date">[[_getDate(item.createdAt)]]</span> -->
+              </div>
             </div>
           </div>
         </div>

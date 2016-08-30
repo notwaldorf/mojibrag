@@ -35,17 +35,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <iron-list items="[[posts]]" as="item" id="list">
       <template>
-        <div class="item-wrapper">
+        <div>
           <div class="item">
-            <div class="pad">
-              <div class="text">[[item.message]]</div>
-
-              <div class="horizontal">
-                <img class="avatar" sizing="contain" src="[[item.image]]">
-                <div class="vertical">
-                  <span class="name">[[item.name]]</span>
-                  <span class="date">[[_getDate(item.createdAt)]]</span>
-                </div>
+            <div class="horizontal">
+              <img class="avatar" sizing="contain" src="[[item.image]]">
+              <div class="vertical">
+                <span class="name">[[item.email]]</span>
+                <div class="text">[[item.message]]</div>
+                <!-- <span class="date">[[_getDate(item.createdAt)]]</span> -->
               </div>
             </div>
           </div>
