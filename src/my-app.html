@@ -22,12 +22,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/iron-pages/iron-pages.html">
 <link rel="import" href="../bower_components/iron-selector/iron-selector.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
-<link rel="import" href="../bower_components/paper-fab/paper-fab.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
-
 <link rel="import" href="../bower_components/polymerfire/polymerfire.html">
 <link rel="import" href="../bower_components/app-storage/app-indexeddb-mirror/app-indexeddb-mirror.html">
 
+<link rel="import" href="new-post.html">
 <link rel="import" href="my-icons.html">
 
 <dom-module id="my-app">
@@ -36,7 +35,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       :host {
         --app-primary-color: #4285f4;
         --app-secondary-color: black;
-
+        --paper-tabs-selection-bar-color: var(--app-primary-color);
+        --paper-tab-ink: var(--app-primary-color);
         display: block;
       }
 
@@ -85,33 +85,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         @apply(--layout-flex-auto);
       }
 
-      paper-fab {
-        position: absolute;
-        bottom: 16px;
-        right: 16px;
-        --paper-fab-background: var(--app-primary-color);
-      }
-
-      .new-post {
-        box-sizing: border-box;
-        margin: auto;
-        width: 100%;
-        margin: 20px auto;
+      new-post {
         max-width: 540px;
-      }
-
-      .new-post textarea {
-        box-sizing: border-box;
-        width: 100%;
-        height: 100px;
-        font-size: 16px;
-      }
-
-      .new-post paper-button {
-        background-color: var(--app-primary-color);
-        color: white;
-        margin: 0;
-        padding: 5px;
       }
     </style>
 
@@ -159,16 +134,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           </app-toolbar>
         </app-header>
 
-        <div class="new-post" id="newPost" hidden>
-          <p>Write something</p>
-          <textarea id="textarea"></textarea>
-          <paper-button raised on-click="_post">Post!</paper-button>
-          <select id="type">
-            <option value="updates">Update</option>
-            <option value="ideas">Idea</option>
-            <option value="shipped">Shipped</option>
-          </select>
-        </div>
+        <new-post></new-post>
 
         <iron-pages
             selected="[[page]]"
@@ -181,8 +147,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <view-404 name="404"></view-404>
         </iron-pages>
       </app-header-layout>
-
-      <paper-fab icon="icons:add" on-click="_showNewPost"></paper-fab>
 
     </app-drawer-layout>
   </template>
@@ -206,6 +170,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
 
       attached: function() {
+        this._selectedTab = 0;
         var auth = firebase.auth();
         firebase.auth().onAuthStateChanged(function(user) {
           this.user = user;
@@ -225,6 +190,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         '_routePageChanged(routeData.page)'
       ],
 
+      listeners: {
+        'new-post': '_post'
+      },
+
       _routePageChanged: function(page) {
         this.page = page || 'updates';
       },
@@ -240,19 +209,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         this.page = '404';
       },
 
-      _showNewPost: function() {
-        this.$.newPost.hidden = false;
-      },
-
-      _post: function() {
-        this.$.newPost.hidden = true;
-
-        var message = this.$.textarea.value;
+      _post: function(event) {
+        var message = event.detail.message;
+        var type = event.detail.type;
         var email = this.user.email;
         var name = this.user.displayName;
         var image = this.user.photoURL;
-
-        var type = this.$.type.value;
 
         firebase.database().ref('/posts/').child(type)
           .push({

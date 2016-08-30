@@ -1,0 +1,243 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="../bower_components/polymer/polymer.html">
+
+<dom-module id="new-post">
+  <template>
+    <style>
+      :host {
+        display: block;
+        box-sizing: border-box;
+        margin: auto;
+        width: 100%;
+        margin: 20px auto;
+      }
+
+      textarea, #preview {
+        box-sizing: border-box;
+        padding: 10px;
+        margin: 0;
+        width: 100%;
+        height: 100px;
+        font-size: 16px;
+        resize: none;
+        margin-bottom: 10px;
+      }
+
+      #preview {
+        background: white;
+        border: 1px solid black;
+        color: black;
+        margin-bottom: 16px;
+      }
+
+      paper-button {
+        background-color: var(--app-primary-color);
+        color: white;
+        margin: 0;
+        padding: 5px;
+      }
+
+      #preview select {
+        display: inline-block;
+        font-size: 16px;
+        padding: 0 4px;
+        line-height: 1.5;
+        background-color: #eee;
+        border: 0;
+        border-radius: 3px;
+        cursor: pointer;
+        outline: 0;
+        -webkit-appearance: none !important;
+        -moz-appearance: none;
+        appearance: none;
+        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),
+                  0 1px 5px 0 rgba(0, 0, 0, 0.12),
+                  0 3px 1px -2px rgba(0, 0, 0, 0.2);
+      }
+    </style>
+
+    <paper-tabs selected="{{_selected}}">
+      <paper-tab>Write</paper-tab>
+      <paper-tab id="previewTab">Preview</paper-tab>
+    </paper-tabs>
+
+    <iron-pages selected="{{_selected}}">
+      <textarea id="write">OMG!!! The house is on fire and the cat is eating all the donuts!
+
+That is wild!</textarea>
+      <div id="preview"></div></div>
+    </iron-pages>
+
+    <paper-button raised on-click="_post">Post!</paper-button>
+    
+    <select id="type">
+      <option value="updates">Update</option>
+      <option value="ideas">Idea</option>
+      <option value="shipped">Shipped</option>
+    </select>
+
+  </template>
+
+  <script>
+    var SYMBOLS = '!"#$%&\'()*+,-./:;<=>?@[]^_`{|}~';
+
+    Polymer({
+      is: 'new-post',
+
+      _post: function () {
+        // Emojify, just in case.
+        this._emojify();
+
+        var nodes = this.$.preview.children;
+        var value = '';
+        for (var i = 0; i < nodes.length; i++) {
+          if (nodes[i].tagName === 'SELECT') {
+            // Do this instead of .value because we want to maintain whitespace.
+            value += nodes[i].options[nodes[i].selectedIndex].textContent;
+          } else if (nodes[i].tagName === 'BR') {
+            value += '\n';
+          } else {
+            value += nodes[i].textContent;
+          }
+        }
+
+        this.fire('new-post', {message: value, type: this.$.type.value});
+      },
+
+      registered: function() {
+        var request = new XMLHttpRequest();
+        request.open('GET', 'bower_components/emojilib/emojis.json', true);
+
+        var proto = this.constructor.prototype;
+        request.onload = function() {
+          if (request.status >= 200 && request.status < 400) {
+            proto.allEmojis = JSON.parse(request.response);
+          }
+        }.bind(this);
+        request.send();
+      },
+
+      attached: function() {
+        this._selected = 0;
+
+        var request = new XMLHttpRequest();
+          request.open('GET', 'bower_components/emojilib/emojis.json', true);
+          request.onload = function() {
+            if (request.status >= 200 && request.status < 400) {
+              allEmojis = JSON.parse(request.response);
+              var event = document.createEvent('HTMLEvents');
+              event.initEvent('emoji-ready', true, false);
+              document.dispatchEvent(event);
+            }
+          };
+          request.send();
+
+        this.addEventListener('iron-activate', function(event) {
+          // In the preview tab, update what we're showing
+          if (event.detail.selected === 1) {
+            this._emojify();
+          }
+        });
+      },
+
+      _emojify: function() {
+        this.$.preview.innerHTML = '';
+
+        var allLines = this.$.write.value.split('\n');
+        for (var line = 0; line < allLines.length; line++) {
+          if (allLines[line] == '') {
+            this.$.preview.appendChild(document.createElement('br'))
+            continue
+          }
+
+          var words = allLines[line].split(' ');
+
+          // Re-add the translated words.
+          for (var i = 0; i < words.length; i++ ) {
+            this.$.preview.appendChild(this._translateWord(words[i]));
+          }
+          this.$.preview.appendChild(document.createElement('br'));
+        }
+      },
+
+      /* From https://github.com/notwaldorf/emoji-translate */
+      _translateWord: function(word) {
+        // Punctuation blows. Get all the punctuation at the start and end of the word.
+        var firstSymbol = '';
+        var lastSymbol = '';
+
+        while (SYMBOLS.indexOf(word[0]) != -1) {
+          firstSymbol += word[0];
+          word = word.slice(1, word.length);
+        }
+
+        while (SYMBOLS.indexOf(word[word.length - 1]) != -1) {
+          lastSymbol += word[word.length - 1];
+          word = word.slice(0, word.length - 1);
+        }
+
+        var emoji = this._getEmoji(word);
+
+        var node;
+        if (emoji.length === 1) {
+          node = document.createElement('span');
+          node.innerHTML = firstSymbol + emoji + lastSymbol + ' ';
+        } else {
+          node = document.createElement('select');
+          for (var i = 0; i < emoji.length; i++) {
+            var option = document.createElement('option');
+            option.innerHTML = firstSymbol + emoji[i] + lastSymbol + ' ';
+            node.appendChild(option);
+          }
+        }
+        return node;
+      },
+
+      _getEmoji: function(originalWord) {
+        var word = originalWord.trim().toLowerCase();
+
+        if (!word || word === '' || word === 'it' || word === 'is')
+          return [originalWord];
+
+        // Maybe this is a plural word but the word is the singular?
+        // Don't do it for two letter words since "as" would become "a" etc.
+        var maybeSingular = '';
+        if (word.length > 2 && word[word.length - 1] == 's')
+          maybeSingular = word.slice(0, word.length - 1);
+
+        // Maybe this is a singular word but the word is the plural?
+        // Don't do this for single letter since that will pluralize crazy things.
+        var maybePlural = (word.length == 1) ? '' : word + 's';
+
+        // Go through all the things and find the first one that matches.
+        var useful = [];
+
+        for (var emoji in allEmojis) {
+          var words = allEmojis[emoji].keywords;
+          if (emoji == word || emoji == maybeSingular || emoji == maybePlural ||
+              (words && words.indexOf(word) >= 0) ||
+              (words && words.indexOf(maybeSingular) >= 0) ||
+              (words && words.indexOf(maybePlural) >= 0)) {
+            useful.push(allEmojis[emoji].char);
+          }
+        }
+        if (useful.length === 0) {
+          useful.push(originalWord);
+        }
+        return useful;
+      }
+    });
+
+  </script>
+</dom-module>
