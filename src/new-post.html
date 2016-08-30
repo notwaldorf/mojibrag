@@ -42,28 +42,45 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       paper-button {
-        background-color: var(--app-primary-color);
-        color: white;
         margin: 0;
         padding: 5px;
+        font-size: 16px;
+      }
+
+      paper-button.blue {
+        background-color: var(--app-primary-color);
+        color: white;
+      }
+
+      select {
+        -webkit-appearance: none !important;
+        -moz-appearance: none;
+        appearance: none;
+        display: inline-block;
+        border: 0;
+        outline: 0;
+        background: transparent;
+        cursor: pointer;
       }
 
       #preview select {
-        display: inline-block;
         font-size: 16px;
         padding: 0 4px;
         line-height: 1.5;
         background-color: #eee;
-        border: 0;
         border-radius: 3px;
-        cursor: pointer;
-        outline: 0;
-        -webkit-appearance: none !important;
-        -moz-appearance: none;
-        appearance: none;
         box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),
                   0 1px 5px 0 rgba(0, 0, 0, 0.12),
                   0 3px 1px -2px rgba(0, 0, 0, 0.2);
+      }
+
+      paper-button select {
+        font-size: 16px;
+      }
+
+      paper-button.select::after {
+        content: ' ▾';
+        pointer-events: none;
       }
     </style>
 
@@ -79,13 +96,14 @@ That is wild!</textarea>
       <div id="preview"></div></div>
     </iron-pages>
 
-    <paper-button raised on-click="_post">Post!</paper-button>
-    
-    <select id="type">
-      <option value="updates">Update</option>
-      <option value="ideas">Idea</option>
-      <option value="shipped">Shipped</option>
-    </select>
+    <paper-button class="blue" raised on-click="_post">Post!</paper-button>
+    <paper-button class="select" raised>
+      <select id="type">
+        <option value="updates">Update</option>
+        <option value="ideas">Idea</option>
+        <option value="shipped">Shipped</option>
+      </select>
+    </paper-button>
 
   </template>
 
