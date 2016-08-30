@@ -28,6 +28,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         box-shadow:0px 0px 10px rgba(0, 0, 0, 0.14);
       }
 
+      :host([hidden]) {
+        display: none !important;
+      }
+
       textarea, #preview {
         box-sizing: border-box;
         padding: 0;
@@ -136,7 +140,7 @@ That is wild!</textarea>
         this._emojify();
         this.$.write.addEventListener('input', function(event) {
           this._emojify();
-        });
+        }.bind(this));
       },
 
       _post: function () {
