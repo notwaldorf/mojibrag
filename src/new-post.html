@@ -93,9 +93,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </style>
 
     <div class="title">Write a new post</div>
-    <textarea id="write">OMG!!! The house is on fire and the cat is eating all the donuts!
-That is wild!</textarea>
-
+    <textarea id="write">Write your cool message here! ✌️</textarea>
     <div class="title">Preview</div>
     <div id="preview"></div>
 
@@ -153,6 +151,7 @@ That is wild!</textarea>
         }
 
         this.fire('new-post', {message: value, team: this.team});
+        this.$.write.value = 'Write your cool message here! ✌️'
       },
 
       _emojify: function() {
@@ -193,6 +192,7 @@ That is wild!</textarea>
           word = word.slice(0, word.length - 1);
         }
 
+        // If it's already an emoji, return it;
         var emoji = this._getEmoji(word);
 
         if (emoji === '')
@@ -215,6 +215,7 @@ That is wild!</textarea>
 
       _getEmoji: function(originalWord) {
         var word = originalWord.trim().toLowerCase();
+        var allEmojis = this.constructor.prototype.allEmojis;
 
         if (!word || word === '' || word === 'a' || word === 'it' || word === 'is')
           return '';
@@ -236,7 +237,8 @@ That is wild!</textarea>
 
         for (var emoji in allEmojis) {
           var words = allEmojis[emoji].keywords;
-          if (emoji == word || emoji == maybeSingular || emoji == maybePlural ||
+          if (word == allEmojis[emoji].char ||
+              emoji == word || emoji == maybeSingular || emoji == maybePlural ||
               (words && words.indexOf(word) >= 0) ||
               (words && words.indexOf(maybeSingular) >= 0) ||
               (words && words.indexOf(maybePlural) >= 0)) {
