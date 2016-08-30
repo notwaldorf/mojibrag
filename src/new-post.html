@@ -17,7 +17,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <style>
       :host {
         display: block;
-        position: relative;
         box-sizing: border-box;
         margin: auto;
         width: 100%;
@@ -99,6 +98,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <div class="title">Write a new post</div>
     <textarea id="write">OMG!!! The house is on fire and the cat is eating all the donuts!
 That is wild!</textarea>
+
     <div class="title">Preview</div>
     <div id="preview"></div>
 
@@ -134,7 +134,7 @@ That is wild!</textarea>
 
       attached: function() {
         this._emojify();
-        this.addEventListener('input', function(event) {
+        this.$.write.addEventListener('input', function(event) {
           this._emojify();
         });
       },
