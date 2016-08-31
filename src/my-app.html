@@ -29,6 +29,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="new-post.html">
 <link rel="import" href="new-team.html">
 <link rel="import" href="my-icons.html">
+<link rel="import" href="firebase-helper.html">
 
 <dom-module id="my-app">
   <template>
@@ -145,7 +146,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <template is="dom-repeat" items="[[teams]]">
             <a name="[[item.name]]" href="/[[item.name]]" uid="[[item.id]]">
               <span>[[item.name]]</span>
-              <paper-icon-button class="teamSettings" icon="icons:settings" on-click="_showTeamSettings"></paper-icon-button>
+              <paper-icon-button class="teamSettings" icon="icons:settings" on-click="_showEditTeam"></paper-icon-button>
             </a>
           </template>
         </iron-selector>
@@ -169,7 +170,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         <div class="main-content">
           <new-post hidden$="[[!user]]" team="[[page]]"></new-post>
-
           <new-team hidden id="newTeam"></new-team>
 
           <div class="needsSignin" hidden$="[[user]]">
@@ -196,6 +196,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <script>
     Polymer({
       is: 'my-app',
+
+      behaviors: [Polymer.FirebaseHelper],
 
       properties: {
         page: {
@@ -224,44 +226,32 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       attached: function() {
         this._getLocation();
 
-        this.set('teams', []);
         var auth = firebase.auth();
-
         firebase.auth().onAuthStateChanged(function(user) {
+          this.resetUI();
           this.user = user;
-          console.log(user);
-          var id = user.uid;
-
-          firebase.database().ref('/users/' + user.uid).once('value', function(snapshot) {
-            var value = snapshot.val();
-            if (value) {
-              console.log('user already exists');
-              this.user.createdAt = snapshot.val().createdAt;
-
-              // Get this user's teams
-              var teamIds = snapshot.val().teams || [];
-              for (var i = 0; i < teamIds.length; i++) {
-                firebase.database().ref('/teams/' + teamIds[i]).once('value', function(teamSnapshot) {
-                  if (teamSnapshot.val()) {
-                    this.push('teams', {name: teamSnapshot.val().name, id: teamSnapshot.key})
-                  }
-                }.bind(this));
-              }
-            } else {
-              console.log('adding new user');
-              // Add this new user.
-              firebase.database().ref('/users/').child(user.uid)
-                .set({
-                  id: user.uid,
-                  name: user.displayName,
-                  email: user.email,
-                  photo: user.photoURL,
-                  createdAt: {'.sv': 'timestamp'}
-                });
-            }
-          }.bind(this));
-
+          this._firebaseSaveUser(user);
         }.bind(this));
+      },
+
+      observers: [
+        '_routePageChanged(routeData.page)'
+      ],
+
+      listeners: {
+        'new-post': '_postNewMessage',
+        'new-team': '_createTeam',
+        'delete-team': '_deleteTeam',
+        'rename-team': '_renameTeam',
+        'delete-users': '_deleteUsers',
+        'add-users': '_addUsers',
+        'post-like': '_postLike',
+        'post-unlike': '_postUnlike',
+      },
+
+      resetUI: function() {
+        this.set('teams', []);
+        this.$.newTeam.hidden = true;
       },
 
       login: function() {
@@ -272,21 +262,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         firebase.auth().signOut();
       },
 
-      observers: [
-        '_routePageChanged(routeData.page)'
-      ],
-
-      listeners: {
-        'new-post': '_post',
-        'new-team': '_createTeam',
-        'delete-team': '_deleteTeam',
-        'rename-team': '_renameTeam',
-        'delete-users': '_deleteUsers',
-        'add-users': '_addUsers',
-        'post-like': '_postLike',
-        'post-unlike': '_postUnlike',
-      },
-
+      /*******************************
+       * Routes
+       *******************************/
       _routePageChanged: function(page) {
         this.page = page;
       },
@@ -303,69 +281,28 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         this.page = '404';
       },
 
-      _post: function(event) {
-        var message = event.detail.message;
-        var team = event.detail.team;
-        var email = this.user.email;
-        var name = this.user.displayName;
-        var image = this.user.photoURL;
+      /*******************************
+       * Posts
+       *******************************/
+      _postNewMessage: function(event) {
         var location = this.location || '';
-
-        firebase.database().ref('/posts/').child(team)
-          .push({
-            name: name,
-            message: message,
-            email: email,
-            image: this.user.photoURL,
-            likes: 0,
-            location: location,
-            createdAt: {'.sv': 'timestamp'}
-          });
+        this._firebaseAddMessage(event.detail.team, event.detail.message, location);
       },
 
+      /*******************************
+       * Teams
+       *******************************/
       _showCreateTeam: function() {
         this.$.newTeam.create();
       },
 
-      _showTeamSettings: function(event) {
+      _showEditTeam: function(event) {
         var parentLink = event.target.parentNode;
         this.$.newTeam.edit(parentLink.name, parentLink.uid);
       },
 
       _createTeam: function(event) {
-        var teamName = event.detail.name;
-        var teamUsers = event.detail.users;
-
-        // Create the team.
-        var fbTeam = firebase.database().ref('/teams')
-          .push({
-            name: teamName,
-            owner: this.user.uid,
-            ownerEmail: this.user.email,
-            createdAt: {'.sv': 'timestamp'}
-          });
-
-        // Add this team to this user.
-        firebase.database().ref('/users/' + this.user.uid).once('value', function(snapshot) {
-          var teams = snapshot.val().teams || [];
-          teams.push(fbTeam.key);
-          snapshot.ref.update({teams: teams});
-        });
-        this.push('teams', {name: teamName, id: fbTeam.key});
-
-        // For each of the users in the list, add this team to them.
-        firebase.database().ref('/users/').once('value', function(snapshot) {
-          var users = snapshot.val();
-
-          for (var user in users) {
-            if (teamUsers.indexOf(users[user].email) != -1 ) {
-              var currentUserTeams = users[user].teams || [];
-              currentUserTeams.push(fbTeam.key);
-              firebase.database().ref('/users/' + user).update({teams: currentUserTeams});
-            }
-          }
-        });
-
+        this._firebaseAddTeam(event.detail.name, event.detail.users);
         this.$.newTeam.hidden = true;
       },
 

@@ -1,0 +1,115 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+
+<script>
+Polymer.FirebaseHelper = {
+  _firebaseSaveUser: function(user) {
+    firebase.database().ref('/users/' + user.uid).once('value', function(snapshot) {
+      var userInfo = snapshot.val();
+
+      if (userInfo) {
+        console.log('Existing user:', this.user);
+        // Figure out if we want to display this somewhere.
+        //this.user.createdAt = snapshot.val().createdAt;
+
+        // Get this user's teams, if any
+        this._firebaseGetUserTeams(snapshot.val().teams || []);
+      } else {
+        console.log('New user!');
+
+        firebase.database().ref('/users/').child(user.uid)
+            .set({
+              id: user.uid,
+              name: user.displayName,
+              email: user.email,
+              photo: user.photoURL,
+              createdAt: {'.sv': 'timestamp'}
+            });
+      }
+    }.bind(this));
+  },
+
+  _firebaseGetUserTeams: function(teamIds) {
+    this.set('teams', []);
+    var self = this;
+    for (var i = 0; i < teamIds.length; i++) {
+      firebase.database().ref('/teams/' + teamIds[i]).once('value', function(snapshot) {
+        // This team may not exist.
+        if (snapshot.val()) {
+          // Push instead of set so that we can do this incrementally I guess.
+          self.push('teams', {name: snapshot.val().name, id: snapshot.key});
+        }
+      }.bind(this));
+    }
+  },
+
+  _firebaseAddMessage: function(team, message, location) {
+    firebase.database().ref('/posts/').child(team)
+      .push({
+        name: this.user.displayName,
+        message: message,
+        email: this.user.email,
+        image: this.user.photoURL,
+        likes: 0,
+        location: location,
+        createdAt: {'.sv': 'timestamp'}
+      });
+  },
+
+  _firebaseAddTeam: function(team, users) {
+    var self = this;
+
+    // Check if the team already exists.
+    firebase.database().ref('/teams/' + team).once('value', function(snapshot) {
+      if (snapshot.val()) {
+        alert('team already exists');
+        self.fire('new-team-error');
+      } else {
+        // Add this user as an user if they didn't add themselves already
+        if (users.indexOf(self.user.email) === -1) {
+          users.splice(0, 0, self.user.email);
+        }
+
+        // Create the team.
+        firebase.database().ref('/teams')
+          .child(team).set({
+            name: team,
+            owner: self.user.uid,
+            ownerEmail: self.user.email,
+            users: users.length == 0 ? null : users,
+            createdAt: {'.sv': 'timestamp'}
+          }).then(function() {
+            // Show it
+            self.push('teams', {name: team, id: team});
+
+            // Add this team to this user.
+            firebase.database().ref('/users/' + self.user.uid).once('value', function(snapshot) {
+              var userTeams = snapshot.val().teams || [];
+              userTeams.push(team);
+              snapshot.ref.update({teams: userTeams});
+            });
+
+            // For each of the users in the list, add this team to them.
+            // The problem is that the user only entered emails, so we have to go
+            // through the whole database and match emails(since they're not keys)
+            // TODO: figure out if there's a better way.
+            firebase.database().ref('/users/').once('value', function(snapshot) {
+              var allUsers = snapshot.val();
+
+              for (var user in allUsers) {
+                // This user is in the new team!
+
+                if (allUsers[user].email !== self.user.email &&
+                  users.indexOf(allUsers[user].email) != -1 ) {
+                  var userTeams = allUsers[user].teams || [];
+                  userTeams.push(team);
+                  firebase.database().ref('/users/' + user).update({teams: userTeams});
+                }
+              }
+            });
+        });
+      }
+    });
+  }
+
+};
+</script>
