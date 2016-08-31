@@ -80,10 +80,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <input type="text" id="uid" hidden>
     </div>
 
-    <!-- <div class="horizontal" hidden$="[[!_edit]]">
+    <div class="horizontal" hidden$="[[!_edit]]">
       <input type="email" multiple placeholder="users, comma separated email" id="editUsers">
-      <paper-button on-click="_deleteUsers" class="inline-button">Delete users</paper-button>
-    </div> -->
+      <paper-button on-click="_deleteUsers" class="inline-button">Del users</paper-button>
+      <paper-button on-click="_addUsers" class="inline-button">Add users</paper-button>
+    </div>
 
     <input type="email" multiple placeholder="users, comma separated" id="newUsers" hidden$="[[_edit]]">
 
@@ -150,7 +151,31 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         this.fire('rename-team', {name: this.$.name.value, uid: this.$.uid.value});
         this.hidden = true;
-      }
+      },
+
+      _deleteUsers: function() {
+        var valid = this.$.editUsers.validity.valid;
+        if (!valid)
+          return;
+
+        this.fire('delete-users',
+            {uid: this.$.uid.value,
+             users: this.$.editUsers.value.split(',')
+            });
+        this.hidden = true;
+      },
+
+      _addUsers: function() {
+        var valid = this.$.editUsers.validity.valid;
+        if (!valid)
+          return;
+
+        this.fire('add-users',
+            {uid: this.$.uid.value,
+             users: this.$.editUsers.value.split(',')
+            });
+        this.hidden = true;
+      },
     });
   </script>
 </dom-module>

@@ -273,7 +273,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         'new-post': '_post',
         'new-team': '_createTeam',
         'delete-team': '_deleteTeam',
-        'rename-team': '_renameTeam'
+        'rename-team': '_renameTeam',
+        'delete-users': '_deleteUsers',
+        'add-users': '_addUsers'
       },
 
       _routePageChanged: function(page) {
@@ -382,6 +384,24 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             return;
           }
         }
+      },
+
+      _addUsers: function(event) {
+        var teamId = event.detail.uid;
+        var newUsers = event.detail.users;
+
+        // For each of the users in the list, add this team to them.
+        firebase.database().ref('/users/').once('value', function(snapshot) {
+          var users = snapshot.val();
+
+          for (var user in users) {
+            if (newUsers.indexOf(users[user].email) != -1 ) {
+              var currentUserTeams = users[user].teams || [];
+              currentUserTeams.push(teamId);
+              firebase.database().ref('/users/' + user).update({teams: currentUserTeams});
+            }
+          }
+        });
       }
     });
   </script>
