@@ -10,6 +10,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/iron-list/iron-list.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="my-icons.html">
 
 <dom-module id="view-posts">
   <template>
@@ -56,6 +58,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         font-size: 10px;
       }
 
+      .heart-icon {
+        position: absolute;
+        top: 16px;
+        right: 16px;
+      }
+
       .horizontal {
         @apply(--layout-horizontal);
       }
@@ -90,6 +98,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <!-- <span class="date">[[_getDate(item.createdAt)]]</span> -->
               </div>
             </div>
+            <div class="heart-icon">
+              <span>[[item.likes]]</span>
+              <paper-icon-button icon="icons:favorite-border" on-click="_like" item="[[item]]"></paper-icon-button>
+            </div>
           </div>
         </div>
       </template>
@@ -107,8 +119,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     Polymer({
       is: 'view-posts',
       properties: {
-        path: {
-          team: String
+        team: {
+          type: String
         },
 
         session: {
@@ -130,7 +142,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
 
       _postsChanged: function() {
-        //this.$.list.fire('iron-resize');
+        this.$.list.fire('iron-resize');
+      },
+
+      _like: function(event) {
+        var button = event.target;
+        var item = button.item;
+
+        if (button.icon === 'icons:favorite-border') {
+          button.icon = 'icons:favorite';
+          this.fire('post-like', {uid: item.$key, team: this.team});
+        } else {
+          button.icon = 'icons:favorite-border';
+          this.fire('post-unlike', {uid: item.$key, team: this.team});
+        }
       }
     });
   </script>

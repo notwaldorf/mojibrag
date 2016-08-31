@@ -275,7 +275,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         'delete-team': '_deleteTeam',
         'rename-team': '_renameTeam',
         'delete-users': '_deleteUsers',
-        'add-users': '_addUsers'
+        'add-users': '_addUsers',
+        'post-like': '_postLike',
+        'post-unlike': '_postUnlike',
       },
 
       _routePageChanged: function(page) {
@@ -307,6 +309,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             message: message,
             email: email,
             image: this.user.photoURL,
+            likes: 0,
             createdAt: {'.sv': 'timestamp'}
           });
       },
@@ -419,6 +422,28 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               currentUserTeams.splice(teamIndex, 1);
               firebase.database().ref('/users/' + user).update({teams: currentUserTeams});
             }
+          }
+        });
+      },
+
+      _postLike: function(event) {
+        var postId = event.detail.uid;
+        var postTeam = event.detail.team;
+
+        firebase.database().ref('/posts/' + postTeam).child(postId).once('value', function(snapshot) {
+          var likes = snapshot.val().likes || 0;
+          snapshot.ref.update({likes: likes + 1});
+        });
+      },
+
+      _postUnlike: function(event) {
+        var postId = event.detail.uid;
+        var postTeam = event.detail.team;
+
+        firebase.database().ref('/posts/' + postTeam).child(postId).once('value', function(snapshot) {
+          var likes = snapshot.val().likes || 0;
+          if (likes !== 0) {
+            snapshot.ref.update({likes: likes - 1});
           }
         });
       }
