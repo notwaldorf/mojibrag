@@ -1,0 +1,13 @@
+{
+  "database": {
+  },
+  "hosting": {
+    "public": "./",
+    "rewrites": [
+      {
+        "source": "**/*",
+        "destination": "/index.html"
+      }
+    ]
+  }
+}
