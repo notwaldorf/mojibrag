@@ -47,7 +47,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         --app-drawer-content-container: {
           background: #f5f5f5;
         };
-        --app-drawer-width: 150px;
+        --app-drawer-width: 200px;
       }
 
       .main-content {
@@ -71,9 +71,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         --paper-icon-button-ink-color: white;
       }*/
 
-      .drawer-list {
+      /*.drawer-list {
         margin: 0 20px;
-      }
+      }*/
 
       .drawer-list a {
         display: block;
@@ -81,6 +81,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         text-decoration: none;
         color: grey;
         font-weight: 100;
+        @apply(--layout-horizontal);
+        @apply(--layout-justified);
+      }
+
+      .drawer-list a paper-icon-button {
       }
 
       .drawer-list a.iron-selected {
@@ -111,6 +116,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         color: white;
         font-size: 14px;
       }
+
+      .teamSettings {
+        display: inline-block;
+      }
     </style>
 
     <firebase-app
@@ -134,7 +143,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
           <template is="dom-repeat" items="[[teams]]">
-            <a name="[[item.name]]" href="/[[item.name]]">[[item.name]]</a>
+            <a name="[[item.name]]" href="/[[item.name]]" uid="[[item.id]]">
+              <span>[[item.name]]</span>
+              <paper-icon-button class="teamSettings" icon="icons:settings" on-click="_showTeamSettings"></paper-icon-button>
+            </a>
           </template>
         </iron-selector>
 
@@ -223,7 +235,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               var teamIds = snapshot.val().teams || [];
               for (var i = 0; i < teamIds.length; i++) {
                 firebase.database().ref('/teams/' + teamIds[i]).once('value', function(teamSnapshot) {
-                  this.push('teams', {name: teamSnapshot.val().name, id: teamSnapshot.key})
+                  if (teamSnapshot.val()) {
+                    this.push('teams', {name: teamSnapshot.val().name, id: teamSnapshot.key})
+                  }
                 }.bind(this));
               }
             } else {
@@ -258,6 +272,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       listeners: {
         'new-post': '_post',
         'new-team': '_createTeam',
+        'delete-team': '_deleteTeam',
+        'rename-team': '_renameTeam'
       },
 
       _routePageChanged: function(page) {
@@ -294,7 +310,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
 
       _showCreateTeam: function() {
-        this.$.newTeam.hidden = false;
+        this.$.newTeam.create();
+      },
+
+      _showTeamSettings: function(event) {
+        var parentLink = event.target.parentNode;
+        this.$.newTeam.edit(parentLink.name, parentLink.uid);
       },
 
       _createTeam: function(event) {
@@ -332,6 +353,35 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         });
 
         this.$.newTeam.hidden = true;
+      },
+
+      _deleteTeam: function(event) {
+        var teamId = event.detail.uid;
+        var teamName = event.detail.name;
+
+        firebase.database().ref('/teams/').child(teamId).remove();
+        for (var i = 0; i < this.teams.length; i++) {
+          if (this.teams[i].id === teamId) {
+            this.splice('teams', i, 1);
+            return;
+          }
+        }
+      },
+
+      _renameTeam: function(event) {
+        var teamId = event.detail.uid;
+        var teamName = event.detail.name;
+
+        firebase.database().ref('/teams/').child(teamId).update(
+          {name: teamName}
+        );
+
+        for (var i = 0; i < this.teams.length; i++) {
+          if (this.teams[i].id === teamId) {
+            this.splice('teams', i, 1, {name: teamName, id: teamId});
+            return;
+          }
+        }
       }
     });
   </script>

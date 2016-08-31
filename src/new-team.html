@@ -22,6 +22,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         margin-bottom: 40px;
         box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.14);
         padding: 20px;
+        @apply(--layout-flex);
       }
 
       :host([hidden]) {
@@ -32,9 +33,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         margin: 0;
         font-size: 14px;
         color: var(--app-primary-color);
-        @apply(--layout-flex);
-        @apply(--layout-flex-auto);
-        float: right;
       }
 
       .title {
@@ -45,8 +43,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       input {
-        display: block;
         width: 100%;
+        display: block;
         font-size: 16px;
         font-weight: 100;
         border: none;
@@ -55,16 +53,48 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         margin: 10px 0 15px 0;
       }
 
+      [hidden] {
+        display: none !important;
+      }
+
       input:invalid {
         border-bottom: 1px solid red;
+      }
+
+      .horizontal {
+        @apply(--layout-horizontal);
+      }
+      .horizontal-reverse {
+        @apply(--layout-horizontal-reverse);
+      }
+
+      .inline-button {
+        width: 150px;
       }
     </style>
 
     <div class="title">Create new team</div>
-    <input type="text" placeholder="team-name" id="name" required>
-    <input type="email" multiple placeholder="users, comma separated" id="users">
-    <paper-button on-click="_create">Create!</paper-button>
-    <br>
+
+    <div class="horizontal">
+      <input type="text" placeholder="team-name" id="name" required>
+      <input type="text" id="uid" hidden>
+    </div>
+
+    <!-- <div class="horizontal" hidden$="[[!_edit]]">
+      <input type="email" multiple placeholder="users, comma separated email" id="editUsers">
+      <paper-button on-click="_deleteUsers" class="inline-button">Delete users</paper-button>
+    </div> -->
+
+    <input type="email" multiple placeholder="users, comma separated" id="newUsers" hidden$="[[_edit]]">
+
+    <div class="horizontal-reverse">
+      <paper-button on-click="_cancel">Cancel</paper-button>
+      <paper-button on-click="_create" hidden$="[[_edit]]">Create!</paper-button>
+      <paper-button on-click="_deleteTeam" hidden$="[[!_edit]]">Delete team</paper-button>
+      <paper-button on-click="_renameTeam" hidden$="[[!_edit]]">Rename team</paper-button>
+
+    </div>
+
     </div>
 
   </template>
@@ -73,16 +103,53 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     Polymer({
       is: 'new-team',
 
+      properties: {
+        _edit: {
+          type: Boolean,
+          value: false
+        }
+      },
+
+      edit: function(name, uid) {
+        this.$.name.value = name;
+        this.$.uid.value = uid;
+        this._edit = true;
+        this.hidden = false;
+      },
+
+      create: function() {
+        this._edit = false;
+        this.hidden = false;
+      },
+
       _create: function () {
-        var valid = this.$.name.validity.valid && this.$.users.validity.valid;
+        var valid = this.$.name.validity.valid && this.$.newUsers.validity.valid;
         if (!valid)
           return;
 
         this.fire('new-team',
           { name: this.$.name.value.trim(),
-            users: this.$.users.value.split(',')});
+            users: this.$.newUsers.value.split(',')});
 
-        this.$.name.value = this.$.users.value = '';
+        this.$.name.value = this.$.newUsers.value = '';
+      },
+
+      _cancel: function() {
+        this.hidden = true;
+        this._edit = true;
+      },
+
+      _deleteTeam: function() {
+        this.fire('delete-team', {name: this.$.name.value, uid: this.$.uid.value});
+        this.hidden = true;
+      },
+
+      _renameTeam: function() {
+        if (!this.$.name.validity.valid)
+          return;
+
+        this.fire('rename-team', {name: this.$.name.value, uid: this.$.uid.value});
+        this.hidden = true;
       }
     });
   </script>
