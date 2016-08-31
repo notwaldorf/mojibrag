@@ -30,6 +30,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="new-team.html">
 <link rel="import" href="my-icons.html">
 <link rel="import" href="firebase-helper.html">
+<link rel="import" href="view-posts.html">
 
 <dom-module id="my-app">
   <template>
@@ -37,16 +38,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       :host {
         --app-primary-color: #4285f4;
         --app-secondary-color: black;
+        --app-background-color: #f5f5f5;
         --paper-tabs-selection-bar-color: var(--app-primary-color);
         --paper-tab-ink: var(--app-primary-color);
+
         display: block;
       }
 
-      app-header-layout, app-drawer {
-        background: #f5f5f5;
+      app-drawer-layout {
+        background: var(--app-background-color);
+      }
+
+      app-drawer {
         color: #37474F;
         --app-drawer-content-container: {
-          background: #f5f5f5;
+          background: var(--app-background-color);
         };
         --app-drawer-width: 200px;
       }
@@ -144,9 +150,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
           <template is="dom-repeat" items="[[teams]]">
-            <a name="[[item.name]]" href="/[[item.name]]" uid="[[item.id]]">
+            <a name="[[item.name]]" href="/[[item.name]]">
               <span>[[item.name]]</span>
-              <paper-icon-button class="teamSettings" icon="icons:settings" on-click="_showEditTeam"></paper-icon-button>
+              <paper-icon-button class="teamSettings" name="[[item.name]]" ref="[[item.ref]]" icon="icons:settings"
+                  on-click="_showEditTeam">
+              </paper-icon-button>
             </a>
           </template>
         </iron-selector>
@@ -169,7 +177,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </app-header>
 
         <div class="main-content">
-          <new-post hidden$="[[!user]]" team="[[page]]"></new-post>
+          <new-post hidden team="[[page]]" id="newPost"></new-post>
           <new-team hidden id="newTeam"></new-team>
 
           <div class="needsSignin" hidden$="[[user]]">
@@ -183,7 +191,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               fallback-selection="404"
               role="main">
             <template is="dom-repeat" items="[[teams]]">
-              <view-posts name="[[item.name]]" session="[[user]]" team="[[item.name]]"></view-posts>
+              <view-posts name="[[item]]" session="[[user]]" team="[[item]]"></view-posts>
             </template>
             <view-404 name="404"></view-404>
           </iron-pages>
@@ -230,7 +238,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         firebase.auth().onAuthStateChanged(function(user) {
           this.resetUI();
           this.user = user;
-          this._firebaseSaveUser(user);
+          this._firebaseUpdateUserInfo(user);
         }.bind(this));
       },
 
@@ -272,9 +280,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       // TODO: this is borked.
       _pageChanged: function(page) {
         // Load page import on demand. Show 404 page if fails
-        var resolvedPageUrl = this.resolveUrl(page==='404' ? 'view-404.html' : 'view-posts.html');
-        console.log(resolvedPageUrl)
-        this.importHref(resolvedPageUrl, null, this._showPage404, true);
+        // var resolvedPageUrl = this.resolveUrl(page==='404' ? 'view-404.html' : 'view-posts.html');
+        // console.log(resolvedPageUrl)
+        // this.importHref(resolvedPageUrl, null, this._showPage404, true);
       },
 
       _showPage404: function() {
@@ -297,8 +305,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
 
       _showEditTeam: function(event) {
-        var parentLink = event.target.parentNode;
-        this.$.newTeam.edit(parentLink.name, parentLink.uid);
+        this.$.newTeam.edit(event.target.name, event.target.ref);
       },
 
       _createTeam: function(event) {
@@ -307,36 +314,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
 
       _deleteTeam: function(event) {
-        var teamId = event.detail.uid;
-        var teamName = event.detail.name;
-
-        firebase.database().ref('/teams/').child(teamId).remove();
-        for (var i = 0; i < this.teams.length; i++) {
-          if (this.teams[i].id === teamId) {
-            this.splice('teams', i, 1);
-            return;
-          }
-        }
+        this._firebaseDeleteTeam(event.detail.ref, event.detail.name);
       },
 
       _renameTeam: function(event) {
-        var teamId = event.detail.uid;
-        var teamName = event.detail.name;
-
-        firebase.database().ref('/teams/').child(teamId).update(
-          {name: teamName}
-        );
-
-        for (var i = 0; i < this.teams.length; i++) {
-          if (this.teams[i].id === teamId) {
-            this.splice('teams', i, 1, {name: teamName, id: teamId});
-            return;
-          }
-        }
+        this._firebaseRenameTeam(event.detail.ref, event.detail.oldName, event.detail.newName);
       },
 
       _addUsers: function(event) {
-        var teamId = event.detail.uid;
+        var teamId = event.detail.name;
         var newUsers = event.detail.users;
 
         // For each of the users in the list, add this team to them.
@@ -354,7 +340,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
 
       _deleteUsers: function(event) {
-        var teamId = event.detail.uid;
+        var teamId = event.detail.name;
         var delUsers = event.detail.users;
 
         // For each of the users in the list, remove this team from them.

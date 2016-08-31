@@ -2,7 +2,7 @@
 
 <script>
 Polymer.FirebaseHelper = {
-  _firebaseSaveUser: function(user) {
+  _firebaseUpdateUserInfo: function(user) {
     firebase.database().ref('/users/' + user.uid).once('value', function(snapshot) {
       var userInfo = snapshot.val();
 
@@ -31,12 +31,17 @@ Polymer.FirebaseHelper = {
   _firebaseGetUserTeams: function(teamIds) {
     this.set('teams', []);
     var self = this;
+
+    if (teamIds.length > 0) {
+      self.$.newPost.hidden = false;
+    }
+
     for (var i = 0; i < teamIds.length; i++) {
       firebase.database().ref('/teams/' + teamIds[i]).once('value', function(snapshot) {
         // This team may not exist.
         if (snapshot.val()) {
           // Push instead of set so that we can do this incrementally I guess.
-          self.push('teams', {name: snapshot.val().name, id: snapshot.key});
+          self.push('teams', {name: snapshot.val().name, ref: snapshot.key});
         }
       }.bind(this));
     }
@@ -59,7 +64,7 @@ Polymer.FirebaseHelper = {
     var self = this;
 
     // Check if the team already exists.
-    firebase.database().ref('/teams/' + team).once('value', function(snapshot) {
+    firebase.database().ref('/teamNames/' + team).once('value', function(snapshot) {
       if (snapshot.val()) {
         alert('team already exists');
         self.fire('new-team-error');
@@ -70,43 +75,82 @@ Polymer.FirebaseHelper = {
         }
 
         // Create the team.
-        firebase.database().ref('/teams')
-          .child(team).set({
+        var teamRef = firebase.database().ref('/teams')
+          .push({
             name: team,
             owner: self.user.uid,
             ownerEmail: self.user.email,
             users: users.length == 0 ? null : users,
             createdAt: {'.sv': 'timestamp'}
-          }).then(function() {
-            // Show it
-            self.push('teams', {name: team, id: team});
+          });
 
-            // Add this team to this user.
-            firebase.database().ref('/users/' + self.user.uid).once('value', function(snapshot) {
-              var userTeams = snapshot.val().teams || [];
-              userTeams.push(team);
-              snapshot.ref.update({teams: userTeams});
-            });
+        // Also add it in the name -> key mapping.
+        firebase.database().ref('/teamNames/').child(team).set({id:teamRef.key});
 
-            // For each of the users in the list, add this team to them.
-            // The problem is that the user only entered emails, so we have to go
-            // through the whole database and match emails(since they're not keys)
-            // TODO: figure out if there's a better way.
-            firebase.database().ref('/users/').once('value', function(snapshot) {
-              var allUsers = snapshot.val();
-
-              for (var user in allUsers) {
-                // This user is in the new team!
-
-                if (allUsers[user].email !== self.user.email &&
-                  users.indexOf(allUsers[user].email) != -1 ) {
-                  var userTeams = allUsers[user].teams || [];
-                  userTeams.push(team);
-                  firebase.database().ref('/users/' + user).update({teams: userTeams});
-                }
-              }
-            });
+        // Add this team to this user.
+        firebase.database().ref('/users/' + self.user.uid).once('value', function(snapshot) {
+          var userTeams = snapshot.val().teams || [];
+          userTeams.push(teamRef.key);
+          snapshot.ref.update({teams: userTeams});
         });
+
+        // Add it to the UI now because the next step is slow.
+        self.push('teams', {name: team, ref: teamRef.key});
+
+        // For each of the users in the list, add this team to them.
+        // The problem is that the user only entered emails, so we have to go
+        // through the whole database and match emails(since they're not keys)
+        // TODO: figure out if there's a better way.
+        firebase.database().ref('/users/').once('value', function(snapshot) {
+          var allUsers = snapshot.val();
+
+          for (var user in allUsers) {
+            // This user is in the new team! (but may be us, so skip us)
+            if (allUsers[user].email !== self.user.email &&
+              users.indexOf(allUsers[user].email) != -1 ) {
+              var userTeams = allUsers[user].teams || [];
+              userTeams.push(teamRef.key);
+              firebase.database().ref('/users/' + user).update({teams: userTeams});
+            }
+          }
+        });
+      }
+    });
+  },
+
+  _firebaseDeleteTeam: function(ref, teamName) {
+    // Delete this from the names -> keys table.
+    firebase.database().ref('/teamNames/').child(teamName).remove();
+
+    // Delete this from the main teams table.
+    firebase.database().ref('/teams/').child(ref).remove();
+
+    // TODO: could optionally delete this from the users too.
+
+    // Delete this from the UI.
+    for (var i = 0; i < this.teams.length; i++) {
+      if (this.teams[i].name === teamName) {
+        this.splice('teams', i, 1);
+        return;
+      }
+    }
+  },
+
+  _firebaseRenameTeam: function(ref, oldName, newName) {
+    var self = this;
+
+    // Check if the new team already exists.
+    firebase.database().ref('/teamNames/' + newName).once('value', function(snapshot) {
+      if (snapshot.val()) {
+        alert('new name already exists');
+        self.fire('new-team-error');
+      } else {
+        // Update the name in the main teams table
+        firebase.database().ref('/teams/').child(ref).set({name: newName});
+
+        // Update the name in the names -> keys table.
+        firebase.database().ref('/teamNames/').child(oldName).remove();
+        firebase.database().ref('/teamNames/').child(newName).set({id:ref});
       }
     });
   }

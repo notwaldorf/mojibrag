@@ -67,7 +67,6 @@
 
     <div class="horizontal">
       <input type="text" placeholder="team-name" id="name" required pattern="[^.#$\[\]/]+">
-      <input type="text" id="uid" hidden>
     </div>
 
     <div class="horizontal" hidden$="[[!_edit]]">
@@ -83,7 +82,6 @@
       <paper-button on-click="_create" hidden$="[[_edit]]">Create!</paper-button>
       <paper-button on-click="_deleteTeam" hidden$="[[!_edit]]">Delete team</paper-button>
       <paper-button on-click="_renameTeam" hidden$="[[!_edit]]">Rename team</paper-button>
-
     </div>
 
     </div>
@@ -101,9 +99,11 @@
         }
       },
 
-      edit: function(name, uid) {
+      edit: function(name, ref) {
+        this._originalName = name;
+        this._ref = ref;
         this.$.name.value = name;
-        this.$.uid.value = uid;
+
         this._edit = true;
         this.hidden = false;
       },
@@ -133,7 +133,7 @@
       },
 
       _deleteTeam: function() {
-        this.fire('delete-team', {name: this.$.name.value, uid: this.$.uid.value});
+        this.fire('delete-team', {ref: this._ref, name: this._originalName});
         this.hidden = true;
       },
 
@@ -141,7 +141,7 @@
         if (!this.$.name.validity.valid)
           return;
 
-        this.fire('rename-team', {name: this.$.name.value, uid: this.$.uid.value});
+        this.fire('rename-team', {ref: this._ref, oldName: this._originalName, newName: this.$.name.value});
         this.hidden = true;
       },
 
@@ -151,7 +151,7 @@
           return;
 
         this.fire('delete-users',
-            {uid: this.$.uid.value,
+            {name: this.$.name.value,
              users: this.$.editUsers.value.split(',')
             });
         this.hidden = true;
@@ -163,7 +163,7 @@
           return;
 
         this.fire('add-users',
-            {uid: this.$.uid.value,
+            {name: this.$.name.value,
              users: this.$.editUsers.value.split(',')
             });
         this.hidden = true;
