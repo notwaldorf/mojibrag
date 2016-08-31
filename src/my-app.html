@@ -168,7 +168,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </app-header>
 
         <div class="main-content">
-          <new-post hidden$="[[!user]]" team$="[[page]]"></new-post>
+          <new-post hidden$="[[!user]]" team="[[page]]"></new-post>
 
           <new-team hidden id="newTeam"></new-team>
 
@@ -213,10 +213,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           type: Object,
           value: null,
           notify: true
+        },
+
+        location: {
+          type: String,
+          notify: true
         }
       },
 
       attached: function() {
+        this._getLocation();
+
         this.set('teams', []);
         var auth = firebase.auth();
 
@@ -302,6 +309,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         var email = this.user.email;
         var name = this.user.displayName;
         var image = this.user.photoURL;
+        var location = this.location || '';
 
         firebase.database().ref('/posts/').child(team)
           .push({
@@ -310,6 +318,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             email: email,
             image: this.user.photoURL,
             likes: 0,
+            location: location,
             createdAt: {'.sv': 'timestamp'}
           });
       },
@@ -445,6 +454,40 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           if (likes !== 0) {
             snapshot.ref.update({likes: likes - 1});
           }
+        });
+      },
+
+      _getLocation: function() {
+        var self = this;
+        navigator.geolocation.getCurrentPosition(function(position) {
+          var request = new XMLHttpRequest();
+          var method = 'GET';
+          var url = 'http://maps.googleapis.com/maps/api/geocode/json?latlng='
+              + position.coords.latitude + ','
+              + position.coords.longitude;
+
+          request.open('GET', url, true);
+          request.onreadystatechange = function() {
+            if (request.readyState == 4 && request.status == 200) {
+              var data = JSON.parse(request.responseText);
+              var addressComponents = data.results[0].address_components;
+
+              var city, state;
+              for(var i = 0; i < addressComponents.length; i++){
+                if (addressComponents[i].types == 'locality,political') {
+                  city = addressComponents[i].long_name;
+                } else if (addressComponents[i].types == 'administrative_area_level_1,political') {
+                  state = addressComponents[i].short_name;
+                }
+              }
+
+              // TODO: this probably changes when you're on mobile and it should
+              // be less bad and static.
+              self.location = city + ', ' + state;
+              console.log('We have a location!', self.location);
+            }
+          };
+          request.send();
         });
       }
     });

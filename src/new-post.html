@@ -27,6 +27,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         display: none !important;
       }
 
+      [hidden] {
+        display: none !important;
+      }
+
       textarea, #preview {
         box-sizing: border-box;
         padding: 0;
@@ -130,7 +134,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           this._emojify();
         }.bind(this));
       },
-
+      
       _post: function () {
         // Emojify, if you haven't already.
         var nodes = this.$.preview.children;

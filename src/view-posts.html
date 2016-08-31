@@ -48,12 +48,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         margin-bottom: 10px;
       }
 
-      .text {
+      .giant {
         font-size: 36px;
         font-weight: 100;
       }
 
-      .date {
+      .small {
         padding-top: 10px;
         font-size: 10px;
       }
@@ -70,6 +70,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       .vertical {
         @apply(--layout-vertical);
+      }
+
+      iron-icon.location {
+        height: 16px;
+        vertical-align: middle;
       }
     </style>
 
@@ -93,9 +98,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <div class="horizontal">
               <img class="avatar" sizing="contain" src="[[item.image]]">
               <div class="vertical">
-                <span class="name">[[item.email]]</span>
-                <div class="text">[[item.message]]</div>
-                <!-- <span class="date">[[_getDate(item.createdAt)]]</span> -->
+                <div class="name">[[item.email]]</div>
+                <div class="giant">[[item.message]]</div>
+                <span class="small">
+                  [[_getDate(item.createdAt)]]
+                  <span hidden$="[[!_hasLocation(item.location)]]">
+                    <iron-icon icon="icons:location" class="location"></iron-icon>
+                    [[item.location]]
+                  </span>
+                </span>
               </div>
             </div>
             <div class="heart-icon">
@@ -135,10 +146,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       _getDate: function(timestamp) {
         var date = new Date(timestamp);
-        var day = date.getDate();
-        var monthIndex = date.getMonth();
-        var year = date.getFullYear();
-        return day + ' '  + monthNames[monthIndex] + ' ' + year;
+        var seconds = Math.floor((new Date() - date) / 1000);
+
+        if (seconds < 3600) {
+          var minutes = Math.floor(seconds/60)
+          return (minutes > 1) ? minutes + " minutes ago" : "1 minute ago";
+        } else if (seconds < 86400) {
+          var hours = Math.floor(seconds/3600)
+          return (hours > 1) ? hours + " hours ago" : "1 hour ago";
+        } else {
+          var day = date.getDate();
+          var monthIndex = date.getMonth();
+          var year = date.getFullYear();
+          return day + ' '  + monthNames[monthIndex] + ' ' + year;
+        }
       },
 
       _postsChanged: function() {
@@ -156,6 +177,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           button.icon = 'icons:favorite-border';
           this.fire('post-unlike', {uid: item.$key, team: this.team});
         }
+      },
+
+      _hasLocation: function(location) {
+        return !!location;
       }
     });
   </script>
