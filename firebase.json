@@ -2,7 +2,7 @@
   "database": {
   },
   "hosting": {
-    "public": "./",
+    "public": "./build/bundled/",
     "rewrites": [
       {
         "source": "**/*",
