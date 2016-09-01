@@ -174,7 +174,60 @@ Polymer.FirebaseHelper = {
         firebase.database().ref('/teamNames/').child(newName).set({id:ref});
       }
     });
+  },
+
+  _firebaseAddUsers: function(ref, newUsers) {
+    // Add these users in the teams database
+    firebase.database().ref('/teams/' + ref).once('value', function(snapshot) {
+      var currentUsers = snapshot.val().users;
+      currentUsers = currentUsers.concat(newUsers);
+      snapshot.ref.update({users: currentUsers});
+    });
+
+    // For each of the users in the list, add this team to them.
+    firebase.database().ref('/users/').once('value', function(snapshot) {
+      var users = snapshot.val();
+
+      for (var user in users) {
+        if (newUsers.indexOf(users[user].email) != -1 ) {
+          var currentUserTeams = users[user].teams || [];
+          currentUserTeams.push(ref);
+          firebase.database().ref('/users/' + user).update({teams: currentUserTeams});
+        }
+      }
+    });
+  },
+
+  _firebaseDeleteUsers: function(ref, delUsers) {
+    // Remove these users in the teams database
+    firebase.database().ref('/teams/' + ref).once('value', function(snapshot) {
+      var currentUsers = snapshot.val().users;
+
+      for (var user in delUsers) {
+        var index = currentUsers.indexOf(delUsers[user]);
+        if (index != -1 ) {
+          currentUsers.splice(index, 1);
+        }
+      }
+      snapshot.ref.update({users: currentUsers});
+    });
+
+
+    // For each of the users in the list, remove this team from them.
+    firebase.database().ref('/users/').once('value', function(snapshot) {
+      var users = snapshot.val();
+
+      for (var user in users) {
+        if (delUsers.indexOf(users[user].email) != -1 ) {
+          var currentUserTeams = users[user].teams || [];
+          var teamIndex = currentUserTeams.indexOf(ref);
+          currentUserTeams.splice(teamIndex, 1);
+          firebase.database().ref('/users/' + user).update({teams: currentUserTeams});
+        }
+      }
+    });
   }
+
 
 };
 </script>
