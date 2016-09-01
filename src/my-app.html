@@ -48,15 +48,22 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         display: none !important;
       }
 
-      app-drawer-layout, app-header-layout, app-header {
+      app-drawer-layout {
         color: #37474F;
-        background: var(--app-background-color);
+        xbackground: var(--app-background-color);
+
+        background: -webkit-linear-gradient(10deg, rgba(67, 216, 168, 0.8), rgba(188, 188, 236, 0.8));
+        background: linear-gradient(80deg, rgba(67, 216, 168, 0.8), rgba(188, 188, 236, 0.8));
+      }
+
+      app-header {
+        background: transparent;
       }
 
       app-drawer {
         color: #37474F;
         --app-drawer-content-container: {
-          background: var(--app-background-color);
+          background: transparent;
           margin-right: 20px;
           padding-left: 16px;
           padding-right: 16px;
@@ -65,7 +72,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       .main-content {
-        padding: 20px;
+        padding: 10px;
         max-width: 540px;
         margin: auto;
       }
@@ -176,7 +183,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       </app-drawer>
 
       <!-- Main content -->
-      <app-header-layout>
+      <app-header-layout has-scrolling-region>
         <app-header fixed>
           <app-toolbar>
             <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>

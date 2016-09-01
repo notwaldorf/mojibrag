@@ -8,18 +8,21 @@
     <style>
       :host {
         display: block;
+        margin-bottom: 40px;
       }
 
       #list {
-        height: 100vh;
         max-width: 100%;
-        margin: auto;
+      }
+
+      h1 {
+        color: #ed2553;
       }
 
       .item {
         @apply(--layout-horizontal);
         margin: 8px 0;
-        background: white;
+        background: rgba(255, 255, 255, 0.5);
         padding: 16px;
       }
 
@@ -52,6 +55,7 @@
         position: absolute;
         top: 16px;
         right: 16px;
+        color: #ed2553;
       }
 
       .horizontal {
@@ -81,7 +85,7 @@
     </app-indexeddb-mirror>
 
     <h1>[[team]]</h1>
-    <iron-list items="[[posts]]" as="item" id="list">
+    <iron-list items="[[posts]]" as="item" id="list" scroll-target="document">
       <template>
         <div>
           <div class="item">
