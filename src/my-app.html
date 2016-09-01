@@ -56,9 +56,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         color: #37474F;
         --app-drawer-content-container: {
           background: transparent;
-          margin-right: 20px;
-          padding-left: 16px;
-          padding-right: 16px;
         };
         --app-drawer-width: 200px;
       }
@@ -137,6 +134,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         display: inline-block;
         vertical-align: middle;
       }
+
+      .drawer-background {
+        margin-right: 20px;
+        padding-left: 16px;
+        padding-right: 16px;
+        height: 100%;
+      }
+
+      @media (max-width: 620px) {
+        .drawer-background {
+          margin-right: 0;
+          background: white;
+        }
+      }
     </style>
 
     <firebase-app
@@ -157,25 +168,27 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       <!-- Drawer content -->
       <app-drawer>
-        <app-toolbar class="left-toolbar">#humblebrag</app-toolbar>
+        <div class="drawer-background">
+          <app-toolbar class="left-toolbar">#humblebrag</app-toolbar>
 
-        <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
-          <template is="dom-repeat" items="[[teams]]">
-            <a name="[[item.name]]" href="/[[item.name]]">
-              <span>
-                <iron-icon class="team-settings" icon="icons:public" hidden$=[[!item.public]]></iron-icon>
-                <span>[[item.name]]</span>
-              </span>
-              <paper-icon-button class="team-settings" team="[[item]]" icon="icons:settings"
-                  on-click="_showEditTeam" hidden$="[[_shouldShowTeamSettings(item)]]">
-              </paper-icon-button>
-            </a>
-          </template>
-        </iron-selector>
+          <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
+            <template is="dom-repeat" items="[[teams]]">
+              <a name="[[item.name]]" href="/[[item.name]]">
+                <span>
+                  <iron-icon class="team-settings" icon="icons:public" hidden$=[[!item.public]]></iron-icon>
+                  <span>[[item.name]]</span>
+                </span>
+                <paper-icon-button class="team-settings" team="[[item]]" icon="icons:settings"
+                    on-click="_showEditTeam" hidden$="[[_shouldShowTeamSettings(item)]]">
+                </paper-icon-button>
+              </a>
+            </template>
+          </iron-selector>
 
-        <paper-button raised on-click="_showCreateTeam" class="create-team" id="createTeamButton">
-          <iron-icon icon="icons:add"></iron-icon>Create team
-        </paper-button>
+          <paper-button raised on-click="_showCreateTeam" class="create-team" id="createTeamButton">
+            <iron-icon icon="icons:add"></iron-icon>Create team
+          </paper-button>
+        </div>
       </app-drawer>
 
       <!-- Main content -->
