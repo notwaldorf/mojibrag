@@ -157,6 +157,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           background: white;
         }
       }
+
+      .giant-emoji {
+        font-size: 100px;
+      }
     </style>
 
     <firebase-app
@@ -174,7 +178,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         tail="{{subroute}}"></app-route>
 
     <div class="needsSignin" hidden$="[[user]]">
-      <div style="font-size:100px">👋🆒🐱</div>
+      <div class="giant-emoji">👋🆒🐱</div>
       <h1>#humblebrag</h1>
       <p>📢 &nbsp;stuff. Use ✨🙊😂 &nbsp; emoji.</p>
       <paper-button on-tap="login" raised>Sign in with Google</paper-button>
@@ -221,6 +225,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </app-header>
 
         <div class="main-content">
+          <div id="loading" hidden>
+            <div class="giant-emoji">✋ 🎉 ⏳ 🤖</div>
+          </div>
           <new-post hidden team="[[page]]" id="newPost"></new-post>
           <new-team hidden id="newTeam"></new-team>
           <iron-pages
@@ -277,6 +284,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         firebase.auth().onAuthStateChanged(function(user) {
           this.user = user;
           this.$.drawer.opened = !!user;
+          this.$.loading.hidden = !this.$.drawer.opened;
           this._firebaseUpdateUserInfo(user);
         }.bind(this));
       },
@@ -305,6 +313,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         firebase.auth().signOut();
         this.$.newTeam.hidden = true;
         this.$.newPost.hidden = true;
+        this.$.loading.hidden = true;
       },
 
       /*******************************

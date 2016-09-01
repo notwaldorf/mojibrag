@@ -39,6 +39,7 @@ Polymer.FirebaseHelper = {
         return;
 
       this.$.newPost.hidden = false;
+      this.$.loading.hidden = true;
       for (team in teams) {
         this._processOneTeam(team);
       }
@@ -50,6 +51,7 @@ Polymer.FirebaseHelper = {
 
     if (teamIds.length !== 0) {
       this.$.newPost.hidden = false;
+      this.$.loading.hidden = true;
     }
 
     for (var i = 0; i < teamIds.length; i++) {
