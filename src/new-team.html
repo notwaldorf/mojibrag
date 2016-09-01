@@ -63,7 +63,8 @@
       }
     </style>
 
-    <div class="title">Create new team</div>
+    <div class="title" hidden$="[[_edit]]">Create new team</div>
+    <div class="title" hidden$="[[!_edit]]">Edit new team</div>
 
     <div class="horizontal">
       <input type="text" placeholder="team-name" id="name" required pattern="[^.#$\[\]/]+">
@@ -71,8 +72,8 @@
 
     <div class="horizontal" hidden$="[[!_edit]]">
       <input type="email" multiple placeholder="users, comma separated email" id="editUsers">
-      <paper-button on-click="_deleteUsers" class="inline-button">Del users</paper-button>
-      <paper-button on-click="_addUsers" class="inline-button">Add users</paper-button>
+      <paper-icon-button on-click="_addUsers" icon="icons:person-add"></paper-icon-button>
+      <paper-icon-button on-click="_deleteUsers" icon="icons:delete"></paper-icon-button>
     </div>
 
     <input type="email" multiple placeholder="users, comma separated" id="newUsers" hidden$="[[_edit]]">
@@ -168,7 +169,7 @@
         if (this.$.editUsers.value.trim() !== '') {
           users = this.$.editUsers.value.split(',')
         }
-        
+
         this.fire('add-users', {ref: this._ref, users: users});
         this.hidden = true;
       },

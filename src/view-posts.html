@@ -80,15 +80,15 @@
       online="[[online]]">
     </app-indexeddb-mirror>
 
-    <h1>[[team]] [[ref]]</h1>
+    <h1>[[team]]</h1>
     <iron-list items="[[posts]]" as="item" id="list">
       <template>
         <div>
           <div class="item">
             <div class="horizontal">
-              <img class="avatar" sizing="contain" src="[[item.image]]">
+              <img class="avatar" sizing="contain" src="[[item.image]]" title="[[item.email]]">
               <div class="vertical">
-                <div class="name">[[item.email]]</div>
+                <!-- <div class="name">[[item.email]]</div> -->
                 <div class="giant">[[item.message]]</div>
                 <span class="small">
                   [[_getDate(item.createdAt)]]

@@ -44,7 +44,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         display: block;
       }
 
-      app-drawer-layout, app-header-layout {
+      [hidden] {
+        display: none !important;
+      }
+
+      app-drawer-layout, app-header-layout, app-header {
+        color: #37474F;
         background: var(--app-background-color);
       }
 
@@ -52,6 +57,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         color: #37474F;
         --app-drawer-content-container: {
           background: var(--app-background-color);
+          margin-right: 20px;
+          padding-left: 16px;
+          padding-right: 16px;
         };
         --app-drawer-width: 200px;
       }
@@ -62,28 +70,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         margin: auto;
       }
 
-      app-header, .left-toolbar {
-        color: #fff;
-        background: #f5f5f5;
-        color: #37474F;
-        z-index: 10;
+      .left-toolbar {
+        padding: 0;
       }
 
+      /* logout button */
       app-toolbar paper-button {
         font-size: 14px;
+        color: #37474F;
       }
-/*
-      app-header paper-icon-button {
-        --paper-icon-button-ink-color: white;
-      }*/
-
-      /*.drawer-list {
-        margin: 0 20px;
-      }*/
 
       .drawer-list a {
         display: block;
-        padding: 0 16px;
+        width: 100%;
         text-decoration: none;
         color: grey;
         font-weight: 100;
@@ -91,12 +90,24 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         @apply(--layout-justified);
       }
 
-      .drawer-list a paper-icon-button {
-      }
-
       .drawer-list a.iron-selected {
         color: black;
         font-weight: bold;
+      }
+
+      paper-button.create-team {
+        width: 100%;
+        font-size: 14px;
+        padding: 2px 0;
+        margin: 20px 0;
+      }
+
+      paper-icon-button.team-settingss {
+        color: grey;
+      }
+
+      paper-icon-button.team-settingss:hover {
+        color: black;
       }
 
       .avatar {
@@ -123,7 +134,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         font-size: 14px;
       }
 
-      .teamSettings {
+      .team-settingss {
         display: inline-block;
       }
     </style>
@@ -143,6 +154,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         tail="{{subroute}}"></app-route>
 
     <app-drawer-layout fullbleed>
+
       <!-- Drawer content -->
       <app-drawer hidden$="[[!user]]">
         <app-toolbar class="left-toolbar">#humblebrag</app-toolbar>
@@ -151,14 +163,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <template is="dom-repeat" items="[[teams]]">
             <a name="[[item.name]]" href="/[[item.name]]">
               <span>[[item.name]]</span>
-              <paper-icon-button class="teamSettings" name="[[item.name]]" ref="[[item.ref]]" icon="icons:settings"
+              <paper-icon-button class="team-settingss" name="[[item.name]]" ref="[[item.ref]]" icon="icons:settings"
                   on-click="_showEditTeam">
               </paper-icon-button>
             </a>
           </template>
         </iron-selector>
 
-        <paper-button raised on-click="_showCreateTeam"><iron-icon icon="icons:add"></iron-icon>Create team</paper-button>
+        <paper-button raised on-click="_showCreateTeam" class="create-team" id="createTeamButton">
+          <iron-icon icon="icons:add"></iron-icon>Create team
+        </paper-button>
       </app-drawer>
 
       <!-- Main content -->
@@ -176,6 +190,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </app-header>
 
         <div class="main-content">
+          <div id="help" hidden>
+            <h1>hey there!</h1>
+            <p>You don't seem to have been added to any teams, which is
+              why you don't see any humblebrags. Either contact an admin to
+              add you to a team, or create your own and start humblebragging!</p>
+
+            <paper-button raised on-click="_showCreateTeam" class="create-team">
+              <iron-icon icon="icons:add"></iron-icon>Create team
+            </paper-button>
+          </div>
           <new-post hidden team="[[page]]" id="newPost"></new-post>
           <new-team hidden id="newTeam"></new-team>
 
@@ -235,7 +259,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         var auth = firebase.auth();
         firebase.auth().onAuthStateChanged(function(user) {
-          this.resetUI();
           this.user = user;
           this._firebaseUpdateUserInfo(user);
         }.bind(this));
@@ -256,17 +279,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         'post-unlike': '_postUnlike',
       },
 
-      resetUI: function() {
-        this.set('teams', []);
-        this.$.newTeam.hidden = true;
-      },
-
       login: function() {
         firebase.auth().signInWithPopup(new firebase.auth.GoogleAuthProvider());
       },
 
       logout: function() {
         firebase.auth().signOut();
+        this.$.newTeam.hidden = true;
+        this.$.newPost.hidden = true;
+        this.$.help.hidden = true;
+      },
+
+      showNoTeams: function(noTeams) {
+        this.$.newPost.hidden = noTeams;
+        this.$.help.hidden = !noTeams;
+        this.$.createTeamButton.hidden = noTeams;
       },
 
       /*******************************
@@ -307,7 +334,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
 
       _showEditTeam: function(event) {
-        this.$.newTeam.edit(event.target.name, event.target.ref);
+        var resolvedPageUrl = this.resolveUrl('new-team.html');
+        var teamName = event.target.name;
+        var ref = event.target.ref;
+
+        this.importHref(resolvedPageUrl, function() {
+          this.$.newTeam.edit(teamName, ref);
+        }, null, true);
       },
 
       _createTeam: function(event) {

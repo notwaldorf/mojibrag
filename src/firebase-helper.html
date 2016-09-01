@@ -38,7 +38,7 @@ Polymer.FirebaseHelper = {
         if (snapshot.val()) {
           // Push instead of set so that we can do this incrementally I guess.
           self.push('teams', {name: snapshot.val().name, ref: snapshot.key});
-          self.$.newPost.hidden = false;
+          self.showNoTeams(false);
           //this._routePageChanged(this.routeData.page);
         }
       }.bind(this));
@@ -115,7 +115,7 @@ Polymer.FirebaseHelper = {
 
         // Add it to the UI now because the next step is slow.
         self.push('teams', {name: team, ref: teamRef.key});
-        self.$.newPost.hidden = false;
+        self.showNoTeams(false);
 
         // For each of the users in the list, add this team to them.
         // The problem is that the user only entered emails, so we have to go
@@ -152,7 +152,7 @@ Polymer.FirebaseHelper = {
       if (this.teams[i].name === teamName) {
         this.splice('teams', i, 1);
         if (this.teams.length === 0)
-          this.$.newPost.hidden = true;
+          this.showNoTeams(true);
         return;
       }
     }
