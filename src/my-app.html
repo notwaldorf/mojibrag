@@ -80,15 +80,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         display: block;
         width: 100%;
         text-decoration: none;
-        color: grey;
+        color: #455A64;
         font-weight: 100;
         @apply(--layout-horizontal);
         @apply(--layout-justified);
+        vertical-align:  middle
         text-align: left;
       }
+
       .drawer-list a.iron-selected {
-        color: black;
+        color: #37474F;
         font-weight: bold;
+      }
+
+      .drawer-list a iron-icon {
+        vertical-align: middle;
       }
 
       paper-button.create-team {
@@ -120,7 +126,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       .needsSignin {
-        height: 100vh;
+        @apply(--layout-fit);
+        padding-top: 20vh;
+        max-width: 400px;
+        margin: auto;
         text-align: center;
       }
 
@@ -164,17 +173,23 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         data="{{routeData}}"
         tail="{{subroute}}"></app-route>
 
-    <app-drawer-layout>
+    <div class="needsSignin" hidden$="[[user]]">
+      <div style="font-size:100px">👋🆒🐱</div>
+      <h1>#humblebrag</h1>
+      <p>📢 &nbsp;stuff. Use ✨🙊😂 &nbsp; emoji.</p>
+      <paper-button on-tap="login" raised>Sign in with Google</paper-button>
+    </div>
 
+    <app-drawer-layout>
       <!-- Drawer content -->
-      <app-drawer>
+      <app-drawer id="drawer">
         <div class="drawer-background">
           <app-toolbar class="left-toolbar">#humblebrag</app-toolbar>
 
           <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
             <template is="dom-repeat" items="[[teams]]">
               <a name="[[item.name]]" href="/[[item.name]]">
-                <span>
+                <span style="padding:8px 0;">
                   <iron-icon class="team-settings" icon="icons:public" hidden$=[[!item.public]]></iron-icon>
                   <span>[[item.name]]</span>
                 </span>
@@ -208,12 +223,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <div class="main-content">
           <new-post hidden team="[[page]]" id="newPost"></new-post>
           <new-team hidden id="newTeam"></new-team>
-
-          <div class="needsSignin" hidden$="[[user]]">
-            <h1>#humblebrag</h1>
-            <paper-button on-tap="login" raised>Sign in with Google</paper-button>
-          </div>
-
           <iron-pages
               selected="[[page]]"
               attr-for-selected="name"
@@ -262,10 +271,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       attached: function() {
         this._getLocation();
+        this.$.drawer.opened = false;
 
         var auth = firebase.auth();
         firebase.auth().onAuthStateChanged(function(user) {
           this.user = user;
+          this.$.drawer.opened = !!user;
           this._firebaseUpdateUserInfo(user);
         }.bind(this));
       },
@@ -290,6 +301,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
 
       logout: function() {
+        this.$.drawer.opened = false;
         firebase.auth().signOut();
         this.$.newTeam.hidden = true;
         this.$.newPost.hidden = true;
