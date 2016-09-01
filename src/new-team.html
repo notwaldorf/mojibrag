@@ -1,4 +1,6 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/paper-toggle-button/paper-toggle-button.html">
+
 
 <dom-module id="new-team">
   <template>
@@ -55,12 +57,25 @@
       .horizontal {
         @apply(--layout-horizontal);
       }
+
       .horizontal-reverse {
         @apply(--layout-horizontal-reverse);
+        @apply(--layout-justified);
       }
 
       .inline-button {
         width: 150px;
+      }
+
+      .public-settings {
+        padding: 0.7em 0.57em;  /* match paper-buttons on the same line */
+        text-transform: uppercase;
+        font-size: 14px;
+      }
+
+      paper-toggle-button {
+        display: inline-block;
+        vertical-align: middle;
       }
     </style>
 
@@ -80,10 +95,17 @@
     <input type="email" multiple placeholder="users, comma separated" id="newUsers" hidden$="[[_edit]]">
 
     <div class="horizontal-reverse">
-      <paper-button on-click="_cancel">Cancel</paper-button>
-      <paper-button on-click="_create" hidden$="[[_edit]]">Create!</paper-button>
-      <paper-button on-click="_deleteTeam" hidden$="[[!_edit]]">Delete team</paper-button>
-      <paper-button on-click="_renameTeam" hidden$="[[!_edit]]">Rename team</paper-button>
+      <span>
+        <paper-button on-click="_cancel">Cancel</paper-button>
+        <paper-button on-click="_create" hidden$="[[_edit]]">Create!</paper-button>
+
+        <paper-button on-click="_deleteTeam" hidden$="[[!_edit]]">Delete team</paper-button>
+        <paper-button on-click="_renameTeam" hidden$="[[!_edit]]">Rename team</paper-button>
+      </span>
+
+      <span class="public-settings">
+        private <paper-toggle-button id="public" hidden$="[[_edit]]"></paper-toggle-button>public
+      </span>
     </div>
 
     </div>
@@ -125,7 +147,7 @@
           users = this.$.newUsers.value.split(',')
         }
 
-        this.fire('new-team', {name: this.$.name.value.trim(), users: users});
+        this.fire('new-team', {name: this.$.name.value.trim(), users: users, public:this.$.public.checked});
         this.$.name.value = this.$.newUsers.value = '';
       },
 

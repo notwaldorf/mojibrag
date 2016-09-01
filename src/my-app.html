@@ -95,8 +95,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         font-weight: 100;
         @apply(--layout-horizontal);
         @apply(--layout-justified);
+        text-align: left;
       }
-
       .drawer-list a.iron-selected {
         color: black;
         font-weight: bold;
@@ -141,8 +141,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         font-size: 14px;
       }
 
-      .team-settingss {
+      .team-settings {
         display: inline-block;
+        vertical-align: middle;
       }
     </style>
 
@@ -169,8 +170,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
           <template is="dom-repeat" items="[[teams]]">
             <a name="[[item.name]]" href="/[[item.name]]">
+              <iron-icon class="team-settings" icon="icons:public" hidden$=[[!item.public]]></iron-icon>
               <span>[[item.name]]</span>
-              <paper-icon-button class="team-settingss" name="[[item.name]]" ref="[[item.ref]]" icon="icons:settings"
+              <paper-icon-button class="team-settings" name="[[item.name]]" ref="[[item.ref]]" icon="icons:settings"
                   on-click="_showEditTeam">
               </paper-icon-button>
             </a>
@@ -197,16 +199,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </app-header>
 
         <div class="main-content">
-          <div id="help" hidden>
-            <h1>hey there!</h1>
-            <p>You don't seem to have been added to any teams, which is
-              why you don't see any humblebrags. Either contact an admin to
-              add you to a team, or create your own and start humblebragging!</p>
-
-            <paper-button raised on-click="_showCreateTeam" class="create-team">
-              <iron-icon icon="icons:add"></iron-icon>Create team
-            </paper-button>
-          </div>
           <new-post hidden team="[[page]]" id="newPost"></new-post>
           <new-team hidden id="newTeam"></new-team>
 
@@ -221,7 +213,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               xfallback-selection="404"
               role="main">
             <template is="dom-repeat" items="[[teams]]">
-              <view-posts name="[[item.name]]" session="[[user]]" team="[[item.name]]" ref="[[item.ref]]"></view-posts>
+              <view-posts name="[[item.name]]" session="[[user]]" team="[[item.name]]" ref="[[item.key]]"></view-posts>
             </template>
             <view-404 name="404"></view-404>
           </iron-pages>
@@ -294,13 +286,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         firebase.auth().signOut();
         this.$.newTeam.hidden = true;
         this.$.newPost.hidden = true;
-        this.$.help.hidden = true;
-      },
-
-      showNoTeams: function(noTeams) {
-        this.$.newPost.hidden = noTeams;
-        this.$.help.hidden = !noTeams;
-        this.$.createTeamButton.hidden = noTeams;
       },
 
       /*******************************
@@ -351,7 +336,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
 
       _createTeam: function(event) {
-        this._firebaseAddTeam(event.detail.name, event.detail.users);
+        this._firebaseAddTeam(event.detail.name, event.detail.users, event.detail.public);
         this.$.newTeam.hidden = true;
       },
 
