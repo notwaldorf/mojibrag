@@ -359,25 +359,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
 
       _postLike: function(event) {
-        var postId = event.detail.uid;
-        var postTeam = event.detail.team;
-
-        firebase.database().ref('/posts/' + postTeam).child(postId).once('value', function(snapshot) {
-          var likes = snapshot.val().likes || 0;
-          snapshot.ref.update({likes: likes + 1});
-        });
+        this._firebaseLikeMessage(event.detail.ref, event.detail.teamRef);
       },
 
       _postUnlike: function(event) {
-        var postId = event.detail.uid;
-        var postTeam = event.detail.team;
-
-        firebase.database().ref('/posts/' + postTeam).child(postId).once('value', function(snapshot) {
-          var likes = snapshot.val().likes || 0;
-          if (likes !== 0) {
-            snapshot.ref.update({likes: likes - 1});
-          }
-        });
+        this._firebaseUnlikeMessage(event.detail.ref, event.detail.teamRef);
       },
 
       _getLocation: function() {

@@ -45,16 +45,37 @@ Polymer.FirebaseHelper = {
   },
 
   _firebaseAddMessage: function(team, message, location) {
-    firebase.database().ref('/posts/').child(team)
-      .push({
-        name: this.user.displayName,
-        message: message,
-        email: this.user.email,
-        image: this.user.photoURL,
-        likes: 0,
-        location: location,
-        createdAt: {'.sv': 'timestamp'}
-      });
+    // Get the team ref from the names -> keys mapping
+    firebase.database().ref('/teamNames/' + team).once('value', function(snapshot) {
+      var teamRef = snapshot.val().id;
+
+      firebase.database().ref('/posts/').child(teamRef)
+        .push({
+          name: this.user.displayName,
+          message: message,
+          email: this.user.email,
+          image: this.user.photoURL,
+          likes: 0,
+          location: location,
+          createdAt: {'.sv': 'timestamp'}
+        });
+    }.bind(this));
+  },
+
+  _firebaseLikeMessage: function(post, team) {
+    firebase.database().ref('/posts/' + team).child(post).once('value', function(snapshot) {
+      var likes = snapshot.val().likes || 0;
+      snapshot.ref.update({likes: likes + 1});
+    });
+  },
+
+  _firebaseUnlikeMessage: function(post, team) {
+    firebase.database().ref('/posts/' + team).child(post).once('value', function(snapshot) {
+      var likes = snapshot.val().likes || 0;
+      if (likes !== 0) {
+        snapshot.ref.update({likes: likes - 1});
+      }
+    });
   },
 
   _firebaseAddTeam: function(team, users) {

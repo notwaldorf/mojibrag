@@ -70,11 +70,11 @@
 
     <firebase-query
       data="{{_fbPosts}}"
-      path="/posts/{{team}}">
+      path="/posts/{{ref}}">
     </firebase-query>
     <app-indexeddb-mirror
       session="[[user.uid]]"
-      key="/posts/{{team}}"
+      key="/posts/{{ref}}"
       data="[[_fbPosts]]"
       persisted-data="{{posts}}"
       online="[[online]]">
@@ -124,6 +124,10 @@
           type: String
         },
 
+        ref: {
+          type: String
+        },
+
         session: {
           type: String
         },
@@ -162,10 +166,10 @@
 
         if (button.icon === 'icons:favorite-border') {
           button.icon = 'icons:favorite';
-          this.fire('post-like', {uid: item.$key, team: this.team});
+          this.fire('post-like', {ref: item.$key, teamRef: this.ref});
         } else {
           button.icon = 'icons:favorite-border';
-          this.fire('post-unlike', {uid: item.$key, team: this.team});
+          this.fire('post-unlike', {ref: item.$key, teamRef: this.ref});
         }
       },
 
