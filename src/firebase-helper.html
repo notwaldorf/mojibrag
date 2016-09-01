@@ -32,16 +32,13 @@ Polymer.FirebaseHelper = {
     this.set('teams', []);
     var self = this;
 
-    if (teamIds.length > 0) {
-      self.$.newPost.hidden = false;
-    }
-
     for (var i = 0; i < teamIds.length; i++) {
       firebase.database().ref('/teams/' + teamIds[i]).once('value', function(snapshot) {
         // This team may not exist.
         if (snapshot.val()) {
           // Push instead of set so that we can do this incrementally I guess.
           self.push('teams', {name: snapshot.val().name, ref: snapshot.key});
+          self.$.newPost.hidden = false;
         }
       }.bind(this));
     }
@@ -96,6 +93,7 @@ Polymer.FirebaseHelper = {
 
         // Add it to the UI now because the next step is slow.
         self.push('teams', {name: team, ref: teamRef.key});
+        self.$.newPost.hidden = false;
 
         // For each of the users in the list, add this team to them.
         // The problem is that the user only entered emails, so we have to go
@@ -131,6 +129,8 @@ Polymer.FirebaseHelper = {
     for (var i = 0; i < this.teams.length; i++) {
       if (this.teams[i].name === teamName) {
         this.splice('teams', i, 1);
+        if (this.teams.length === 0)
+          this.$.newPost.hidden = true;
         return;
       }
     }

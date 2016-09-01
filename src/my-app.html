@@ -191,7 +191,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               fallback-selection="404"
               role="main">
             <template is="dom-repeat" items="[[teams]]">
-              <view-posts name="[[item]]" session="[[user]]" team="[[item]]"></view-posts>
+              <view-posts name="[[item.name]]" session="[[user]]" team="[[item.name]]" ref="[[item.ref]]"></view-posts>
             </template>
             <view-404 name="404"></view-404>
           </iron-pages>
