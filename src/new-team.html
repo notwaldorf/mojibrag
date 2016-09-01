@@ -123,9 +123,8 @@
         }
       },
 
-      edit: function(name, ref) {
-        this._originalName = name;
-        this._ref = ref;
+      edit: function(team) {
+        this._team = team;
         this.$.name.value = name;
 
         this._edit = true;
@@ -157,7 +156,7 @@
       },
 
       _deleteTeam: function() {
-        this.fire('delete-team', {ref: this._ref, name: this._originalName});
+        this.fire('delete-team', {ref: this._team.key, name: this._team.name});
         this.hidden = true;
       },
 
@@ -165,7 +164,7 @@
         if (!this.$.name.validity.valid)
           return;
 
-        this.fire('rename-team', {ref: this._ref, oldName: this._originalName, newName: this.$.name.value});
+        this.fire('rename-team', {ref: this._team.key, oldName: this._team.name, newName: this.$.name.value});
         this.hidden = true;
       },
 
@@ -179,7 +178,7 @@
           users = this.$.editUsers.value.split(',')
         }
 
-        this.fire('delete-users', {ref: this._ref, users: users});
+        this.fire('delete-users', {ref: this._team.key, users: users});
         this.hidden = true;
       },
 
@@ -193,7 +192,7 @@
           users = this.$.editUsers.value.split(',')
         }
 
-        this.fire('add-users', {ref: this._ref, users: users});
+        this.fire('add-users', {ref: this._team.key, users: users});
         this.hidden = true;
       },
     });

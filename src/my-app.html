@@ -170,10 +170,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
           <template is="dom-repeat" items="[[teams]]">
             <a name="[[item.name]]" href="/[[item.name]]">
-              <iron-icon class="team-settings" icon="icons:public" hidden$=[[!item.public]]></iron-icon>
-              <span>[[item.name]]</span>
-              <paper-icon-button class="team-settings" name="[[item.name]]" ref="[[item.ref]]" icon="icons:settings"
-                  on-click="_showEditTeam">
+              <span>
+                <iron-icon class="team-settings" icon="icons:public" hidden$=[[!item.public]]></iron-icon>
+                <span>[[item.name]]</span>
+              </span>
+              <paper-icon-button class="team-settings" team="[[item]]" icon="icons:settings"
+                  on-click="_showEditTeam" hidden$="[[_shouldShowTeamSettings(item)]]">
               </paper-icon-button>
             </a>
           </template>
@@ -327,12 +329,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       _showEditTeam: function(event) {
         var resolvedPageUrl = this.resolveUrl('new-team.html');
-        var teamName = event.target.name;
-        var ref = event.target.ref;
+        var team = event.target.team;
 
         this.importHref(resolvedPageUrl, function() {
-          this.$.newTeam.edit(teamName, ref);
+          this.$.newTeam.edit(team);
         }, null, true);
+      },
+
+      _shouldShowTeamSettings: function(team) {
+        return (team.owner === this.user.uid)
       },
 
       _createTeam: function(event) {
