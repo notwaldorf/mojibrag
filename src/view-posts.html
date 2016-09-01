@@ -74,19 +74,23 @@
 
     <firebase-query
       data="{{_fbPosts}}"
-      path="/posts/{{ref}}">
+      path="/posts/{{ref}}"
+      order-by-child="createdAt"
+      >
     </firebase-query>
     <app-indexeddb-mirror
       session="[[user.uid]]"
       key="/posts/{{ref}}"
       data="[[_fbPosts]]"
       persisted-data="{{posts}}"
-      online="[[online]]">
+      online="[[online]]"
+      order-by-child="createdAt">
     </app-indexeddb-mirror>
 
     <h1>[[team]]</h1>
     <iron-list items="[[posts]]" as="item" id="list" scroll-target="document">
       <template>
+      <!-- <template is="dom-repeat" sort="reverseSort" items="[[posts]]" as="item"> -->
         <div>
           <div class="item">
             <div class="horizontal">
@@ -139,7 +143,7 @@
         posts: {
           type: Array,
           observer: '_postsChanged'
-        },
+        }
       },
 
       _getDate: function(timestamp) {
@@ -161,7 +165,8 @@
       },
 
       _postsChanged: function() {
-        this.$.list.fire('iron-resize');
+        //this.$.list.fire('iron-resize');
+        console.log('update', this.team);
       },
 
       _like: function(event) {
@@ -179,6 +184,10 @@
 
       _hasLocation: function(location) {
         return !!location;
+      },
+
+      reverseSort: function(a, b) {
+        return a.createdAt > b.createdAt ? -1 : 1;
       }
     });
   </script>
