@@ -27,7 +27,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/app-storage/app-indexeddb-mirror/app-indexeddb-mirror.html">
 
 <link rel="import" href="new-post.html">
-<link rel="import" href="new-team.html">
 <link rel="import" href="my-icons.html">
 <link rel="import" href="firebase-helper.html">
 <link rel="import" href="view-posts.html">
@@ -45,7 +44,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         display: block;
       }
 
-      app-drawer-layout {
+      app-drawer-layout, app-header-layout {
         background: var(--app-background-color);
       }
 
@@ -188,7 +187,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <iron-pages
               selected="[[page]]"
               attr-for-selected="name"
-              fallback-selection="404"
+              xfallback-selection="404"
               role="main">
             <template is="dom-repeat" items="[[teams]]">
               <view-posts name="[[item.name]]" session="[[user]]" team="[[item.name]]" ref="[[item.ref]]"></view-posts>
@@ -274,7 +273,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
        * Routes
        *******************************/
       _routePageChanged: function(page) {
-        this.page = page;
+        this.page = page; //this.teams.length > 0 ? page : '404';
       },
 
       // TODO: this is borked.
@@ -301,7 +300,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
        * Teams
        *******************************/
       _showCreateTeam: function() {
-        this.$.newTeam.create();
+        var resolvedPageUrl = this.resolveUrl('new-team.html');
+        this.importHref(resolvedPageUrl, function() {
+          this.$.newTeam.create();
+        }, null, true);
       },
 
       _showEditTeam: function(event) {

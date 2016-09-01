@@ -39,6 +39,7 @@ Polymer.FirebaseHelper = {
           // Push instead of set so that we can do this incrementally I guess.
           self.push('teams', {name: snapshot.val().name, ref: snapshot.key});
           self.$.newPost.hidden = false;
+          //this._routePageChanged(this.routeData.page);
         }
       }.bind(this));
     }
