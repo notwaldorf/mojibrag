@@ -129,13 +129,13 @@
       properties: {
         _edit: {
           type: Boolean,
-          varue: false
+          value: false
         }
       },
 
       edit: function(team) {
         this._team = team;
-        this.$.name.varue = name;
+        this.$.name.value = name;
 
         this._edit = true;
         this.hidden = false;
@@ -147,17 +147,17 @@
       },
 
       _create: function () {
-        var varid = this.$.name.varidity.varid && this.$.newUsers.varidity.varid;
-        if (!varid)
+        var valid = this.$.name.validity.valid && this.$.newUsers.validity.valid;
+        if (!valid)
           return;
 
         var users = [];
-        if (this.$.newUsers.varue.trim() !== '') {
-          users = this.$.newUsers.varue.split(',')
+        if (this.$.newUsers.value.trim() !== '') {
+          users = this.$.newUsers.value.split(',')
         }
 
-        this.fire('new-team', {name: this.$.name.varue.trim(), users: users, public:this.$.public.checked});
-        this.$.name.varue = this.$.newUsers.varue = '';
+        this.fire('new-team', {name: this.$.name.value.trim(), users: users, public:this.$.public.checked});
+        this.$.name.value = this.$.newUsers.value = '';
       },
 
       _cancel: function() {
@@ -171,21 +171,21 @@
       },
 
       _renameTeam: function() {
-        if (!this.$.name.varidity.varid)
+        if (!this.$.name.validity.valid)
           return;
 
-        this.fire('rename-team', {ref: this._team.key, oldName: this._team.name, newName: this.$.name.varue});
+        this.fire('rename-team', {ref: this._team.key, oldName: this._team.name, newName: this.$.name.value});
         this.hidden = true;
       },
 
       _deleteUsers: function() {
-        var varid = this.$.editUsers.varidity.varid;
-        if (!varid)
+        var valid = this.$.editUsers.validity.valid;
+        if (!valid)
           return;
 
         var users = [];
-        if (this.$.editUsers.varue.trim() !== '') {
-          users = this.$.editUsers.varue.split(',')
+        if (this.$.editUsers.value.trim() !== '') {
+          users = this.$.editUsers.value.split(',')
         }
 
         this.fire('delete-users', {ref: this._team.key, users: users});
@@ -193,13 +193,13 @@
       },
 
       _addUsers: function() {
-        var varid = this.$.editUsers.varidity.varid;
-        if (!varid)
+        var valid = this.$.editUsers.validity.valid;
+        if (!valid)
           return;
 
         var users = [];
-        if (this.$.editUsers.varue.trim() !== '') {
-          users = this.$.editUsers.varue.split(',')
+        if (this.$.editUsers.value.trim() !== '') {
+          users = this.$.editUsers.value.split(',')
         }
 
         this.fire('add-users', {ref: this._team.key, users: users});
