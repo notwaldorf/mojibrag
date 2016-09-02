@@ -216,7 +216,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                   <span>[[item.name]]</span>
                 </span>
                 <paper-icon-button class="team-settings" team="[[item]]" icon="icons:settings"
-                    on-click="_showEditTeam" hidden$="[[_shouldShowTeamSettings(item)]]">
+                    on-click="_showEditTeam" hidden$="[[!_shouldShowTeamSettings(item)]]">
                 </paper-icon-button>
               </a>
             </template>
