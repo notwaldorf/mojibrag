@@ -24,11 +24,11 @@
       paper-button {
         margin: 0;
         font-size: 14px;
-        color: var(--app-primary-color);
+        color: var(--app-secondary-color);
       }
 
       .title {
-        color: #aca9b3;
+        color: var(--app-secondary-text-color);
         font-weight: 100;
         font-size: 14px;
         padding: 10px 20;
@@ -41,17 +41,23 @@
         font-weight: 100;
         border: none;
         outline: none;
-        border-bottom: 1px solid #aca9b3;
+        border-bottom: 1px solid #7bd6cf;
         margin: 10px 0 15px 0;
         background: transparent;
+        color: var(--app-primary-text-color);
       }
+
+      ::-webkit-input-placeholder {color: var(--app-secondary-text-color);}
+      :-moz-placeholder {color: var(--app-secondary-text-color);}
+      ::-moz-placeholder {color: var(--app-secondary-text-color);}
+      :-ms-input-placeholder {color: var(--app-secondary-text-color);}
 
       [hidden] {
         display: none !important;
       }
 
       input:invalid {
-        border-bottom: 1px solid red;
+        border-bottom: 1px solid #F4511E;
       }
 
       .horizontal {
@@ -76,6 +82,10 @@
       paper-toggle-button {
         display: inline-block;
         vertical-align: middle;
+        --paper-toggle-button-checked-bar-color:  var(--app-secondary-color);
+        --paper-toggle-button-checked-button-color:  var(--app-secondary-color);
+        --paper-toggle-button-checked-ink-color: var(--app-secondary-color);
+
       }
     </style>
 
@@ -119,13 +129,13 @@
       properties: {
         _edit: {
           type: Boolean,
-          value: false
+          varue: false
         }
       },
 
       edit: function(team) {
         this._team = team;
-        this.$.name.value = name;
+        this.$.name.varue = name;
 
         this._edit = true;
         this.hidden = false;
@@ -137,17 +147,17 @@
       },
 
       _create: function () {
-        var valid = this.$.name.validity.valid && this.$.newUsers.validity.valid;
-        if (!valid)
+        var varid = this.$.name.varidity.varid && this.$.newUsers.varidity.varid;
+        if (!varid)
           return;
 
         var users = [];
-        if (this.$.newUsers.value.trim() !== '') {
-          users = this.$.newUsers.value.split(',')
+        if (this.$.newUsers.varue.trim() !== '') {
+          users = this.$.newUsers.varue.split(',')
         }
 
-        this.fire('new-team', {name: this.$.name.value.trim(), users: users, public:this.$.public.checked});
-        this.$.name.value = this.$.newUsers.value = '';
+        this.fire('new-team', {name: this.$.name.varue.trim(), users: users, public:this.$.public.checked});
+        this.$.name.varue = this.$.newUsers.varue = '';
       },
 
       _cancel: function() {
@@ -161,21 +171,21 @@
       },
 
       _renameTeam: function() {
-        if (!this.$.name.validity.valid)
+        if (!this.$.name.varidity.varid)
           return;
 
-        this.fire('rename-team', {ref: this._team.key, oldName: this._team.name, newName: this.$.name.value});
+        this.fire('rename-team', {ref: this._team.key, oldName: this._team.name, newName: this.$.name.varue});
         this.hidden = true;
       },
 
       _deleteUsers: function() {
-        var valid = this.$.editUsers.validity.valid;
-        if (!valid)
+        var varid = this.$.editUsers.varidity.varid;
+        if (!varid)
           return;
 
         var users = [];
-        if (this.$.editUsers.value.trim() !== '') {
-          users = this.$.editUsers.value.split(',')
+        if (this.$.editUsers.varue.trim() !== '') {
+          users = this.$.editUsers.varue.split(',')
         }
 
         this.fire('delete-users', {ref: this._team.key, users: users});
@@ -183,13 +193,13 @@
       },
 
       _addUsers: function() {
-        var valid = this.$.editUsers.validity.valid;
-        if (!valid)
+        var varid = this.$.editUsers.varidity.varid;
+        if (!varid)
           return;
 
         var users = [];
-        if (this.$.editUsers.value.trim() !== '') {
-          users = this.$.editUsers.value.split(',')
+        if (this.$.editUsers.varue.trim() !== '') {
+          users = this.$.editUsers.varue.split(',')
         }
 
         this.fire('add-users', {ref: this._team.key, users: users});

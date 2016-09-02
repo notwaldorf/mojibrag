@@ -35,9 +35,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <template>
     <style>
       :host {
-        --app-primary-color: #4285f4;
-        --app-secondary-color: black;
-        --app-background-color: #f5f5f5;
+        --app-primary-color: #FFC107;  /* orange */
+        --app-secondary-color: #1976D2;  /* teal */
+        --app-primary-text-color: #37474F;
+        --app-secondary-text-color: #607D8B;
         --paper-tabs-selection-bar-color: var(--app-primary-color);
         --paper-tab-ink: var(--app-primary-color);
 
@@ -48,16 +49,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         display: none !important;
       }
 
-      app-drawer-layout {
-        color: #37474F;
-      }
-
       app-drawer {
-        color: #37474F;
         --app-drawer-content-container: {
           background: transparent;
         };
         --app-drawer-width: 200px;
+      }
+
+      .drawer-background {
+        margin-right: 20px;
+        height: 100%;
       }
 
       .main-content {
@@ -68,12 +69,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       .left-toolbar {
         padding: 0;
+        color: white;
+        letter-spacing: 2px;
+        font-size: 20px;
+        padding-left: 16px;
       }
 
       /* logout button */
       app-toolbar paper-button {
         font-size: 14px;
-        color: #37474F;
+        letter-spacing: 1px;
+        color: white;
       }
 
       .drawer-list a {
@@ -84,12 +90,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         font-weight: 100;
         @apply(--layout-horizontal);
         @apply(--layout-justified);
-        vertical-align:  middle
+        vertical-align: middle;
         text-align: left;
+        padding-left: 16px;
+        padding-right: 16px;
       }
 
       .drawer-list a.iron-selected {
-        color: #37474F;
+        background: rgba(255, 255, 255, 0.3);
         font-weight: bold;
       }
 
@@ -100,8 +108,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       paper-button.create-team {
         width: 100%;
         font-size: 14px;
-        padding: 2px 0;
-        margin: 20px 0;
+        letter-spacing: 1px;
+        padding: 4px 0;
+        margin: 20px 16px;
       }
 
       paper-icon-button.team-settingss {
@@ -126,12 +135,24 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       .needsSignin {
+        color: white;
         @apply(--layout-fit);
         padding-top: 20vh;
         max-width: 400px;
         margin: auto;
         text-align: center;
       }
+
+      .needsSignin h1 {
+        letter-spacing: 2px;
+        font-weight: 500;
+      }
+
+      .needsSignin p {
+        font-weight: 200;
+        font-size: 18px;
+      }
+
 
       paper-button[raised] {
         background-color: var(--app-primary-color);
@@ -144,17 +165,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         vertical-align: middle;
       }
 
-      .drawer-background {
-        margin-right: 20px;
-        padding-left: 16px;
-        padding-right: 16px;
-        height: 100%;
-      }
-
       @media (max-width: 620px) {
         .drawer-background {
+          padding-right: 36px;  /* the left/right 16px padding when it's not this size */
           margin-right: 0;
           background: white;
+        }
+        .left-toolbar {
+          color: var(--app-primary-text-color);
         }
       }
 
