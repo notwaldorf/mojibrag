@@ -3,6 +3,7 @@
   "shell": "src/my-app.html",
   "fragments": [
     "src/new-post.html",
+    "src/firebase-helper.html",
     "src/new-team.html",
     "src/view-posts.html",
     "src/view-404.html"
