@@ -254,7 +254,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               xfallback-selection="404"
               role="main">
             <template is="dom-repeat" items="[[teams]]">
-              <view-posts name="[[item.name]]" session="[[user]]" team="[[item.name]]" ref="[[item.key]]"></view-posts>
+              <view-posts name="[[item.name]]" session="[[user]]" team="[[item.name]]" ref="[[item.key]]" offline="[[offline]]"></view-posts>
             </template>
             <view-404 name="404"></view-404>
           </iron-pages>
@@ -291,7 +291,22 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         location: {
           type: String,
           notify: true
-        }
+        },
+
+        offline: {
+          type: Boolean,
+          value: false
+        },
+      },
+
+      ready: function() {
+        this.offline = navigator.onLine === false;
+        window.addEventListener('online', function() {
+          this.offline = false;
+        }.bind(this));
+        window.addEventListener('offline', function() {
+          this.offline = true;
+        }.bind(this));
       },
 
       attached: function() {

@@ -85,7 +85,7 @@
       key="/posts/{{ref}}"
       data="[[_fbPosts]]"
       persisted-data="{{posts}}"
-      online="[[online]]"
+      online="[[!offline]]"
       order-by-child="createdAt">
     </app-indexeddb-mirror>
 
@@ -144,6 +144,11 @@
         posts: {
           type: Array,
           observer: '_postsChanged'
+        },
+
+        offline: {
+          type: Boolean,
+          value: false
         }
       },
 
