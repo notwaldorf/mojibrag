@@ -5,6 +5,9 @@ Polymer.FirebaseHelper = {
   _firebaseUpdateUserInfo: function(user) {
     this.set('teams', []);
 
+    if (!user)
+      return;
+
     // Get the public teams.
     this._firebaseGetPublicTeams();
 
