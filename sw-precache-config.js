@@ -14,5 +14,13 @@ module.exports = {
     '/bower_components/webcomponentsjs/webcomponents-lite.min.js',
     '/bower_components/emojilib/emojis.json'
   ],
-  navigateFallback: '/index.html'
+  navigateFallback: '/index.html',
+  navigateFallbackWhitelist: [/^(?!\/__)/],
+  runtimeCaching: [
+    {
+      // cache Google user profile pics
+      urlPattern: /^https:\/\/lh3.googleusercontent.com\/.*/,
+      handler: 'networkFirst'
+    }
+  ]
 };
