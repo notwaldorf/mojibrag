@@ -331,7 +331,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
        * Routes
        *******************************/
       _routePageChanged: function(page) {
-        this.page = page; //this.teams.length > 0 ? page : '404';
+        this.page = page || 'global';
       },
 
       // TODO: this is borked.
