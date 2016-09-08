@@ -176,7 +176,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         data="{{routeData}}"
         tail="{{subroute}}"></app-route>
 
-    <signin-view hidden$="[[user]]">
+    <signin-view hidden$="[[user.uid]]">
       <paper-button on-tap="login" raised>Sign in with Google</paper-button>
     </signin-view>
 
