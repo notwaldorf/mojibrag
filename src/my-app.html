@@ -232,7 +232,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               xfallback-selection="404"
               role="main">
             <template is="dom-repeat" items="[[teams]]">
-              <view-posts name="[[item.name]]" session="[[user]]" team="[[item.name]]" ref="[[item.key]]" offline="[[offline]]"></view-posts>
+              <view-posts name="[[item.name]]" uid="[[user.uid]]" team="[[item.name]]" ref="[[item.key]]" offline="[[offline]]"></view-posts>
             </template>
             <view-404 name="404"></view-404>
           </iron-pages>
@@ -318,6 +318,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         'add-users': '_addUsers',
         'post-like': '_postLike',
         'post-unlike': '_postUnlike',
+        'post-delete': '_postDelete'
       },
 
       login: function() {
@@ -409,6 +410,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       _postUnlike: function(event) {
         this._firebaseUnlikeMessage(event.detail.ref, event.detail.teamRef);
+      },
+
+      _postDelete: function(event) {
+        this._firebaseDeleteMessage(event.detail.ref, event.detail.teamRef);
       },
 
       _getLocation: function() {

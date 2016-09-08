@@ -105,6 +105,17 @@
         height: 16px;
         vertical-align: middle;
       }
+
+      button {
+        background: transparent;
+        border: none;
+        outline: none;
+        cursor: pointer;
+      }
+
+      button:hover {
+        color: #F4511E;
+      }
     </style>
 
     <firebase-query
@@ -113,7 +124,7 @@
       order-by-child="index">
     </firebase-query>
     <app-indexeddb-mirror
-      session="[[user.uid]]"
+      session="[[uid]]"
       key="/posts/{{ref}}"
       data="[[_fbPosts]]"
       persisted-data="{{posts}}"
@@ -131,17 +142,21 @@
                 <!-- <div class="name">[[item.email]]</div> -->
                 <div class="giant">[[item.message]]</div>
                 <span class="small">
-                  [[_getDate(item.createdAt)]]
+                  <span>[[_getDate(item.createdAt)]]</span>
                   <span hidden$="[[!_hasLocation(item.location)]]">
                     <iron-icon icon="icons:location" class="location"></iron-icon>
                     [[item.location]]
                   </span>
+                  <button hidden$="[[!_shouldEdit(item)]]" ref="[[item.$key]]" on-click="_delete">
+                    <iron-icon icon="icons:delete" class="location"></iron-icon>
+                    Delete post
+                  </button>
                 </span>
               </div>
             </div>
             <div class="heart-icon">
               <span>[[item.likes]]</span>
-              <paper-icon-button icon="icons:favorite-border" on-click="_like" item="[[item]]"></paper-icon-button>
+              <paper-icon-button icon="icons:favorite-border" on-click="_like" ref="[[item.$key]]"></paper-icon-button>
             </div>
           </div>
         </div>
@@ -168,7 +183,7 @@
           type: String
         },
 
-        session: {
+        uid: {
           type: String
         },
 
@@ -208,23 +223,29 @@
 
       _like: function(event) {
         var button = event.target;
-        var item = button.item;
+        var ref = button.ref;
 
         if (button.icon === 'icons:favorite-border') {
           button.icon = 'icons:favorite';
-          this.fire('post-like', {ref: item.$key, teamRef: this.ref});
+          this.fire('post-like', {ref: ref, teamRef: this.ref});
         } else {
           button.icon = 'icons:favorite-border';
-          this.fire('post-unlike', {ref: item.$key, teamRef: this.ref});
+          this.fire('post-unlike', {ref: ref, teamRef: this.ref});
         }
+      },
+
+      _delete: function(event) {
+        var button = event.target;
+        var ref = button.ref;
+        this.fire('post-delete', {ref: ref, teamRef: this.ref});
       },
 
       _hasLocation: function(location) {
         return !!location;
       },
 
-      reverseSort: function(a, b) {
-        return a.createdAt > b.createdAt ? -1 : 1;
+      _shouldEdit: function(item) {
+        return this.uid === item.uid;
       }
     });
   </script>

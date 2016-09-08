@@ -82,7 +82,7 @@ Polymer.FirebaseHelper = {
     firebase.database().ref('/teamNames/' + team).once('value', function(snapshot) {
       var teamRef = snapshot.val().id;
       var now = new Date().getTime();
-      
+
       firebase.database().ref('/posts/').child(teamRef)
         .push({
           name: this.user.displayName,
@@ -112,6 +112,10 @@ Polymer.FirebaseHelper = {
         snapshot.ref.update({likes: likes - 1});
       }
     });
+  },
+
+  _firebaseDeleteMessage: function(post, team) {
+    firebase.database().ref('/posts/' + team).child(post).remove();
   },
 
   _firebaseAddTeam: function(team, users, isPublic) {
