@@ -180,7 +180,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <paper-button on-tap="login" raised>Sign in with Google</paper-button>
     </signin-view>
 
-    <app-drawer-layout>
+    <app-drawer-layout id="drawerLayout">
       <!-- Drawer content -->
       <app-drawer id="drawer">
         <div class="drawer-background">
@@ -294,8 +294,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         var auth = firebase.auth();
         firebase.auth().onAuthStateChanged(function(user) {
           this.user = user;
-          this.$.drawer.opened = !!user;
-          this.$.loading.hidden = !this.$.drawer.opened;
+          var hasUser = !!user;
+          this.$.loading.hidden = !hasUser;
+
+          // Only on desktop, after auth, show the drawer.
+          if (!this.$.drawerLayout.narrow)
+            this.$.drawer.opened = hasUser;
+
           this._firebaseUpdateUserInfo(user);
         }.bind(this));
       },
