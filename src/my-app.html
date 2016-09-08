@@ -26,6 +26,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/polymerfire/polymerfire.html">
 <link rel="import" href="../bower_components/app-storage/app-indexeddb-mirror/app-indexeddb-mirror.html">
 
+<link rel="import" href="signin-view.html">
 <link rel="import" href="new-post.html">
 <link rel="import" href="my-icons.html">
 <link rel="import" href="firebase-helper.html">
@@ -134,28 +135,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         @apply(--layout-flex-auto);
       }
 
-      .needsSignin {
-        color: white;
-        @apply(--layout-fit);
-        padding-top: 20vh;
-        margin: auto;
-        text-align: center;
-        background: -webkit-linear-gradient(-45deg, rgba(32, 155, 222, 1), rgba(113, 224, 192, 1));
-        background: linear-gradient(-45deg, rgba(32, 155, 222, 1), rgba(113, 224, 192, 1));
-        z-index: 100;  /* sit on top of the drawer */
-      }
-
-      .needsSignin h1 {
-        letter-spacing: 2px;
-        font-weight: 500;
-      }
-
-      .needsSignin p {
-        font-weight: 200;
-        font-size: 18px;
-      }
-
-
       paper-button[raised] {
         background-color: var(--app-primary-color);
         color: white;
@@ -197,14 +176,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         data="{{routeData}}"
         tail="{{subroute}}"></app-route>
 
-    <div class="needsSignin" hidden$="[[user]]">
-      <div class="giant-emoji">👋🆒🐱</div>
-      <h1>#humblebrag</h1>
-      <p>📢 &nbsp;stuff. Use ✨🙊😂 &nbsp; emoji.</p>
-      <br>
-      <p>(📍📝 we ask for your location to geotag your posts)</p>
+    <signin-view hidden$="[[user]]">
       <paper-button on-tap="login" raised>Sign in with Google</paper-button>
-    </div>
+    </signin-view>
 
     <app-drawer-layout>
       <!-- Drawer content -->
