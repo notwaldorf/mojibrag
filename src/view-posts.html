@@ -46,6 +46,7 @@
       .giant {
         font-size: 36px;
         font-weight: 100;
+        padding-right: 30px;
       }
 
       .small {
@@ -77,16 +78,14 @@
     <firebase-query
       data="{{_fbPosts}}"
       path="/posts/{{ref}}"
-      order-by-child="createdAt"
-      >
+      order-by-child="index">
     </firebase-query>
     <app-indexeddb-mirror
       session="[[user.uid]]"
       key="/posts/{{ref}}"
       data="[[_fbPosts]]"
       persisted-data="{{posts}}"
-      online="[[!offline]]"
-      order-by-child="createdAt">
+      online="[[!offline]]">
     </app-indexeddb-mirror>
 
     <h1>[[team]]</h1>

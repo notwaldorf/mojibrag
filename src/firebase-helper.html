@@ -80,16 +80,18 @@ Polymer.FirebaseHelper = {
     // Get the team ref from the names -> keys mapping
     firebase.database().ref('/teamNames/' + team).once('value', function(snapshot) {
       var teamRef = snapshot.val().id;
-
+      var now = new Date().getTime();
       firebase.database().ref('/posts/').child(teamRef)
         .push({
           name: this.user.displayName,
           message: message,
           email: this.user.email,
+          uid: this.user.uid,
           image: this.user.photoURL,
           likes: 0,
           location: location,
-          createdAt: {'.sv': 'timestamp'}
+          createdAt: now,
+          index: -now  /* because reverse sorting firebase data is hard */
         });
     }.bind(this));
   },
