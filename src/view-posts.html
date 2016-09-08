@@ -26,6 +26,38 @@
         margin: 8px 0;
         background: rgba(255, 255, 255, 0.5);
         padding: 16px;
+        animation: appear 500ms ease-out forwards;
+        -o-animation: appear 500ms ease-out forwards;
+        -moz-animation: appear 500ms ease-out forwards;
+        -webkit-animation: appear 500ms ease-out forwards;
+      }
+
+      @keyframes appear {
+        0% { transform:scale(0); }
+        50% { transform:scale(1.05) }
+        75% { transform:scale(0.95) }
+        100% { transform:scale(1) }
+      }
+
+      @-moz-keyframes appear {
+        0% { transform:scale(0); }
+        50% { transform:scale(1.05) }
+        75% { transform:scale(0.95) }
+        100% { transform:scale(1) }
+      }
+
+      @-webkit-keyframes appear {
+        0% { transform:scale(0); }
+        50% { transform:scale(1.05) }
+        75% { transform:scale(0.95) }
+        100% { transform:scale(1) }
+      }
+
+      @-o-keyframes appear {
+        0% { transform:scale(0); }
+        50% { transform:scale(1.05) }
+        75% { transform:scale(0.95) }
+        100% { transform:scale(1) }
       }
 
       .avatar {
