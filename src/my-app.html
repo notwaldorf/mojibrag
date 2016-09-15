@@ -9,28 +9,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 -->
 
 <link rel="import" href="../bower_components/polymer/polymer.html">
-<link rel="import" href="../bower_components/app-layout/app-drawer/app-drawer.html">
-<link rel="import" href="../bower_components/app-layout/app-drawer-layout/app-drawer-layout.html">
-<link rel="import" href="../bower_components/app-layout/app-header/app-header.html">
-<link rel="import" href="../bower_components/app-layout/app-header-layout/app-header-layout.html">
-<link rel="import" href="../bower_components/app-layout/app-scroll-effects/app-scroll-effects.html">
-<link rel="import" href="../bower_components/app-layout/app-toolbar/app-toolbar.html">
-
-<link rel="import" href="../bower_components/app-route/app-location.html">
-<link rel="import" href="../bower_components/app-route/app-route.html">
-
-<link rel="import" href="../bower_components/iron-pages/iron-pages.html">
-<link rel="import" href="../bower_components/iron-selector/iron-selector.html">
-<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../bower_components/polymerfire/polymerfire.html">
-<link rel="import" href="../bower_components/app-storage/app-indexeddb-mirror/app-indexeddb-mirror.html">
-
 <link rel="import" href="signin-view.html">
-<link rel="import" href="new-post.html">
-<link rel="import" href="my-icons.html">
-<link rel="import" href="firebase-helper.html">
-<link rel="import" href="view-posts.html">
 
 <dom-module id="my-app">
   <template>
@@ -41,9 +22,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         --app-primary-text-color: #37474F;
         --app-secondary-text-color: #607D8B;
         --app-error-color: #F4511E;
-        --paper-tabs-selection-bar-color: var(--app-primary-color);
-        --paper-tab-ink: var(--app-primary-color);
-
         display: block;
       }
 
@@ -51,115 +29,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         display: none !important;
       }
 
-      app-drawer {
-        --app-drawer-content-container: {
-          background: transparent;
-        };
-        --app-drawer-width: 200px;
-      }
-
-      .drawer-background {
-        margin-right: 20px;
-        height: 100%;
-      }
-
-      .main-content {
-        padding: 10px;
-        max-width: 540px;
-        margin: auto;
-      }
-
-      .left-toolbar {
-        padding: 0;
-        color: white;
-        letter-spacing: 2px;
-        font-size: 20px;
-        padding-left: 16px;
-      }
-
-      /* logout button */
-      app-toolbar paper-button {
-        font-size: 14px;
-        letter-spacing: 1px;
-        color: white;
-      }
-
-      .drawer-list a {
-        display: block;
-        width: 100%;
-        text-decoration: none;
-        color: #455A64;
-        font-weight: 100;
-        @apply(--layout-horizontal);
-        @apply(--layout-justified);
-        vertical-align: middle;
-        text-align: left;
-        padding-left: 16px;
-        padding-right: 16px;
-      }
-
-      .drawer-list a.iron-selected {
-        background: rgba(255, 255, 255, 0.3);
-        font-weight: bold;
-      }
-
-      .drawer-list a iron-icon {
-        vertical-align: middle;
-      }
-
-      paper-button.create-team {
-        width: 100%;
-        font-size: 14px;
-        letter-spacing: 1px;
-        padding: 4px 0;
-        margin: 20px 16px;
-      }
-
-      paper-icon-button.team-settingss {
-        color: grey;
-      }
-
-      paper-icon-button.team-settingss:hover {
-        color: black;
-      }
-
-      .avatar {
-        border-radius: 50%;
-        width: 36px;
-        height: 36px;
-        vertical-align: middle;
-        margin-left: 16px;
-      }
-
-      .spacer {
-        @apply(--layout-flex);
-        @apply(--layout-flex-auto);
-      }
-
       paper-button[raised] {
         background-color: var(--app-primary-color);
         color: white;
         font-size: 14px;
-      }
-
-      .team-settings {
-        display: inline-block;
-        vertical-align: middle;
-      }
-
-      @media (max-width: 620px) {
-        .drawer-background {
-          padding-right: 36px;  /* the left/right 16px padding when it's not this size */
-          margin-right: 0;
-          background: white;
-        }
-        .left-toolbar {
-          color: var(--app-primary-text-color);
-        }
-      }
-
-      .giant-emoji {
-        font-size: 100px;
       }
     </style>
 
@@ -167,253 +40,66 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       api-key="AIzaSyDqUICuPABxyDDgGvdZbgsO9r97qet6N_w"
       database-url="https://humblebrag-1cc8e.firebaseio.com"
       auth-domain="humblebrag-1cc8e.firebaseapp.com"
-      storage-bucket="thumblebrag-1cc8e.appspot.com">
+      storage-bucket="humblebrag-1cc8e.appspot.com">
     </firebase-app>
+    <firebase-auth id="googleAuth" user="{{user}}" provider="google"></firebase-auth>
 
-    <app-location route="{{route}}"></app-location>
-    <app-route
-        route="{{route}}"
-        pattern="/:page"
-        data="{{routeData}}"
-        tail="{{subroute}}"></app-route>
-
-    <signin-view hidden$="[[user.uid]]">
+    <signin-view hidden id="signin">
       <paper-button on-tap="login" raised>Sign in with Google</paper-button>
     </signin-view>
 
-    <app-drawer-layout id="drawerLayout">
-      <!-- Drawer content -->
-      <app-drawer id="drawer">
-        <div class="drawer-background">
-          <app-toolbar class="left-toolbar">#humblebrag</app-toolbar>
-
-          <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
-            <template is="dom-repeat" items="[[teams]]">
-              <a name="[[item.name]]" href="/[[item.name]]">
-                <span style="padding:8px 0;">
-                  <iron-icon class="team-settings" icon="icons:public" hidden$=[[!item.public]]></iron-icon>
-                  <span>[[item.name]]</span>
-                </span>
-                <paper-icon-button class="team-settings" team="[[item]]" icon="icons:settings"
-                    on-click="_showEditTeam" hidden$="[[!_shouldShowTeamSettings(item)]]">
-                </paper-icon-button>
-              </a>
-            </template>
-          </iron-selector>
-
-          <paper-button raised on-click="_showCreateTeam" class="create-team" id="createTeamButton">
-            <iron-icon icon="icons:add"></iron-icon>Create team
-          </paper-button>
-        </div>
-      </app-drawer>
-
-      <!-- Main content -->
-      <app-header-layout>
-        <app-header fixed>
-          <app-toolbar>
-            <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
-            <div class="spacer"></div>
-
-            <div hidden$="[[!user]]" class="userInfo">
-              <img class="avatar" alt="github avatar" src="[[user.photoURL]]">
-              <paper-button on-tap="logout">Sign out</paper-button>
-            </div>
-          </app-toolbar>
-        </app-header>
-
-        <div class="main-content">
-          <div id="loading" hidden>
-            <div class="giant-emoji">✋ 🎉 ⏳ 🤖</div>
-          </div>
-          <new-post hidden team="[[page]]" id="newPost"></new-post>
-          <new-team hidden id="newTeam"></new-team>
-          <iron-pages
-              selected="[[page]]"
-              attr-for-selected="name"
-              xfallback-selection="404"
-              role="main">
-            <template is="dom-repeat" items="[[teams]]">
-              <view-posts name="[[item.name]]" uid="[[user.uid]]" team="[[item.name]]" ref="[[item.key]]" offline="[[offline]]"></view-posts>
-            </template>
-            <view-404 name="404"></view-404>
-          </iron-pages>
-        </div>
-      </app-header-layout>
-
-    </app-drawer-layout>
+    <humble-brag id="app" location="[[location]]"></humble-brag>
   </template>
 
   <script>
     Polymer({
       is: 'my-app',
 
-      behaviors: [Polymer.FirebaseHelper],
-
       properties: {
-        page: {
-          type: String,
-          reflectToAttribute: true,
-          observer: '_pageChanged'
-        },
-
-        teams: {
-          type: Array,
-          value: []
-        },
-
-        user: {
-          type: Object,
-          value: null,
-          notify: true
-        },
-
         location: {
           type: String,
           notify: true
         },
-
-        offline: {
-          type: Boolean,
-          value: false
-        },
       },
 
-      ready: function() {
-        this.offline = navigator.onLine === false;
-        window.addEventListener('online', function() {
-          this.offline = false;
-        }.bind(this));
-        window.addEventListener('offline', function() {
-          this.offline = true;
-        }.bind(this));
-      },
+      // listeners: {
+      //   'status-known-changed': '_statusChanged'
+      // },
+      //
+      // _statusChanged: function(event) {
+      //   var known = event.detail.value;
+      // },
+
+      // TODO: you might need this to show a different "don't sign in bc you can't" view
+      // ready: function() {
+      //   this.offline = navigator.onLine === false;
+      //   window.addEventListener('online', function() {
+      //     this.offline = false;
+      //   }.bind(this));
+      //   window.addEventListener('offline', function() {
+      //     this.offline = true;
+      //   }.bind(this));
+      // },
 
       attached: function() {
         this._getLocation();
-        this.$.drawer.opened = false;
-
-        var auth = firebase.auth();
         firebase.auth().onAuthStateChanged(function(user) {
-          this.user = user;
-          var hasUser = !!user;
-          this.$.loading.hidden = !hasUser;
-
-          // Only on desktop, after auth, show the drawer.
-          if (!this.$.drawerLayout.narrow)
-            this.$.drawer.opened = hasUser;
-
-          this._firebaseUpdateUserInfo(user);
+          if (!!user) {
+            this.importHref(this.resolveUrl('humble-brag.html'), function() {
+              this.$.signin.hidden = true;
+              this.$.app.hidden = false;
+              this.$.app.user = user;
+              this.$.app.init();
+            }, null, true);
+          } else {
+            this.$.signin.hidden = false;
+            this.$.app.hidden = true;
+          }
         }.bind(this));
       },
 
-      observers: [
-        '_routePageChanged(routeData.page)'
-      ],
-
-      listeners: {
-        'new-post': '_postNewMessage',
-        'new-team': '_createTeam',
-        'delete-team': '_deleteTeam',
-        'rename-team': '_renameTeam',
-        'delete-users': '_deleteUsers',
-        'add-users': '_addUsers',
-        'post-like': '_postLike',
-        'post-unlike': '_postUnlike',
-        'post-delete': '_postDelete'
-      },
-
       login: function() {
-        firebase.auth().signInWithPopup(new firebase.auth.GoogleAuthProvider());
-      },
-
-      logout: function() {
-        this.$.drawer.opened = false;
-        firebase.auth().signOut();
-        this.$.newTeam.hidden = true;
-        this.$.newPost.hidden = true;
-        this.$.loading.hidden = true;
-      },
-
-      /*******************************
-       * Routes
-       *******************************/
-      _routePageChanged: function(page) {
-        this.page = page || 'global';
-      },
-
-      // TODO: this is borked.
-      _pageChanged: function(page) {
-        // Load page import on demand. Show 404 page if fails
-        // var resolvedPageUrl = this.resolveUrl(page==='404' ? 'view-404.html' : 'view-posts.html');
-        // console.log(resolvedPageUrl)
-        // this.importHref(resolvedPageUrl, null, this._showPage404, true);
-      },
-
-      _showPage404: function() {
-        this.page = '404';
-      },
-
-      /*******************************
-       * Posts
-       *******************************/
-      _postNewMessage: function(event) {
-        var location = this.location || '';
-        this._firebaseAddMessage(event.detail.team, event.detail.message, location);
-      },
-
-      /*******************************
-       * Teams
-       *******************************/
-      _showCreateTeam: function() {
-        var resolvedPageUrl = this.resolveUrl('new-team.html');
-        this.importHref(resolvedPageUrl, function() {
-          this.$.newTeam.create();
-        }, null, true);
-      },
-
-      _showEditTeam: function(event) {
-        var resolvedPageUrl = this.resolveUrl('new-team.html');
-        var team = event.target.team;
-
-        this.importHref(resolvedPageUrl, function() {
-          this.$.newTeam.edit(team);
-        }, null, true);
-      },
-
-      _shouldShowTeamSettings: function(team) {
-        return (team.owner === this.user.uid)
-      },
-
-      _createTeam: function(event) {
-        this._firebaseAddTeam(event.detail.name, event.detail.users, event.detail.public);
-      },
-
-      _deleteTeam: function(event) {
-        this._firebaseDeleteTeam(event.detail.ref, event.detail.name);
-      },
-
-      _renameTeam: function(event) {
-        this._firebaseRenameTeam(event.detail.ref, event.detail.oldName, event.detail.newName);
-      },
-
-      _addUsers: function(event) {
-        this._firebaseAddUsers(event.detail.ref, event.detail.users);
-      },
-
-      _deleteUsers: function(event) {
-        this._firebaseDeleteUsers(event.detail.ref, event.detail.users);
-      },
-
-      _postLike: function(event) {
-        this._firebaseLikeMessage(event.detail.ref, event.detail.teamRef);
-      },
-
-      _postUnlike: function(event) {
-        this._firebaseUnlikeMessage(event.detail.ref, event.detail.teamRef);
-      },
-
-      _postDelete: function(event) {
-        this._firebaseDeleteMessage(event.detail.ref, event.detail.teamRef);
+        this.$.googleAuth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
       },
 
       _getLocation: function() {
