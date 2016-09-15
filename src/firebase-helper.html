@@ -8,11 +8,11 @@ Polymer.FirebaseHelper = {
     if (!user)
       return;
 
-    // Get the public teams.
-    this._firebaseGetPublicTeams();
-
     firebase.database().ref('/users/' + user.uid).once('value', function(snapshot) {
       var userInfo = snapshot.val();
+
+      this.$.newPost.hidden = false;
+      this.$.loading.hidden = true;
 
       if (userInfo) {
         console.log('Existing user:', this.user);
@@ -35,28 +35,23 @@ Polymer.FirebaseHelper = {
     }.bind(this));
   },
 
-  _firebaseGetPublicTeams: function() {
-    firebase.database().ref('/publicTeams').once('value', function(snapshot) {
-      var teams = snapshot.val();
-      if (!snapshot.val())
-        return;
-
-      this.$.newPost.hidden = false;
-      this.$.loading.hidden = true;
-
-      for (team in teams) {
-        this._processOneTeam(team);
-      }
-    }.bind(this));
-  },
+  // _firebaseGetPublicTeams: function() {
+  //   firebase.database().ref('/publicTeams').once('value', function(snapshot) {
+  //     var teams = snapshot.val();
+  //     if (!snapshot.val())
+  //       return;
+  //
+  //     this.$.newPost.hidden = false;
+  //     this.$.loading.hidden = true;
+  //
+  //     for (team in teams) {
+  //       this._processOneTeam(team);
+  //     }
+  //   }.bind(this));
+  // },
 
   _firebaseGetUserTeams: function(teamIds) {
     var self = this;
-
-    if (teamIds.length !== 0) {
-      this.$.newPost.hidden = false;
-      this.$.loading.hidden = true;
-    }
 
     for (var i = 0; i < teamIds.length; i++) {
       firebase.database().ref('/teams/' + teamIds[i]).once('value', function(snapshot) {

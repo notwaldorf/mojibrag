@@ -1,0 +1,94 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+
+<dom-module id="team-item">
+  <template>
+    <style>
+      :host {
+        display: block;
+        box-sizing: border-box;
+        padding-left: 16px;
+      }
+
+      :host(.iron-selected) {
+        background: rgba(255, 255, 255, 0.3);
+      }
+
+      :host(.iron-selected) a {
+        font-weight: bold;
+      }
+
+      [hidden] {
+        display: none !important;
+      }
+
+      a {
+        box-sizing: border-box;
+        width: 100%;
+        text-decoration: none;
+        color: #455A64;
+        font-weight: 100;
+        @apply(--layout-horizontal);
+        @apply(--layout-justified);
+        vertical-align: middle;
+        text-align: left;
+      }
+
+      .team-settings {
+        display: inline-block;
+        vertical-align: middle;
+        color: grey;
+      }
+
+      .team-settings:hover {
+        color: black;
+      }
+
+      iron-icon {
+        vertical-align: middle;
+      }
+    </style>
+
+    <a href="/[[team.name]]">
+      <span style="padding:8px 0;">
+        <iron-icon class="team-settings" icon="icons:public" hidden$=[[!public]]></iron-icon>
+        <span>[[team.name]]</span>
+      </span>
+      <paper-icon-button class="team-settings" team="[[team]]" icon="icons:settings"
+          on-click="_showEditTeam" hidden$="[[!_shouldShowTeamSettings(team, uid)]]">
+      </paper-icon-button>
+    </a>
+
+  </template>
+
+  <script>
+    Polymer({
+      is: 'team-item',
+
+      properties: {
+        team: {
+          type: Object
+        },
+
+        public: {
+          type: Boolean,
+          value: false
+        },
+
+        uid: {
+          type: String
+        }
+      },
+
+      _showEditTeam: function(event) {
+        var resolvedPageUrl = this.resolveUrl('new-team.html');
+        this.importHref(resolvedPageUrl, function() {
+          this.fire('edit-team', {team: this.team});
+        }, null, true);
+      },
+
+      _shouldShowTeamSettings: function(team, uid) {
+        return (team.owner === uid);
+      },
+    });
+  </script>
+</dom-module>
