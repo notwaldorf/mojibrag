@@ -198,6 +198,8 @@ Polymer.FirebaseHelper = {
     // Delete this from the public teams table.
     firebase.database().ref('/publicTeams/').child(ref).remove();
 
+    this.$.newTeam.hide();
+
     // TODO: could optionally delete this from the users too.
 
     // Delete this from the UI.
@@ -218,17 +220,28 @@ Polymer.FirebaseHelper = {
         self.$.newTeam.showError('Oops! This name is already taken.');
       } else {
         self.$.newTeam.hide();
+
         // Update the name in the main teams table
-        firebase.database().ref('/teams/').child(ref).set({name: newName});
+        firebase.database().ref('/teams/').child(ref).update({name: newName});
 
         // Update the name in the names -> keys table.
         firebase.database().ref('/teamNames/').child(oldName).remove();
         firebase.database().ref('/teamNames/').child(newName).set({id:ref});
+
+        // Update the name in the UI
+        for (var i = 0; i < self.teams.length; i++) {
+          if (self.teams[i].name === oldName) {
+            self.set(['teams', i, 'name'], newName);
+            return;
+          }
+        }
       }
     });
   },
 
   _firebaseAddUsers: function(ref, newUsers) {
+    this.$.newTeam.hide();
+
     // Add these users in the teams database
     firebase.database().ref('/teams/' + ref).once('value', function(snapshot) {
       var currentUsers = snapshot.val().users;
@@ -251,6 +264,8 @@ Polymer.FirebaseHelper = {
   },
 
   _firebaseDeleteUsers: function(ref, delUsers) {
+    this.$.newTeam.hide();
+
     // Remove these users in the teams database
     firebase.database().ref('/teams/' + ref).once('value', function(snapshot) {
       var currentUsers = snapshot.val().users;
@@ -279,7 +294,5 @@ Polymer.FirebaseHelper = {
       }
     });
   }
-
-
 };
 </script>
