@@ -181,7 +181,7 @@
           for (var i = 0; i < words.length; i++ ) {
             var node = this._translateWord(words[i]);
             if (node)
-              Polymer.dom(this.$.preview).appendChild(this._translateWord(words[i]));
+              Polymer.dom(this.$.preview).appendChild(node);
           }
           Polymer.dom(this.$.preview).appendChild(document.createElement('br'));
         }
