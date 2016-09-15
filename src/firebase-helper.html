@@ -14,6 +14,9 @@ Polymer.FirebaseHelper = {
       this.$.newPost.hidden = false;
       this.$.loading.hidden = true;
 
+      // If online, try to update the can/can't edit public teams
+      this._firebaseUpdatePublicTeams();
+
       if (userInfo) {
         console.log('Existing user:', this.user);
 
@@ -35,20 +38,23 @@ Polymer.FirebaseHelper = {
     }.bind(this));
   },
 
-  // _firebaseGetPublicTeams: function() {
-  //   firebase.database().ref('/publicTeams').once('value', function(snapshot) {
-  //     var teams = snapshot.val();
-  //     if (!snapshot.val())
-  //       return;
-  //
-  //     this.$.newPost.hidden = false;
-  //     this.$.loading.hidden = true;
-  //
-  //     for (team in teams) {
-  //       this._processOneTeam(team);
-  //     }
-  //   }.bind(this));
-  // },
+  _firebaseUpdatePublicTeams: function() {
+    var self = this;
+    for (var i = 0; i < this.publicTeams.length; i++) {
+      firebase.database().ref('/teams/' + this.publicTeams[i].$key).once('value', function(snapshot) {
+        var team = snapshot.val();
+        if (!snapshot.val())
+          return;
+
+        // HACK: Since we want to reuse the same UI code for the pre-online details,
+        // reuse the $key property.
+        team.$key = snapshot.key;
+
+        // `this` is the index in the array, i know that's weird but halp?
+        self.set(['publicTeams', Number(this)], team);
+      }.bind(i));  // lol omg
+    }
+  },
 
   _firebaseGetUserTeams: function(teamIds) {
     var self = this;
