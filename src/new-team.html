@@ -69,7 +69,7 @@
       }
 
       input:invalid {
-        border-bottom: 1px solid #F4511E;
+        border-bottom: 1px solid var(--app-error-color);
       }
 
       .horizontal {
@@ -86,7 +86,7 @@
       }
 
       .public-settings {
-        padding: 0.7em 0.57em;  /* match paper-buttons on the same line */
+        padding: 0.7em 0;  /* match paper-buttons on the same line */
         text-transform: uppercase;
         font-size: 14px;
       }
@@ -97,7 +97,10 @@
         --paper-toggle-button-checked-bar-color:  var(--app-secondary-color);
         --paper-toggle-button-checked-button-color:  var(--app-secondary-color);
         --paper-toggle-button-checked-ink-color: var(--app-secondary-color);
+      }
 
+      .error {
+        color: var(--app-error-color);
       }
     </style>
 
@@ -118,8 +121,8 @@
 
     <div class="horizontal-reverse">
       <span>
-        <paper-button on-click="_cancel">Cancel</paper-button>
-        <paper-button on-click="_create" hidden$="[[_edit]]">Create!</paper-button>
+        <paper-button on-click="hide">Cancel</paper-button>
+        <paper-button on-click="_createTeam" hidden$="[[_edit]]">Create!</paper-button>
 
         <paper-button on-click="_deleteTeam" hidden$="[[!_edit]]">Delete team</paper-button>
         <paper-button on-click="_renameTeam" hidden$="[[!_edit]]">Rename team</paper-button>
@@ -130,7 +133,7 @@
       </span>
     </div>
 
-    </div>
+    <div class="error" hidden id="error"></div>
 
   </template>
 
@@ -148,17 +151,31 @@
       edit: function(team) {
         this._team = team;
         this.$.name.value = name;
+        this.$.newUsers.value = '';
 
         this._edit = true;
+        this.$.error.hidden = true;
         this.hidden = false;
       },
 
       create: function() {
+        this.$.name.value = this.$.newUsers.value = '';
         this._edit = false;
+        this.$.error.hidden = true;
         this.hidden = false;
       },
 
-      _create: function () {
+      hide: function() {
+        this.hidden = true;
+        this._edit = false;
+      },
+
+      showError: function(message) {
+        this.$.error.innerHTML = message;
+        this.$.error.hidden = false;
+      },
+
+      _createTeam: function () {
         var valid = this.$.name.validity.valid && this.$.newUsers.validity.valid;
         if (!valid)
           return;
@@ -169,17 +186,10 @@
         }
 
         this.fire('new-team', {name: this.$.name.value.trim(), users: users, public:this.$.public.checked});
-        this.$.name.value = this.$.newUsers.value = '';
-      },
-
-      _cancel: function() {
-        this.hidden = true;
-        this._edit = true;
       },
 
       _deleteTeam: function() {
         this.fire('delete-team', {ref: this._team.key, name: this._team.name});
-        this.hidden = true;
       },
 
       _renameTeam: function() {
@@ -187,7 +197,6 @@
           return;
 
         this.fire('rename-team', {ref: this._team.key, oldName: this._team.name, newName: this.$.name.value});
-        this.hidden = true;
       },
 
       _deleteUsers: function() {
@@ -201,7 +210,6 @@
         }
 
         this.fire('delete-users', {ref: this._team.key, users: users});
-        this.hidden = true;
       },
 
       _addUsers: function() {
@@ -215,7 +223,6 @@
         }
 
         this.fire('add-users', {ref: this._team.key, users: users});
-        this.hidden = true;
       },
     });
   </script>

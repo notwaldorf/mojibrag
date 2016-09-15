@@ -124,9 +124,10 @@ Polymer.FirebaseHelper = {
     // Check if the team already exists.
     firebase.database().ref('/teamNames/' + team).once('value', function(snapshot) {
       if (snapshot.val()) {
-        alert('team already exists');
-        self.fire('new-team-error');
+        self.$.newTeam.showError('Oops! This name is already taken.');
       } else {
+        self.$.newTeam.hide();
+
         // Add this user as an user if they didn't add themselves already
         if (users.indexOf(self.user.email) === -1) {
           users.splice(0, 0, self.user.email);
@@ -214,9 +215,9 @@ Polymer.FirebaseHelper = {
     // Check if the new team already exists.
     firebase.database().ref('/teamNames/' + newName).once('value', function(snapshot) {
       if (snapshot.val()) {
-        alert('new name already exists');
-        self.fire('new-team-error');
+        self.$.newTeam.showError('Oops! This name is already taken.');
       } else {
+        self.$.newTeam.hide();
         // Update the name in the main teams table
         firebase.database().ref('/teams/').child(ref).set({name: newName});
 

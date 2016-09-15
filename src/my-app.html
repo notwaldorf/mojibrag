@@ -40,6 +40,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         --app-secondary-color: #1976D2;  /* teal */
         --app-primary-text-color: #37474F;
         --app-secondary-text-color: #607D8B;
+        --app-error-color: #F4511E;
         --paper-tabs-selection-bar-color: var(--app-primary-color);
         --paper-tab-ink: var(--app-primary-color);
 
@@ -385,7 +386,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       _createTeam: function(event) {
         this._firebaseAddTeam(event.detail.name, event.detail.users, event.detail.public);
-        this.$.newTeam.hidden = true;
       },
 
       _deleteTeam: function(event) {
