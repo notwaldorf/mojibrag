@@ -126,6 +126,42 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       .giant-emoji {
         font-size: 100px;
       }
+
+      .no-internet, new-post, new-team {
+        display: block;
+        box-sizing: border-box;
+        margin: auto;
+        width: 100%;
+        background: rgba(255, 255, 255, 0.5);
+        margin-bottom: 40px;
+        box-shadow:0px 0px 10px rgba(0, 0, 0, 0.14);
+        opacity: 0;
+        padding: 20px;
+      }
+
+      .animate-appear {
+        animation: appear 300ms ease-in 300ms forwards;
+        -o-animation: appear 300ms ease-in 300ms forwards;
+        -moz-animation: appear 300ms ease-in 300ms forwards;
+        -webkit-animation: appear 300ms ease-in 300ms forwards;
+      }
+
+      .animate-disappear {
+        animation: disappear 300ms ease-in 300ms forwards;
+        -o-animation: disappear 300ms ease-in 300ms forwards;
+        -moz-animation: disappear 300ms ease-in 300ms forwards;
+        -webkit-animation: disappear 300ms ease-in 300ms forwards;
+      }
+
+      @keyframes appear { from { opacity: 0; } to { opacity: 1; } }
+      @-moz-keyframes appear { from { opacity: 0; } to { opacity: 1; } }
+      @-webkit-keyframes appear { from { opacity: 0; } to { opacity: 1; } }
+      @-o-keyframes appear { from { opacity: 0; } to { opacity: 1; } }
+
+      @keyframes disappear { from { opacity: 1; } to { opacity: 0; } }
+      @-moz-keyframes disappear { from { opacity: 1; } to { opacity: 0; } }
+      @-webkit-keyframes disappear { from { opacity: 1; } to { opacity: 0; } }
+      @-o-keyframes disappear { from { opacity: 1; } to { opacity: 0; } }
     </style>
 
     <firebase-query data="{{_publicTeams}}" path="/publicTeams">
@@ -153,15 +189,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
           <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
             <template is="dom-repeat" items="[[publicTeams]]">
-              <team-item public team="[[item]]" name="[[item.name]]" uid="[[user.uid]]"></team-item>
+              <team-item public team="[[item]]" name="[[item.name]]" uid="[[user.uid]]" offline="[[offline]]"></team-item>
             </template>
 
             <template is="dom-repeat" items="[[teams]]">
-              <team-item team="[[item]]" name="[[item.name]]" uid="[[user.uid]]"></team-item>
+              <team-item team="[[item]]" name="[[item.name]]" uid="[[user.uid]]" offline="[[offline]]"></team-item>
             </template>
           </iron-selector>
 
-          <paper-button raised on-click="_showCreateTeam" class="create-team" id="createTeamButton">
+          <paper-button raised hidden$="[[offline]]" id="createTeamButton"
+              on-click="_showCreateTeam" class="create-team">
             <iron-icon icon="icons:add"></iron-icon>Create team
           </paper-button>
         </div>
@@ -174,19 +211,26 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
             <div class="spacer"></div>
 
-            <div hidden$="[[!user]]" class="userInfo">
+            <div id="createTeamButton" class="userInfo">
               <img class="avatar" alt="github avatar" src="[[user.photoURL]]">
-              <paper-button on-tap="logout">Sign out</paper-button>
+              <paper-button on-tap="logout" hidden$="[[offline]]">Sign out</paper-button>
             </div>
           </app-toolbar>
         </app-header>
 
         <div class="main-content">
-          <div id="loading">
+          <div id="loading" class="animate-disappear">
             <div class="giant-emoji">✋ 🎉 ⏳ 🤖</div>
           </div>
-          <new-post hidden team="[[page]]" id="newPost"></new-post>
-          <new-team hidden id="newTeam"></new-team>
+
+          <div hidden$="[[!offline]]" class="no-internet animate-appear">
+            <iron-icon icon="icons:cloud-off"></iron-icon>
+            No internet connection! <br>
+            <span class="subtitle">You won't be able to manage teams or write new posts.</span>
+          </div>
+
+          <new-post hidden team="[[page]]" id="newPost" class="animate-appear"></new-post>
+          <new-team hidden id="newTeam" class="animate-appear"></new-team>
           <iron-pages
               selected="[[page]]"
               attr-for-selected="name"
@@ -238,7 +282,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         offline: {
           type: Boolean,
-          value: false
+          value: false,
+          notify: true
         },
       },
 

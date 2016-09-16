@@ -54,7 +54,7 @@
         <span>[[team.name]]</span>
       </span>
       <paper-icon-button class="team-settings" team="[[team]]" icon="icons:settings"
-          on-click="_showEditTeam" hidden$="[[!_shouldShowTeamSettings(team, uid)]]">
+          on-click="_showEditTeam" hidden$="[[!_shouldShowTeamSettings(team, uid, offline)]]">
       </paper-icon-button>
     </a>
 
@@ -76,6 +76,11 @@
 
         uid: {
           type: String
+        },
+
+        offline: {
+          type: Boolean,
+          value: false
         }
       },
 
@@ -86,8 +91,8 @@
         }, null, true);
       },
 
-      _shouldShowTeamSettings: function(team, uid) {
-        return (team.owner === uid);
+      _shouldShowTeamSettings: function(team, uid, offline) {
+        return !offline && (team.owner === uid);
       },
     });
   </script>

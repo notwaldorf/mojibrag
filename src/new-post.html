@@ -5,23 +5,7 @@
     <style>
       :host {
         display: block;
-        box-sizing: border-box;
-        margin: auto;
-        width: 100%;
-        background: rgba(255, 255, 255, 0.5);
-        margin-bottom: 40px;
-        box-shadow:0px 0px 10px rgba(0, 0, 0, 0.14);
-        animation: appear 300ms ease-in 300ms forwards;
-        -o-animation: appear 300ms ease-in 300ms forwards;
-        -moz-animation: appear 300ms ease-in 300ms forwards;
-        -webkit-animation: appear 300ms ease-in 300ms forwards;
-        opacity: 0;
       }
-
-      @keyframes appear { from { opacity: 0; } to { opacity: 1; } }
-      @-moz-keyframes appear { from { opacity: 0; } to { opacity: 1; } }
-      @-webkit-keyframes appear { from { opacity: 0; } to { opacity: 1; } }
-      @-o-keyframes appear { from { opacity: 0; } to { opacity: 1; } }
 
       :host([hidden]) {
         display: none !important;
@@ -33,14 +17,12 @@
 
       textarea, #preview {
         box-sizing: border-box;
-        padding: 0;
         margin: 0;
         width: 100%;
 
         font-size: 18px;
         resize: none;
         border: none;
-        padding: 20px;
       }
 
       textarea {
@@ -56,8 +38,8 @@
       }
 
       .bottom {
-        padding: 10px 0;
         border-top: 1px solid #7bd6cf;
+        padding-top: 10px;
       }
 
       paper-button {
@@ -98,7 +80,6 @@
         color: var(--app-secondary-text-color);
         font-weight: 100;
         font-size: 14px;
-        padding: 10px 20px 0 20px;
       }
     </style>
 
