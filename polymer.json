@@ -2,11 +2,13 @@
   "entrypoint": "index.html",
   "shell": "src/my-app.html",
   "fragments": [
+    "src/humble-brag.html",
     "src/new-post.html",
-    "src/firebase-helper.html",
     "src/new-team.html",
+    "src/signin-view.html",
     "src/view-posts.html",
-    "src/view-404.html"
+    "src/view-404.html",
+    "src/firebase-helper.html"
   ],
   "sourceGlobs": [
    "src/**/*",
