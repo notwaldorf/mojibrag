@@ -9,8 +9,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 -->
 
 <link rel="import" href="../bower_components/polymer/polymer.html">
-<link rel="import" href="../bower_components/paper-button/paper-button.html">
-<link rel="import" href="../bower_components/polymerfire/polymerfire.html">
+<link rel="import" href="../bower_components/polymerfire/firebase-auth.html">
+<link rel="import" href="../bower_components/polymerfire/firebase-app.html">
 <link rel="import" href="signin-view.html">
 
 <dom-module id="my-app">
@@ -50,7 +50,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <firebase-auth id="googleAuth" user="{{user}}" provider="google"></firebase-auth>
 
     <signin-view hidden id="signin">
-      <paper-button on-tap="login" raised hidden$="[[offline]]">Sign in with Google</paper-button>
+      <button on-tap="login" raised hidden$="[[offline]]">Sign in with Google</button>
       <div hidden$="[[!offline]]" class="offline">You are currently offline, so you can't sign in to view posts.
         Come back and sign in when you're online!</div>
     </signin-view>
