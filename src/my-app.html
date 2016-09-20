@@ -11,6 +11,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/polymerfire/firebase-auth.html">
 <link rel="import" href="../bower_components/polymerfire/firebase-app.html">
+<link rel="import" href="../bower_components/app-localize-behavior/app-localize-behavior.html">
+
+<!-- Intl polyfill -->
+<script src="../bower_components/intl/dist/Intl.min.js"></script>
 
 <dom-module id="my-app">
   <template>
@@ -106,7 +110,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <p>📢 &nbsp;stuff. Use ✨🙊😂🔥.<br>
           (we only ask for your location to 📍 your 📝)</p>
         <br>
-        <button on-tap="login" raised hidden$="[[offline]]">Sign in with Google</button>
+        <button on-tap="login" raised hidden$="[[offline]]">{{localize('sign-in')}}</button>
         <div hidden$="[[!offline]]" class="offline">You are currently offline, so you can't sign in to view posts.
           Come back and sign in when you're online!</div>
       </div>
@@ -115,12 +119,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         Find this on <a href="https://github.com/notwaldorf/humblebrag">GitHub</a>.</p>
     </div>
 
-    <humble-brag id="app" location="[[location]]" offline="[[offline]]"></humble-brag>
+    <humble-brag id="app" location="[[location]]" offline="[[offline]]" language="[[language]]"></humble-brag>
   </template>
 
   <script>
     Polymer({
       is: 'my-app',
+
+      behaviors: [
+        Polymer.AppLocalizeBehavior
+      ],
 
       properties: {
         location: {
@@ -144,6 +152,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       // },
 
       ready: function() {
+        this.loadResources(this.resolveUrl('locales.json'));
+
         this.offline = navigator.onLine === false;
         window.addEventListener('online', function() {
           this.offline = false;
@@ -155,6 +165,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       attached: function() {
         this._getLocation();
+
         firebase.auth().onAuthStateChanged(function(user) {
           if (!!user) {
             this.importHref(this.resolveUrl('humble-brag.html'), function() {

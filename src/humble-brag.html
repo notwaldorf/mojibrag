@@ -198,7 +198,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
           <paper-button raised hidden$="[[offline]]" id="createTeamButton"
               on-click="_showCreateTeam" class="create-team">
-            <iron-icon icon="icons:add"></iron-icon>Create team
+            <iron-icon icon="icons:add"></iron-icon>
+            {{localize('create-team-button')}}
           </paper-button>
         </div>
       </app-drawer>
@@ -212,7 +213,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
             <div id="createTeamButton" class="userInfo">
               <img class="avatar" alt="github avatar" src="[[user.photoURL]]">
-              <paper-button on-tap="logout" hidden$="[[offline]]">Sign out</paper-button>
+              <paper-button on-tap="logout" hidden$="[[offline]]">{{localize('sign-out')}}</paper-button>
             </div>
           </app-toolbar>
         </app-header>
@@ -223,13 +224,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           </div>
 
           <div hidden$="[[!offline]]" class="no-internet animate-appear">
-            <iron-icon icon="icons:cloud-off"></iron-icon>
-            No internet connection! <br>
-            <span class="subtitle">You won't be able to manage teams or write new posts.</span>
+            <iron-icon icon="icons:cloud-off"></iron-icon>&nbsp;{{localize('no-internet-title')}}<br>
+            <span class="subtitle">{{localize('no-internet-subtitle')}}</span>
           </div>
 
-          <new-post hidden team="[[page]]" id="newPost" class="animate-appear"></new-post>
-          <new-team hidden id="newTeam" class="animate-appear"></new-team>
+          <new-post hidden team="[[page]]" id="newPost" class="animate-appear" language="[[language]]"></new-post>
+          <new-team hidden id="newTeam" class="animate-appear" language="[[language]]"></new-team>
           <iron-pages
               selected="[[page]]"
               attr-for-selected="name"
@@ -253,7 +253,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     Polymer({
       is: 'humble-brag',
 
-      behaviors: [Polymer.FirebaseHelper],
+      behaviors: [Polymer.FirebaseHelper, Polymer.AppLocalizeBehavior],
 
       properties: {
         page: {
@@ -290,6 +290,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         // We went from hidden to visible, so app-layout needs to recompute its size.
         this.$.header.fire('iron-resize');
         this._firebaseUpdateUserInfo(this.user);
+        this.loadResources(this.resolveUrl('locales.json'));
       },
 
       observers: [

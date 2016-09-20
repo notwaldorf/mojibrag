@@ -83,14 +83,14 @@
       }
     </style>
 
-    <div class="title">Write a new post</div>
-    <textarea id="write">Write your cool message here! ✌️</textarea>
-    <div class="title">Preview (what you type is translated to emoji)</div>
+    <div class="title">{{localize('new-post-header')}}</div>
+    <textarea id="write">{{localize('new-post-sample')}}</textarea>
+    <div class="title">{{localize('new-post-preview-header')}}</div>
     <div id="preview" tabindex="0"></div>
 
     <div class="bottom">
-      <span class="title">In team: [[team]]</span>
-      <paper-button on-click="_post">Post!</paper-button>
+      <span class="title">{{localize('in-team')}}: [[team]]</span>
+      <paper-button on-click="_post">{{localize('post-button')}}</paper-button>
     </div>
 
   </template>
@@ -101,6 +101,10 @@
     Polymer({
       is: 'new-post',
 
+      behaviors: [
+        Polymer.AppLocalizeBehavior
+      ],
+      
       registered: function() {
         var request = new XMLHttpRequest();
         request.open('GET', 'bower_components/emojilib/emojis.json', true);
@@ -115,6 +119,7 @@
       },
 
       attached: function() {
+        this.loadResources(this.resolveUrl('locales.json'));
         this.async(this._emojify, 1);
         this.$.write.addEventListener('input', function(event) {
           this._emojify();

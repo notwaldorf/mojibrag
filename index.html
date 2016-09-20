@@ -149,7 +149,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </style>
   </head>
   <body>
-    <my-app>
+    <my-app id="app">
       <div class="splash">
         <div class="header">
           <div style="font-size: 100px;">👋🆒🐱</div>
@@ -164,6 +164,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       </div>
     </my-app>
 
-    <!-- Built with love using Polymer Starter Kit -->
+    <script>
+      var query = window.location.search;
+      var language = window.location.search.split('=')[1];
+      if (language === 'en' || language === 'fr') {
+        app.language = language;
+      } else {
+        app.language = 'en';
+      }
+    </script>
   </body>
 </html>

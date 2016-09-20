@@ -85,15 +85,15 @@
       }
     </style>
 
-    <div class="title" hidden$="[[_edit]]">Create new team</div>
-    <div class="title" hidden$="[[!_edit]]">Edit existing team</div>
+    <div class="title" hidden$="[[_edit]]">{{localize('new-team-header')}}</div>
+    <div class="title" hidden$="[[!_edit]]">{{localize('edit-team-header')}}</div>
 
     <div class="horizontal">
-      <input type="text" placeholder="team-name" id="name" required pattern="[^.#$\[\]/]+">
+      <input type="text" placeholder="{{localize('team-name-placeholder')}}" id="name" required pattern="[^.#$\[\]/]+">
     </div>
 
     <div class="horizontal" hidden$="[[!_edit]]">
-      <input type="email" multiple placeholder="users, comma separated email" id="editUsers">
+      <input type="email" multiple placeholder="{{localize('team-users-placeholder')}}" id="editUsers">
       <paper-icon-button on-click="_addUsers" icon="icons:person-add"></paper-icon-button>
       <paper-icon-button on-click="_deleteUsers" icon="icons:delete"></paper-icon-button>
     </div>
@@ -102,15 +102,15 @@
 
     <div class="horizontal-reverse">
       <span>
-        <paper-button on-click="hide">Cancel</paper-button>
-        <paper-button on-click="_createTeam" hidden$="[[_edit]]">Create!</paper-button>
+        <paper-button on-click="hide">{{localize('cancel')}}</paper-button>
+        <paper-button on-click="_createTeam" hidden$="[[_edit]]">{{localize('create')}}</paper-button>
 
-        <paper-button on-click="_deleteTeam" hidden$="[[!_edit]]">Delete team</paper-button>
-        <paper-button on-click="_renameTeam" hidden$="[[!_edit]]">Rename team</paper-button>
+        <paper-button on-click="_deleteTeam" hidden$="[[!_edit]]">{{localize('delete-team')}}</paper-button>
+        <paper-button on-click="_renameTeam" hidden$="[[!_edit]]">{{localize('rename-team')}}</paper-button>
       </span>
 
       <span class="public-settings" hidden$="[[_edit]]">
-        private <paper-toggle-button id="public"></paper-toggle-button>public
+        {{localize('private')}} <paper-toggle-button id="public"></paper-toggle-button>{{localize('public')}}
       </span>
     </div>
 
@@ -122,11 +122,19 @@
     Polymer({
       is: 'new-team',
 
+      behaviors: [
+        Polymer.AppLocalizeBehavior
+      ],
+
       properties: {
         _edit: {
           type: Boolean,
           value: false
         }
+      },
+
+      attached: function() {
+        this.loadResources(this.resolveUrl('locales.json'));
       },
 
       edit: function(team) {
