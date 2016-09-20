@@ -34,6 +34,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         color: white;
         font-size: 14px;
       }
+
+      .offline {
+        font-weight: 100;
+        font-size: 18px;
+      }
     </style>
 
     <firebase-app
@@ -45,10 +50,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <firebase-auth id="googleAuth" user="{{user}}" provider="google"></firebase-auth>
 
     <signin-view hidden id="signin">
-      <paper-button on-tap="login" raised>Sign in with Google</paper-button>
+      <paper-button on-tap="login" raised hidden$="[[offline]]">Sign in with Google</paper-button>
+      <div hidden$="[[!offline]]" class="offline">You are currently offline, so you can't sign in to view posts.
+        Come back and sign in when you're online!</div>
     </signin-view>
 
-    <humble-brag id="app" location="[[location]]"></humble-brag>
+    <humble-brag id="app" location="[[location]]" offline="[[offline]]"></humble-brag>
   </template>
 
   <script>
@@ -58,6 +65,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       properties: {
         location: {
           type: String,
+          notify: true
+        },
+
+        offline: {
+          type: Boolean,
+          value: false,
           notify: true
         },
       },
@@ -70,16 +83,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       //   var known = event.detail.value;
       // },
 
-      // TODO: you might need this to show a different "don't sign in bc you can't" view
-      // ready: function() {
-      //   this.offline = navigator.onLine === false;
-      //   window.addEventListener('online', function() {
-      //     this.offline = false;
-      //   }.bind(this));
-      //   window.addEventListener('offline', function() {
-      //     this.offline = true;
-      //   }.bind(this));
-      // },
+      ready: function() {
+        this.offline = navigator.onLine === false;
+        window.addEventListener('online', function() {
+          this.offline = false;
+        }.bind(this));
+        window.addEventListener('offline', function() {
+          this.offline = true;
+        }.bind(this));
+      },
 
       attached: function() {
         this._getLocation();

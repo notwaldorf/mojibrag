@@ -287,16 +287,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         },
       },
 
-      ready: function() {
-        this.offline = navigator.onLine === false;
-        window.addEventListener('online', function() {
-          this.offline = false;
-        }.bind(this));
-        window.addEventListener('offline', function() {
-          this.offline = true;
-        }.bind(this));
-      },
-
       init: function() {
         // We went from hidden to visible, so app-layout needs to recompute its size.
         this.$.header.fire('iron-resize');

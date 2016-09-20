@@ -21,7 +21,8 @@ Polymer.FirebaseHelper = {
         console.log('Existing user:', this.user);
 
         // Get this user's private teams, if any.
-        this._firebaseGetUserTeams(snapshot.val().teams || []);
+        if (!this.offline)
+          this._firebaseGetUserTeams(snapshot.val().teams || []);
 
       } else {
         console.log('New user!');
