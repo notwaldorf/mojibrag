@@ -92,7 +92,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
     </script>
 
-    <link rel="import" href="/src/my-app.html">
+    <link rel="import" href="/src/my-app.html" async>
 
     <style>
       body {
@@ -104,10 +104,66 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         background: -webkit-linear-gradient(-45deg, rgba(32, 155, 222, 0.8), rgba(113, 224, 192, 0.8));
         background: linear-gradient(-45deg, rgba(32, 155, 222, 0.8), rgba(113, 224, 192, 0.8));
       }
+
+      /* styling for render while resources are loading */
+      .splash {
+        display: block;
+        text-align: center;
+        font-weight: 100;
+        font-size: 18px;
+        color: white;
+        max-width: 400px;
+        margin: auto;
+        padding-top: 10%;
+      }
+
+      .header {
+        height: 350px;
+        overflow: hidden;
+      }
+
+      .loading {
+        animation: blink 1.5s linear infinite;
+        -o-animation: blink 1.5s linear infinite;
+        -moz-animation: blink 1.5s linear infinite;
+        -webkit-animation: blink 1.5s linear infinite;
+      }
+
+      @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.2; } 100% { opacity: 1; } }
+      @-webkit-keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.2; } 100% { opacity: 1; } }
+      @-moz-keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.2; } 100% { opacity: 1; } }
+      @-o-keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.2; } 100% { opacity: 1; } }
+
+      .footer {
+        font-size: 13px;
+      }
+
+      a:link, a:visited {
+        color: #FFC107;
+        text-decoration: none;
+      }
+
+      a:hover {
+        text-decoration: underline;
+      }
     </style>
   </head>
   <body>
-    <my-app></my-app>
+    <my-app>
+      <div class="splash">
+        <div class="header">
+          <div style="font-size: 100px;">👋🆒🐱</div>
+          <p>📢 &nbsp;stuff. Use ✨🙊😂🔥.<br>
+            (we only ask for your location to 📍 your 📝)</p>
+          <br>
+          <p class="loading">✋ 🎉 Loading... ⏳ 🤖</p>
+        </div>
+
+        <p class="footer">Made with 🙈&nbsp; by <a href="https://twitter.com/notwaldorf">Monica</a>.
+          Find this on <a href="https://github.com/notwaldorf/humblebrag">GitHub</a>.</p>
+      </div>
+    </my-app>
+
     <!-- Built with love using Polymer Starter Kit -->
   </body>
 </html>
