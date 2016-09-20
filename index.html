@@ -167,10 +167,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <script>
       var query = window.location.search;
       var language = window.location.search.split('=')[1];
+
       if (language === 'en' || language === 'fr') {
         app.language = language;
       } else {
         app.language = 'en';
+        window.location.search = '?lang=en';
       }
     </script>
   </body>
