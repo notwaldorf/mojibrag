@@ -5,7 +5,6 @@
     "src/humble-brag.html",
     "src/new-post.html",
     "src/new-team.html",
-    "src/signin-view.html",
     "src/view-posts.html",
     "src/view-404.html",
     "src/firebase-helper.html"
