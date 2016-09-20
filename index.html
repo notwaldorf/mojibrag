@@ -168,7 +168,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       var query = window.location.search;
       var language = window.location.search.split('=')[1];
 
-      if (language === 'en' || language === 'fr') {
+      var allowed = ['en', 'fr', 'it', 'es', 'emoji'];
+      if (allowed.indexOf(language) != -1) {
         app.language = language;
       } else {
         app.language = 'en';
