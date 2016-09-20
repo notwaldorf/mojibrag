@@ -6,6 +6,7 @@
   "private": true,
   "dependencies": {
     "app-layout": "PolymerElements/app-layout#^0.10.0",
+    "app-localize-behavior": "PolymerElements/app-localize-behavior#^0.10.0",
     "app-route": "PolymerElements/app-route#^0.9.0",
     "iron-flex-layout": "PolymerElements/iron-flex-layout#^1.0.0",
     "iron-icon": "PolymerElements/iron-icon#^1.0.0",
@@ -19,7 +20,8 @@
     "polymerfire": "firebase/polymerfire#^0.9.0",
     "app-storage": "polymerelements/app-storage#^0.9.0",
     "polymer": "Polymer/polymer#^1.6.0",
-    "emojilib": "muan/emojilib#^2.0.0"
+    "emojilib": "muan/emojilib#^2.0.0",
+    "intl": "andyearnshaw/intl.js#^1.0.0"
   },
   "devDependencies": {
     "web-component-tester": "^4.0.0"
