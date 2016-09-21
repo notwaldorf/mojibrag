@@ -119,7 +119,6 @@
       },
 
       attached: function() {
-        this.async(this._emojify, 1);
         this.$.write.addEventListener('input', function(event) {
           this._emojify();
         }.bind(this));

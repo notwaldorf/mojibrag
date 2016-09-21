@@ -12,6 +12,7 @@ Polymer.FirebaseHelper = {
       var userInfo = snapshot.val();
 
       this.$.newPost.hidden = false;
+      this.$.newPost._emojify();
       this.$.loading.hidden = true;
 
       // If online, try to update the can/can't edit public teams
