@@ -67,8 +67,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         padding: 0;
         color: white;
         letter-spacing: 2px;
-        font-size: 20px;
+        font-size: 30px;
         padding-left: 16px;
+        vertical-align: middle;
       }
 
       team-item {
@@ -184,7 +185,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <!-- Drawer content -->
       <app-drawer id="drawer">
         <div class="drawer-background">
-          <app-toolbar class="left-toolbar">#humblebrag</app-toolbar>
+          <app-toolbar class="left-toolbar">👋🆒🐱{{localize('flag')}}</app-toolbar>
 
           <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
             <template is="dom-repeat" items="[[publicTeams]]">

@@ -1,5 +1,6 @@
 {
   "en": {
+    "flag": "🇬🇧",
     "sign-out": "Sign out",
     "sign-in": "Sign in with google",
     "create-team-button": "Create team",
@@ -22,6 +23,7 @@
     "no-internet-subtitle": "You won't be able to manage teams or write new posts."
   },
   "es": {
+    "flag": "🇪🇸",
     "sign-out": "Salir",
     "sign-in": "Iniciar con google",
     "create-team-button": "Crear equipo",
@@ -44,6 +46,7 @@
     "no-internet-subtitle": "No podrás administrar los equipos o escribir nuevos mensajes."
   },
   "fr": {
+    "flag": "🇫🇷",
     "sign-out": "Déconnexion",
     "sign-in": "Connecter avec Google",
     "create-team-button": "Créer équipe",
@@ -66,6 +69,7 @@
     "no-internet-subtitle": "Vous ne serez pas en mesure de gérer des équipes ou d'écrire de nouveaux messages."
   },
   "it": {
+    "flag": "🇮🇹",
     "sign-out": "Disconnetti",
     "sign-in": "Connetti con google",
     "create-team-button": "Crea team",
@@ -88,6 +92,7 @@
     "no-internet-subtitle": "Non potrai gestire i teams o scrivere nuovi messaggi."
   },
   "emoji": {
+    "flag": "🎉",
     "sign-out": "🙅🎟",
     "sign-in": "🙆🎟",
     "create-team-button": "🆕👩‍👩‍👦‍👦",
@@ -110,6 +115,7 @@
     "no-internet-subtitle": "🙅📝 🙅🔧 🙅🎉"
   },
   "al": {
+    "flag": "🇦🇱",
     "sign-out": "Dalësh",
     "sign-in": "Kyçuni me google",
     "create-team-button": "Krijoj ekipin",
@@ -132,6 +138,7 @@
     "no-internet-subtitle": "Ju nuk do të jetë në gjendje për të menaxhuar ekipe ose shkruani mesazh i ri."
   },
   "ro": {
+    "flag": "🇷🇴",
     "sign-out": "Deconecteaza-te",
     "sign-in": "Conecteaza-te cu google",
     "create-team-button": "Creaza o echipa",
