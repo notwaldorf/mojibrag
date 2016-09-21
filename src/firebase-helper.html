@@ -221,22 +221,26 @@ Polymer.FirebaseHelper = {
       if (snapshot.val()) {
         self.$.newTeam.showError('Oops! This name is already taken.');
       } else {
-        self.$.newTeam.hide();
-
         // Update the name in the main teams table
-        firebase.database().ref('/teams/').child(ref).update({name: newName});
+        firebase.database().ref('/teams/').child(ref).update({name: newName})
+            .then(function(success) {
+              // Update the name in the names -> keys table.
+              firebase.database().ref('/teamNames/').child(oldName).remove();
+              firebase.database().ref('/teamNames/').child(newName).set({id:ref});
 
-        // Update the name in the names -> keys table.
-        firebase.database().ref('/teamNames/').child(oldName).remove();
-        firebase.database().ref('/teamNames/').child(newName).set({id:ref});
+              self.$.newTeam.hide();
 
-        // Update the name in the UI
-        for (var i = 0; i < self.teams.length; i++) {
-          if (self.teams[i].name === oldName) {
-            self.set(['teams', i, 'name'], newName);
-            return;
-          }
-        }
+              // Update the name in the UI
+              for (var i = 0; i < self.teams.length; i++) {
+                if (self.teams[i].name === oldName) {
+                  self.set(['teams', i, 'name'], newName);
+                  return;
+                }
+              }
+            }, function(error) {
+              console.log(error)
+              self.$.newTeam.showError('Permission denied. Are you sure you\'re allowed to do this?');
+            });
       }
     });
   },
