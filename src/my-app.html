@@ -107,16 +107,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <div class="signin-view" id="signin" hidden>
       <div class="header">
         <div class="giant">👋🆒🐱</div>
-        <p>📢 &nbsp;stuff. Use ✨🙊😂🔥.<br>
-          (we only ask for your location to 📍 your 📝)</p>
+        <p>{{localize('splash-one')}}<br>
+          {{localize('splash-two')}}</p>
         <br>
         <button on-tap="login" raised hidden$="[[offline]]">{{localize('sign-in')}}</button>
-        <div hidden$="[[!offline]]" class="offline">You are currently offline, so you can't sign in to view posts.
-          Come back and sign in when you're online!</div>
+        <div hidden$="[[!offline]]" class="offline">{{localize('splash-offline')}}</div>
       </div>
 
-      <p class="footer">Made with 🙈&nbsp; by <a href="https://twitter.com/notwaldorf">Monica</a>.
-        Find this on <a href="https://github.com/notwaldorf/humblebrag">GitHub</a>.</p>
+      <p class="footer" inner-h-t-m-l="{{localize('splash-footer')}}"></p>
     </div>
 
     <humble-brag id="app" location="[[location]]" offline="[[offline]]" language="[[language]]"></humble-brag>
