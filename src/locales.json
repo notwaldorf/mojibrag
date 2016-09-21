@@ -214,5 +214,32 @@
    "rename-team": "重命名團隊",
    "no-internet-title": "沒有網絡連接!",
    "no-internet-subtitle": "您將無法管理團隊或撰寫新文章."
- }
+ },
+ "jp": {
+    "flag": "🇯🇵",
+    "splash-one": "用 ✨🙊😂🔥，📢 話",
+    "splash-two": "(我們只要求你的定位來 📍 你的 📝)",
+    "splash-offline": "你現在處於離線狀態所以不能登入瀏覽。有網路的時候再回來吧!",
+    "splash-footer": "<a href='https://twitter.com/notwaldorf'>Monica</a> 出品，用 🙈 製作。到 <a href='https://github.com/notwaldorf/humblebrag'>GitHub</a> 找這個程式。",
+    "sign-out": "ログアウト",
+    "sign-in": "グーグルでログインする",
+    "create-team-button": "チーム作成",
+    "new-post-header": "新規作成",
+    "new-post-sample": "Write your cool message here! In english 😅",
+    "new-post-preview-header": "プレビュー（絵文字変換）",
+    "in-team": "チーム",
+    "post-button": "送信",
+    "new-team-header": "新規チーム作成",
+    "edit-team-header": "チーム編集",
+    "team-name-placeholder": "チーム名",
+    "team-users-placeholder": "ユーザ一覧（カンマ区切りメールアドレス）",
+    "private": "プライベート",
+    "public": "パブリック",
+    "cancel": "キャンセル",
+    "create": "作成！",
+    "delete-team": "チーム削除",
+    "rename-team": "チーム名変更",
+    "no-internet-title": "インターネット接続はありません",
+    "no-internet-subtitle": "チーム管理や記事作成はできません。"
+  }
 }
