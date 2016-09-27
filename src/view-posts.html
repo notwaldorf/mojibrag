@@ -28,41 +28,6 @@
         padding: 16px;
       }
 
-      .bounce {
-        animation: bounce-animation 500ms ease-out forwards;
-        -o-animation: bounce-animation 500ms ease-out forwards;
-        -moz-animation: bounce-animation 500ms ease-out forwards;
-        -webkit-animation: bounce-animation 500ms ease-out forwards;
-      }
-
-      @keyframes bounce-animation {
-        0% { transform:scale(0); }
-        50% { transform:scale(1.05) }
-        75% { transform:scale(0.95) }
-        100% { transform:scale(1) }
-      }
-
-      @-moz-keyframes bounce-animation {
-        0% { transform:scale(0); }
-        50% { transform:scale(1.05) }
-        75% { transform:scale(0.95) }
-        100% { transform:scale(1) }
-      }
-
-      @-webkit-keyframes bounce-animation {
-        0% { transform:scale(0); }
-        50% { transform:scale(1.05) }
-        75% { transform:scale(0.95) }
-        100% { transform:scale(1) }
-      }
-
-      @-o-keyframes bounce-animation {
-        0% { transform:scale(0); }
-        50% { transform:scale(1.05) }
-        75% { transform:scale(0.95) }
-        100% { transform:scale(1) }
-      }
-
       .avatar {
         height: 60px;
         width: 60px;
@@ -138,7 +103,7 @@
     <iron-list items="[[posts]]" as="item" id="list" scroll-target="document">
       <template>
         <div>
-          <div class$="item bounce [[_computeAnimated(item, index)]]" list-index$="[[index]]">
+          <div class="item" list-index$="[[index]]">
             <div class="horizontal">
               <img class="avatar" sizing="contain" src="[[item.image]]" title="[[item.email]]">
               <div class="vertical">
