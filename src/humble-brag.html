@@ -90,7 +90,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         position: relative;
         width: 46px;
       }
-      
+
       .select-wrapper:after {
         content: "";
         width: 0;
@@ -234,15 +234,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <option value="zh">🇨🇳</option>
               </select>
             </span>
-        </app-toolbar>
+          </app-toolbar>
 
           <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
             <template is="dom-repeat" items="[[publicTeams]]">
-              <team-item public team="[[item]]" name="[[item.name]]" uid="[[user.uid]]" offline="[[offline]]"></team-item>
+              <team-item public team="[[item]]" name="[[item.name]]" uid="[[user.uid]]" offline="[[offline]]" language="[[language]]"></team-item>
             </template>
 
             <template is="dom-repeat" items="[[teams]]">
-              <team-item team="[[item]]" name="[[item.name]]" uid="[[user.uid]]" offline="[[offline]]"></team-item>
+              <team-item team="[[item]]" name="[[item.name]]" uid="[[user.uid]]" offline="[[offline]]" language="[[language]]"></team-item>
             </template>
           </iron-selector>
 
