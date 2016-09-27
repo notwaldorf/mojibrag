@@ -104,7 +104,7 @@ Polymer.FirebaseHelper = {
   _firebaseLikeMessage: function(post, team) {
     firebase.database().ref('/posts/' + team).child(post).once('value', function(snapshot) {
       var likes = snapshot.val().likes || 0;
-      snapshot.ref.update({likes: likes + 1});
+      snapshot.ref.child('likes').set(likes + 1);
     });
   },
 
@@ -112,7 +112,7 @@ Polymer.FirebaseHelper = {
     firebase.database().ref('/posts/' + team).child(post).once('value', function(snapshot) {
       var likes = snapshot.val().likes || 0;
       if (likes !== 0) {
-        snapshot.ref.update({likes: likes - 1});
+        snapshot.ref.child('likes').set(likes - 1);
       }
     });
   },
