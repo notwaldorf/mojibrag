@@ -159,6 +159,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         window.addEventListener('offline', function() {
           this.offline = true;
         }.bind(this));
+
+        this.addEventListener('language-changed', function(event) {
+          this.language = event.detail.value;
+        }.bind(this));
       },
 
       attached: function() {

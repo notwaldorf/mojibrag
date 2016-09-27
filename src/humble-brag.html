@@ -72,6 +72,42 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         vertical-align: middle;
       }
 
+      .left-toolbar select {
+        -webkit-appearance:none;
+        -moz-appearance:none;
+        appearance:none;
+        box-sizing: border-box;
+        display: inline-block;
+        border: 0;
+        outline: 0;
+        background: transparent;
+        font-size: 30px;
+        cursor: pointer;
+        position: relative;
+      }
+
+      .select-wrapper {
+        position: relative;
+        width: 46px;
+      }
+      
+      .select-wrapper:after {
+        content: "";
+        width: 0;
+        height: 0;
+        border-left: 5px solid transparent;
+        border-right: 5px solid transparent;
+        border-top: 6px solid white;
+        position: absolute;
+        top: 17px;
+        right: 0;
+        pointer-events: none;
+      }
+
+      select:focus {
+        background-color: #7bd6cf;
+      }
+
       team-item {
         width: 100%;
       }
@@ -175,17 +211,30 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </app-indexeddb-mirror>
 
     <app-location route="{{route}}"></app-location>
-    <app-route
+    <app-route id="appRoute"
         route="{{route}}"
         pattern="/:page"
         data="{{routeData}}"
-        tail="{{subroute}}"></app-route>
+        tail="{{subroute}}"
+        query-params="{{queryParams}}"></app-route>
 
     <app-drawer-layout id="drawerLayout">
       <!-- Drawer content -->
       <app-drawer id="drawer">
         <div class="drawer-background">
-          <app-toolbar class="left-toolbar">👋🆒🐱{{localize('flag')}}</app-toolbar>
+          <app-toolbar class="left-toolbar">👋🆒🐱<span class="select-wrapper">
+              <select id="selectLanguage" value="{{queryParams.lang}}" on-change="_selectLanguageChanged">
+                <option value="al">🇦🇱</option>
+                <option value="en">🇬🇧</option>
+                <option value="es">🇪🇸</option>
+                <option value="fr">🇫🇷</option>
+                <option value="it">🇮🇹</option>
+                <option value="jp">🇯🇵</option>
+                <option value="ro">🇷🇴</option>
+                <option value="zh">🇨🇳</option>
+              </select>
+            </span>
+        </app-toolbar>
 
           <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
             <template is="dom-repeat" items="[[publicTeams]]">
@@ -295,7 +344,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
 
       observers: [
-        '_routePageChanged(routeData.page)'
+        '_routePageChanged(routeData.page)',
       ],
 
       listeners: {
@@ -323,6 +372,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
        *******************************/
       _routePageChanged: function(page) {
         this.page = page || 'global';
+      },
+
+      _selectLanguageChanged: function(event) {
+        this.set('queryParams.lang', event.target.value);
+        this.fire('language-changed', {value: event.target.value});
       },
 
       // TODO: this is borked.
