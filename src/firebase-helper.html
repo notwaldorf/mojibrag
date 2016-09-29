@@ -11,7 +11,7 @@ Polymer.FirebaseHelper = {
     if (this.offline) {
       this.$.loading.hidden = true;
     }
-    
+
     firebase.database().ref('/users/' + user.uid).once('value', function(snapshot) {
       var userInfo = snapshot.val();
 
@@ -196,6 +196,8 @@ Polymer.FirebaseHelper = {
   },
 
   _firebaseDeleteTeam: function(ref, teamName) {
+    var displayedPage = this.$.pages.querySelector('view-posts.iron-selected');
+
     // Delete this from the names -> keys table.
     firebase.database().ref('/teamNames/').child(teamName).remove();
 
@@ -206,6 +208,14 @@ Polymer.FirebaseHelper = {
     firebase.database().ref('/publicTeams/').child(ref).remove();
 
     this.$.newTeam.hide();
+
+    // Switch to the global team since we're now displaying junk data.
+    this.set('routeData.page', 'global');
+
+    // Delete the old posts list.
+    if (displayedPage.ref === ref) {
+      Polymer.dom(this.$.pages).removeChild(displayedPage);
+    }
 
     // TODO: could optionally delete this from the users too.
 
