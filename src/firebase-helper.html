@@ -3,7 +3,7 @@
 <script>
 Polymer.FirebaseHelper = {
   _firebaseUpdateUserInfo: function(user) {
-    this.set('teams', []);
+    this.set('_teams', []);
 
     if (!user)
       return;
@@ -75,7 +75,7 @@ Polymer.FirebaseHelper = {
         // Push instead of set so that we can do this incrementally I guess.
         var obj = snapshot.val();
         obj.key = snapshot.key;
-        this.push('teams', obj);
+        this.push('_teams', obj);
       }
     }.bind(this));
   },
@@ -155,7 +155,7 @@ Polymer.FirebaseHelper = {
         }
 
         // Add it to the UI now because the next steps could be slow.
-        self.push('teams', teamObj);
+        self.push('_teams', teamObj);
 
         // Also add it in the name -> key mapping.
         firebase.database().ref('/teamNames/').child(team).set({id:teamRef.key});
@@ -208,7 +208,7 @@ Polymer.FirebaseHelper = {
     // Delete this from the UI.
     for (var i = 0; i < this.teams.length; i++) {
       if (this.teams[i].name === teamName) {
-        this.splice('teams', i, 1);
+        this.splice('_teams', i, 1);
         return;
       }
     }
@@ -234,7 +234,7 @@ Polymer.FirebaseHelper = {
               // Update the name in the UI
               for (var i = 0; i < self.teams.length; i++) {
                 if (self.teams[i].name === oldName) {
-                  self.set(['teams', i, 'name'], newName);
+                  self.set(['_teams', i, 'name'], newName);
                   return;
                 }
               }

@@ -200,18 +200,22 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       @-o-keyframes disappear { from { opacity: 1; } to { opacity: 0; } }
     </style>
 
-    <firebase-query data="{{_publicTeams}}" path="/publicTeams">
-    </firebase-query>
+    <firebase-query data="{{_publicTeams}}" path="/publicTeams"></firebase-query>
     <app-indexeddb-mirror
       session="[[uid]]"
       key="/publicTeams"
       data="[[_publicTeams]]"
-      persisted-data="{{publicTeams}}"
-      online="[[!offline]]">
+      persisted-data="{{publicTeams}}">
+    </app-indexeddb-mirror>
+    <app-indexeddb-mirror
+      session="[[uid]]"
+      key="/teams"
+      data="[[_teams]]"
+      persisted-data="{{teams}}">
     </app-indexeddb-mirror>
 
     <app-location route="{{route}}"></app-location>
-    <app-route id="appRoute"
+    <app-route
         route="{{route}}"
         pattern="/:page"
         data="{{routeData}}"

@@ -18,6 +18,8 @@
     "manifest.json",
     "bower_components/webcomponentsjs/webcomponents-lite.min.js",
     "bower_components/emojilib/emojis.json",
+    "bower_components/app-storage/app-indexeddb-mirror/app-indexeddb-mirror-worker.js",
+    "bower_components/app-storage/app-indexeddb-mirror/common-worker-scope.js",
     "src/locales.json"
   ]
 }
