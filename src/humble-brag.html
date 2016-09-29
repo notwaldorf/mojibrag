@@ -273,7 +273,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </app-header>
 
         <div class="main-content">
-          <div id="loading" class="animate-disappear">
+          <div id="loading">
             <div class="giant-emoji">✋ 🎉 ⏳ 🤖</div>
           </div>
 
@@ -336,7 +336,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         offline: {
           type: Boolean,
           value: false,
-          notify: true
+          observer: '_offlineChanged'
         },
       },
 
@@ -395,6 +395,26 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         this.page = '404';
       },
 
+      _offlineChanged: function(offline, previous) {
+        if (previous === undefined) {
+          this._initialOffline = offline;
+        }
+
+        if (offline) {
+          this.$.newPost.hidden = true;
+        } else {
+          // If we were originally offline and came online, there is a delay between
+          // the mirror switching to live data, and the live data coming in from Firebase
+          // so throw up a loading screen
+          if (this._initialOffline) {
+            this.$.loading.hidden = false;
+            // We got things from Firebase now, so we can switch back to the easy case.
+            this._initialOffline = false;
+          } else {
+            this.$.newPost.hidden = false;
+          }
+        }
+      },
       /*******************************
        * Posts
        *******************************/
@@ -447,8 +467,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       _postDelete: function(event) {
         this._firebaseDeleteMessage(event.detail.ref, event.detail.teamRef);
-      },
-
+      }
 
     });
   </script>
