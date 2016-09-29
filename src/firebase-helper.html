@@ -8,6 +8,10 @@ Polymer.FirebaseHelper = {
     if (!user)
       return;
 
+    if (this.offline) {
+      this.$.loading.hidden = true;
+    }
+    
     firebase.database().ref('/users/' + user.uid).once('value', function(snapshot) {
       var userInfo = snapshot.val();
 
