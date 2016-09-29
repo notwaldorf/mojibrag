@@ -132,6 +132,12 @@
           nodes = this.$.preview.children;
         }
 
+        if (this.$.preview.textContent.trim() === '') {
+          this.$.write.value = '👉 empty messages are 🚫 🆒';
+          this._emojify();
+          return;
+        }
+
         var value = '';
         for (var i = 0; i < nodes.length; i++) {
           if (nodes[i].tagName === 'SELECT') {
