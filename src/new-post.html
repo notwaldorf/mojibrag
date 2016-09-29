@@ -228,6 +228,12 @@
         // Go through all the things and find the first one that matches.
         var useful = [];
 
+        // If this is already an emoji, don't try to translate it.
+        if (this._isMaybeAlreadyAnEmoji(word)) {
+          useful.push(word);
+          return useful;
+        }
+
         var allEmojis = this.constructor.prototype.allEmojis;
 
         for (var emoji in allEmojis) {
@@ -243,6 +249,15 @@
         }
 
         return (useful.length === 0) ? '' : useful;
+      },
+
+      _isMaybeAlreadyAnEmoji: function(word) {
+        var ranges = [
+            '\ud83c[\udf00-\udfff]', // U+1F300 to U+1F3FF
+            '\ud83d[\udc00-\ude4f]', // U+1F400 to U+1F64F
+            '\ud83d[\ude80-\udeff]' // U+1F680 to U+1F6FF
+        ];
+        return word.match(ranges.join('|'));
       }
     });
 
