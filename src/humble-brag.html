@@ -435,7 +435,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
 
       _showEditTeam: function(event) {
-        this.$.newTeam.edit(event.detail.team);
+        var teamName = event.detail.team;
+        var resolvedPageUrl = this.resolveUrl('new-team.html');
+        this.importHref(resolvedPageUrl, function() {
+          this.$.newTeam.edit(teamName);
+        }, null, true);
       },
 
       _createTeam: function(event) {

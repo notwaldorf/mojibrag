@@ -85,10 +85,7 @@
       },
 
       _showEditTeam: function(event) {
-        var resolvedPageUrl = this.resolveUrl('new-team.html');
-        this.importHref(resolvedPageUrl, function() {
-          this.fire('edit-team', {team: this.team});
-        }, null, true);
+        this.fire('edit-team', {team: this.team});
       },
 
       _shouldShowTeamSettings: function(team, uid, offline) {
