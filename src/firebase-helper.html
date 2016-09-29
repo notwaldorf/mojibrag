@@ -18,6 +18,7 @@ Polymer.FirebaseHelper = {
       this.$.newPost.hidden = false;
       this.$.newPost._emojify();
       this.$.loading.hidden = true;
+      this.$.pages.hidden = false;
 
       // If online, try to update the can/can't edit public teams
       this._firebaseUpdatePublicTeams();

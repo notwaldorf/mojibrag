@@ -408,6 +408,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           // so throw up a loading screen
           if (this._initialOffline) {
             this.$.loading.hidden = false;
+            this.$.pages.hidden = true;
             // We got things from Firebase now, so we can switch back to the easy case.
             this._initialOffline = false;
           } else {
