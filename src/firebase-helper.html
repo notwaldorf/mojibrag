@@ -55,7 +55,7 @@ Polymer.FirebaseHelper = {
 
         // HACK: Since we want to reuse the same UI code for the pre-online details,
         // reuse the $key property.
-        team.$key = snapshot.key;
+        team.$key = team.key = snapshot.key;
 
         // `this` is the index in the array, i know that's weird but halp?
         self.set(['publicTeams', Number(this)], team);
@@ -156,17 +156,23 @@ Polymer.FirebaseHelper = {
 
         // If it's public, also add it to the public teams.
         if (isPublic) {
-          firebase.database().ref('/publicTeams/').child(teamRef.key).set({name:team});
+          firebase.database().ref('/publicTeams/').child(teamRef.key).set({name:team}).then(function(teamObj, success) {
+            // The team created should be the last one in the list, and we need to ammend
+            // it with the extra data (like what _firebaseUpdatePublicTeams() does on load)
+            this.set(['publicTeams', this.publicTeams.length - 1], teamObj);
+          }.bind(self, teamObj));
+        } else {
+          // Add it to the UI now because the next steps could be slow.
+          self.push('_teams', teamObj);
         }
-
-        // Add it to the UI now because the next steps could be slow.
-        self.push('_teams', teamObj);
 
         // Also add it in the name -> key mapping.
         firebase.database().ref('/teamNames/').child(team).set({id:teamRef.key});
 
-        if (isPublic)
+
+        if (isPublic) {
           return;
+        }
 
         // Add this team to this user.
         firebase.database().ref('/users/' + self.user.uid).once('value', function(snapshot) {
