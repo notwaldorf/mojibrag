@@ -3,8 +3,8 @@
   "short_name": "#humblebrag",
   "start_url": "/?homescreen=1",
   "display": "standalone",
-  "theme_color": "#3f51b5",
-  "background_color": "#3f51b5",
+  "theme_color": "#ffc107",
+  "background_color": "#ffc107",
   "icons": [
     {
       "src": "images/manifest/icon-192x192.png",
