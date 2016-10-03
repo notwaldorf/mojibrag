@@ -2,7 +2,7 @@
   "entrypoint": "index.html",
   "shell": "src/my-app.html",
   "fragments": [
-    "src/humble-brag.html",
+    "src/moji-feed.html",
     "src/new-post.html",
     "src/new-team.html",
     "src/view-posts.html",

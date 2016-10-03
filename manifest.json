@@ -1,6 +1,6 @@
 {
-  "name": "#humblebrag",
-  "short_name": "#humblebrag",
+  "name": "mojifeed",
+  "short_name": "mojifeed",
   "start_url": "/?homescreen=1",
   "display": "standalone",
   "theme_color": "#ffc107",

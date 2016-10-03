@@ -97,10 +97,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </style>
 
     <firebase-app
-      api-key="AIzaSyDqUICuPABxyDDgGvdZbgsO9r97qet6N_w"
-      database-url="https://humblebrag-1cc8e.firebaseio.com"
-      auth-domain="humblebrag-1cc8e.firebaseapp.com"
-      storage-bucket="humblebrag-1cc8e.appspot.com">
+      api-key="AIzaSyA_2rcMxPwP0tmO7_s0jlcZZaXMFYaGt4I"
+      database-url="https://mojifeed.firebaseio.com"
+      auth-domain="mojifeed.firebaseapp.com"
+      storage-bucket="mojifeed.appspot.com">
     </firebase-app>
     <firebase-auth id="googleAuth" user="{{user}}" provider="google"></firebase-auth>
 
@@ -117,7 +117,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <p class="footer" inner-h-t-m-l="{{localize('splash-footer')}}"></p>
     </div>
 
-    <humble-brag id="app" location="[[location]]" offline="[[offline]]" language="[[language]]"></humble-brag>
+    <moji-feed id="app" location="[[location]]" offline="[[offline]]" language="[[language]]"></moji-feed>
   </template>
 
   <script>
@@ -170,7 +170,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         firebase.auth().onAuthStateChanged(function(user) {
           if (!!user) {
-            this.importHref(this.resolveUrl('humble-brag.html'), function() {
+            this.importHref(this.resolveUrl('moji-feed.html'), function() {
               this.$.signin.hidden = true;
               this.$.app.hidden = false;
               this.$.app.user = user;
