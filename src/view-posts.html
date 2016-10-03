@@ -102,7 +102,7 @@
     <iron-list items="[[posts]]" as="item" id="list" scroll-target="document">
       <template>
         <div>
-          <div class="item" list-index$="[[index]]">
+          <div class="item">
             <div class="horizontal">
               <img class="avatar" sizing="contain" src="[[item.image]]" title="[[item.email]]">
               <div class="vertical">
@@ -155,25 +155,13 @@
         },
 
         posts: {
-          type: Array,
-          observer: '_postsChanged'
+          type: Array
         },
 
         offline: {
           type: Boolean,
           value: false
         }
-      },
-
-      attached: function() {
-        this.addEventListener('animationend', function(event) {
-          var item = Polymer.dom(event).rootTarget;
-          // Only the first item should animate over and over again, i.e.
-          // every time we post to this list.
-          if (item.getAttribute('list-index') == 0) {
-            item.classList.remove('bounce');
-          }
-        });
       },
 
       _getDate: function(timestamp) {
@@ -194,12 +182,8 @@
         }
       },
 
-      _postsChanged: function() {
-        //this.$.list.fire('iron-resize');
-      },
-
       _like: function(event) {
-        var button = event.target;
+        var button = Polymer.dom(event).localTarget
         var ref = button.ref;
 
         if (button.icon === 'icons:favorite-border') {
@@ -212,7 +196,7 @@
       },
 
       _delete: function(event) {
-        var button = event.target;
+        var button = Polymer.dom(event).localTarget
         var ref = button.ref;
         this.fire('post-delete', {ref: ref, teamRef: this.ref});
       },
