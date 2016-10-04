@@ -117,7 +117,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <p class="footer" inner-h-t-m-l="{{localize('splash-footer')}}"></p>
     </div>
 
-    <moji-feed id="app" location="[[location]]" offline="[[offline]]" language="[[language]]"></moji-feed>
+    <moji-feed id="app" offline="[[offline]]" language="[[language]]"></moji-feed>
   </template>
 
   <script>
@@ -129,11 +129,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       ],
 
       properties: {
-        location: {
-          type: String,
-          notify: true
-        },
-
         offline: {
           type: Boolean,
           value: false,
@@ -166,8 +161,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
 
       attached: function() {
-        this._getLocation();
-
         firebase.auth().onAuthStateChanged(function(user) {
           if (!!user) {
             this.importHref(this.resolveUrl('moji-feed.html'), function() {
@@ -185,40 +178,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       login: function() {
         this.$.googleAuth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
-      },
-
-      _getLocation: function() {
-        var self = this;
-        navigator.geolocation.getCurrentPosition(function(position) {
-          var request = new XMLHttpRequest();
-          var method = 'GET';
-          var url = 'https://maps.googleapis.com/maps/api/geocode/json?latlng='
-              + position.coords.latitude + ','
-              + position.coords.longitude;
-
-          request.open('GET', url, true);
-          request.onreadystatechange = function() {
-            if (request.readyState == 4 && request.status == 200) {
-              var data = JSON.parse(request.responseText);
-              var addressComponents = data.results[0].address_components;
-
-              var city, state;
-              for(var i = 0; i < addressComponents.length; i++){
-                if (addressComponents[i].types == 'locality,political') {
-                  city = addressComponents[i].long_name;
-                } else if (addressComponents[i].types == 'administrative_area_level_1,political') {
-                  state = addressComponents[i].short_name;
-                }
-              }
-
-              // TODO: this probably changes when you're on mobile and it should
-              // be less bad and static.
-              self.location = city + ', ' + state;
-              console.log('We have a location!', self.location);
-            }
-          };
-          request.send();
-        });
       }
     });
   </script>
