@@ -13,6 +13,9 @@
 
       #list {
         max-width: 100%;
+        /* Hack to get around https://github.com/PolymerElements/iron-list/issues/329 */
+        padding-top: 10px;
+        margin-top: -10px;
       }
 
       h1 {
