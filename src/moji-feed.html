@@ -28,7 +28,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <link rel="import" href="my-icons.html">
 <link rel="import" href="new-post.html">
-<link rel="import" href="team-item.html">
+<link rel="import" href="channel-item.html">
 <link rel="import" href="firebase-helper.html">
 <link rel="import" href="view-posts.html">
 
@@ -108,7 +108,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         background-color: #7bd6cf;
       }
 
-      team-item {
+      channel-item {
         width: 100%;
       }
 
@@ -119,7 +119,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         color: white;
       }
 
-      paper-button.create-team {
+      paper-button.create-channel {
         display: block;
         text-align: center;
         box-sizing: border-box !important;
@@ -163,7 +163,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         font-size: 100px;
       }
 
-      .no-internet, new-post, new-team {
+      .no-internet, new-post, new-channel {
         display: block;
         box-sizing: border-box;
         margin: auto;
@@ -200,18 +200,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       @-o-keyframes disappear { from { opacity: 1; } to { opacity: 0; } }
     </style>
 
-    <firebase-query data="{{_publicTeams}}" path="/publicTeams"></firebase-query>
+    <firebase-query data="{{_publicChannels}}" path="/publicChannels"></firebase-query>
     <app-indexeddb-mirror
       session="[[uid]]"
-      key="/publicTeams"
-      data="[[_publicTeams]]"
-      persisted-data="{{publicTeams}}">
+      key="/publicChannels"
+      data="[[_publicChannels]]"
+      persisted-data="{{publicChannels}}">
     </app-indexeddb-mirror>
     <app-indexeddb-mirror
       session="[[uid]]"
-      key="/teams"
-      data="[[_teams]]"
-      persisted-data="{{teams}}">
+      key="/channels"
+      data="[[_channels]]"
+      persisted-data="{{channels}}">
     </app-indexeddb-mirror>
 
     <app-location route="{{route}}"></app-location>
@@ -241,19 +241,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           </app-toolbar>
 
           <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
-            <template is="dom-repeat" items="[[publicTeams]]">
-              <team-item public team="[[item]]" name="[[item.name]]" uid="[[user.uid]]" offline="[[offline]]" language="[[language]]"></team-item>
+            <template is="dom-repeat" items="[[publicChannels]]">
+              <channel-item public channel="[[item]]" name="[[item.name]]" uid="[[user.uid]]" offline="[[offline]]" language="[[language]]"></channel-item>
             </template>
 
-            <template is="dom-repeat" items="[[teams]]">
-              <team-item team="[[item]]" name="[[item.name]]" uid="[[user.uid]]" offline="[[offline]]" language="[[language]]"></team-item>
+            <template is="dom-repeat" items="[[channels]]">
+              <channel-item channel="[[item]]" name="[[item.name]]" uid="[[user.uid]]" offline="[[offline]]" language="[[language]]"></channel-item>
             </template>
           </iron-selector>
 
-          <paper-button raised hidden$="[[offline]]" id="createTeamButton"
-              on-click="_showCreateTeam" class="create-team">
+          <paper-button raised hidden$="[[offline]]" id="createChannelButton"
+              on-click="_showCreateChannel" class="create-channel">
             <iron-icon icon="icons:add"></iron-icon>
-            {{localize('create-team-button')}}
+            {{localize('create-channel-button')}}
           </paper-button>
         </div>
       </app-drawer>
@@ -265,7 +265,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
             <div class="spacer"></div>
 
-            <div id="createTeamButton" class="userInfo">
+            <div id="createChannelButton" class="userInfo">
               <img class="avatar" alt="github avatar" src="[[user.photoURL]]">
               <paper-button on-tap="logout" hidden$="[[offline]]">{{localize('sign-out')}}</paper-button>
             </div>
@@ -282,18 +282,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <span class="subtitle">{{localize('no-internet-subtitle')}}</span>
           </div>
 
-          <new-post hidden team="[[page]]" id="newPost" class="animate-appear" language="[[language]]" resources="[[resources]]"></new-post>
-          <new-team hidden id="newTeam" class="animate-appear" language="[[language]]"></new-team>
+          <new-post hidden channel="[[page]]" id="newPost" class="animate-appear" language="[[language]]" resources="[[resources]]"></new-post>
+          <new-channel hidden id="newChannel" class="animate-appear" language="[[language]]"></new-channel>
           <iron-pages id="pages"
               selected="[[page]]"
               attr-for-selected="name"
               xfallback-selection="404"
               role="main">
-              <template is="dom-repeat" items="[[publicTeams]]">
-                <view-posts name="[[item.name]]" uid="[[user.uid]]" team="[[item.name]]" ref="[[item.$key]]" offline="[[offline]]"></view-posts>
+              <template is="dom-repeat" items="[[publicChannels]]">
+                <view-posts name="[[item.name]]" uid="[[user.uid]]" channel="[[item.name]]" ref="[[item.$key]]" offline="[[offline]]"></view-posts>
               </template>
-            <template is="dom-repeat" items="[[teams]]">
-              <view-posts name="[[item.name]]" uid="[[user.uid]]" team="[[item.name]]" ref="[[item.key]]" offline="[[offline]]"></view-posts>
+            <template is="dom-repeat" items="[[channels]]">
+              <view-posts name="[[item.name]]" uid="[[user.uid]]" channel="[[item.name]]" ref="[[item.key]]" offline="[[offline]]"></view-posts>
             </template>
             <view-404 name="404"></view-404>
           </iron-pages>
@@ -316,12 +316,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           observer: '_pageChanged'
         },
 
-        teams: {
+        channels: {
           type: Array,
           value: []
         },
 
-        publicTeams: {
+        publicChannels: {
           type: Array
         },
 
@@ -353,10 +353,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       listeners: {
         'new-post': '_postNewMessage',
-        'new-team': '_createTeam',
-        'edit-team': '_showEditTeam',
-        'delete-team': '_deleteTeam',
-        'rename-team': '_renameTeam',
+        'new-channel': '_createChannel',
+        'edit-channel': '_showEditChannel',
+        'delete-channel': '_deleteChannel',
+        'rename-channel': '_renameChannel',
         'delete-users': '_deleteUsers',
         'add-users': '_addUsers',
         'post-like': '_postLike',
@@ -366,7 +366,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       logout: function() {
         firebase.auth().signOut();
-        this.$.newTeam.hidden = true;
+        this.$.newChannel.hidden = true;
         this.$.newPost.hidden = true;
         this.$.loading.hidden = true;
       },
@@ -421,37 +421,37 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
        *******************************/
       _postNewMessage: function(event) {
         var location = this.location || '';
-        this._firebaseAddMessage(event.detail.team, event.detail.message, location);
+        this._firebaseAddMessage(event.detail.channel, event.detail.message, location);
       },
 
       /*******************************
-       * Teams
+       * Channels
        *******************************/
-      _showCreateTeam: function() {
-        var resolvedPageUrl = this.resolveUrl('new-team.html');
+      _showCreateChannel: function() {
+        var resolvedPageUrl = this.resolveUrl('new-channel.html');
         this.importHref(resolvedPageUrl, function() {
-          this.$.newTeam.create();
+          this.$.newChannel.create();
         }, null, true);
       },
 
-      _showEditTeam: function(event) {
-        var teamName = event.detail.team;
-        var resolvedPageUrl = this.resolveUrl('new-team.html');
+      _showEditChannel: function(event) {
+        var channelName = event.detail.channel;
+        var resolvedPageUrl = this.resolveUrl('new-channel.html');
         this.importHref(resolvedPageUrl, function() {
-          this.$.newTeam.edit(teamName);
+          this.$.newChannel.edit(channelName);
         }, null, true);
       },
 
-      _createTeam: function(event) {
-        this._firebaseAddTeam(event.detail.name, event.detail.users, event.detail.public);
+      _createChannel: function(event) {
+        this._firebaseAddChannel(event.detail.name, event.detail.users, event.detail.public);
       },
 
-      _deleteTeam: function(event) {
-        this._firebaseDeleteTeam(event.detail.ref, event.detail.name);
+      _deleteChannel: function(event) {
+        this._firebaseDeleteChannel(event.detail.ref, event.detail.name);
       },
 
-      _renameTeam: function(event) {
-        this._firebaseRenameTeam(event.detail.ref, event.detail.oldName, event.detail.newName);
+      _renameChannel: function(event) {
+        this._firebaseRenameChannel(event.detail.ref, event.detail.oldName, event.detail.newName);
       },
 
       _addUsers: function(event) {
@@ -463,15 +463,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
 
       _postLike: function(event) {
-        this._firebaseLikeMessage(event.detail.ref, event.detail.teamRef);
+        this._firebaseLikeMessage(event.detail.ref, event.detail.channelRef);
       },
 
       _postUnlike: function(event) {
-        this._firebaseUnlikeMessage(event.detail.ref, event.detail.teamRef);
+        this._firebaseUnlikeMessage(event.detail.ref, event.detail.channelRef);
       },
 
       _postDelete: function(event) {
-        this._firebaseDeleteMessage(event.detail.ref, event.detail.teamRef);
+        this._firebaseDeleteMessage(event.detail.ref, event.detail.channelRef);
       }
 
     });

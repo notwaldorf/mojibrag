@@ -1,6 +1,6 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
 
-<dom-module id="team-item">
+<dom-module id="channel-item">
   <template>
     <style>
       :host {
@@ -33,13 +33,13 @@
         text-align: left;
       }
 
-      .team-settings {
+      .channel-settings {
         display: inline-block;
         vertical-align: middle;
         color: grey;
       }
 
-      .team-settings:hover {
+      .channel-settings:hover {
         color: black;
       }
 
@@ -48,13 +48,13 @@
       }
     </style>
 
-    <a href="/[[team.name]]?lang=[[language]]">
+    <a href="/[[channel.name]]?lang=[[language]]">
       <span style="padding:8px 0;">
-        <iron-icon class="team-settings" icon="icons:public" hidden$=[[!public]]></iron-icon>
-        <span>[[team.name]]</span>
+        <iron-icon class="channel-settings" icon="icons:public" hidden$=[[!public]]></iron-icon>
+        <span>[[channel.name]]</span>
       </span>
-      <paper-icon-button class="team-settings" team="[[team]]" icon="icons:settings"
-          on-click="_showEditTeam" hidden$="[[!_shouldShowTeamSettings(team, uid, offline)]]">
+      <paper-icon-button class="channel-settings" channel="[[channel]]" icon="icons:settings"
+          on-click="_showEditChannel" hidden$="[[!_shouldShowChannelSettings(channel, uid, offline)]]">
       </paper-icon-button>
     </a>
 
@@ -62,10 +62,10 @@
 
   <script>
     Polymer({
-      is: 'team-item',
+      is: 'channel-item',
 
       properties: {
-        team: {
+        channel: {
           type: Object
         },
 
@@ -84,12 +84,12 @@
         }
       },
 
-      _showEditTeam: function(event) {
-        this.fire('edit-team', {team: this.team});
+      _showEditChannel: function(event) {
+        this.fire('edit-channel', {channel: this.channel});
       },
 
-      _shouldShowTeamSettings: function(team, uid, offline) {
-        return !offline && (team.owner === uid);
+      _shouldShowChannelSettings: function(channel, uid, offline) {
+        return !offline && (channel.owner === uid);
       },
     });
   </script>

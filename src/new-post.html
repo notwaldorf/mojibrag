@@ -89,7 +89,7 @@
     <div id="preview" tabindex="0"></div>
 
     <div class="bottom">
-      <span class="title">{{localize('in-team')}}: [[team]]</span>
+      <span class="title">{{localize('in-channel')}}: [[channel]]</span>
       <paper-button on-click="_post">{{localize('post-button')}}</paper-button>
     </div>
 
@@ -150,7 +150,7 @@
           }
         }
 
-        this.fire('new-post', {message: value, team: this.team});
+        this.fire('new-post', {message: value, channel: this.channel});
         this.$.write.value = 'Write your cool message here! ✌️';
         this._emojify();
       },

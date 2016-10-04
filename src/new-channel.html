@@ -2,7 +2,7 @@
 <link rel="import" href="../bower_components/paper-toggle-button/paper-toggle-button.html">
 
 
-<dom-module id="new-team">
+<dom-module id="new-channel">
   <template>
     <style>
       :host {
@@ -85,28 +85,28 @@
       }
     </style>
 
-    <div class="title" hidden$="[[_edit]]">{{localize('new-team-header')}}</div>
-    <div class="title" hidden$="[[!_edit]]">{{localize('edit-team-header')}}</div>
+    <div class="title" hidden$="[[_edit]]">{{localize('new-channel-header')}}</div>
+    <div class="title" hidden$="[[!_edit]]">{{localize('edit-channel-header')}}</div>
 
     <div class="horizontal">
-      <input type="text" placeholder="{{localize('team-name-placeholder')}}" id="name" required pattern="[^.#$\[\]/]+">
+      <input type="text" placeholder="{{localize('channel-name-placeholder')}}" id="name" required pattern="[^.#$\[\]/]+">
     </div>
 
     <div class="horizontal" hidden$="[[!_edit]]">
-      <input type="email" multiple placeholder="{{localize('team-users-placeholder')}}" id="editUsers">
+      <input type="email" multiple placeholder="{{localize('channel-users-placeholder')}}" id="editUsers">
       <paper-icon-button on-click="_addUsers" icon="icons:person-add"></paper-icon-button>
       <paper-icon-button on-click="_deleteUsers" icon="icons:delete"></paper-icon-button>
     </div>
 
-    <input type="email" multiple placeholder="{{localize('team-users-placeholder')}}" id="newUsers" hidden$="[[_edit]]">
+    <input type="email" multiple placeholder="{{localize('channel-users-placeholder')}}" id="newUsers" hidden$="[[_edit]]">
 
     <div class="horizontal-reverse">
       <span>
         <paper-button on-click="hide">{{localize('cancel')}}</paper-button>
-        <paper-button on-click="_createTeam" hidden$="[[_edit]]">{{localize('create')}}</paper-button>
+        <paper-button on-click="_createchannel" hidden$="[[_edit]]">{{localize('create')}}</paper-button>
 
-        <paper-button on-click="_deleteTeam" hidden$="[[!_edit]]">{{localize('delete-team')}}</paper-button>
-        <paper-button on-click="_renameTeam" hidden$="[[!_edit]]">{{localize('rename-team')}}</paper-button>
+        <paper-button on-click="_deletechannel" hidden$="[[!_edit]]">{{localize('delete-channel')}}</paper-button>
+        <paper-button on-click="_renamechannel" hidden$="[[!_edit]]">{{localize('rename-channel')}}</paper-button>
       </span>
 
       <span class="public-settings" hidden$="[[_edit]]">
@@ -120,7 +120,7 @@
 
   <script>
     Polymer({
-      is: 'new-team',
+      is: 'new-channel',
 
       behaviors: [
         Polymer.AppLocalizeBehavior
@@ -137,9 +137,9 @@
         this.loadResources(this.resolveUrl('locales.json'));
       },
 
-      edit: function(team) {
-        this._team = team;
-        this.$.name.value = team.name;
+      edit: function(channel) {
+        this._channel = channel;
+        this.$.name.value = channel.name;
         this.$.newUsers.value = '';
 
         this._edit = true;
@@ -164,7 +164,7 @@
         this.$.error.hidden = false;
       },
 
-      _createTeam: function () {
+      _createchannel: function () {
         var valid = this.$.name.validity.valid && this.$.newUsers.validity.valid;
         if (!valid)
           return;
@@ -174,18 +174,18 @@
           users = this.$.newUsers.value.split(',')
         }
 
-        this.fire('new-team', {name: this.$.name.value.trim(), users: users, public:this.$.public.checked});
+        this.fire('new-channel', {name: this.$.name.value.trim(), users: users, public:this.$.public.checked});
       },
 
-      _deleteTeam: function() {
-        this.fire('delete-team', {ref: this._team.key, name: this._team.name});
+      _deletechannel: function() {
+        this.fire('delete-channel', {ref: this._channel.key, name: this._channel.name});
       },
 
-      _renameTeam: function() {
+      _renamechannel: function() {
         if (!this.$.name.validity.valid)
           return;
 
-        this.fire('rename-team', {ref: this._team.key, oldName: this._team.name, newName: this.$.name.value});
+        this.fire('rename-channel', {ref: this._channel.key, oldName: this._channel.name, newName: this.$.name.value});
       },
 
       _deleteUsers: function() {
@@ -198,7 +198,7 @@
           users = this.$.editUsers.value.split(',')
         }
 
-        this.fire('delete-users', {ref: this._team.key, users: users});
+        this.fire('delete-users', {ref: this._channel.key, users: users});
       },
 
       _addUsers: function() {
@@ -211,7 +211,7 @@
           users = this.$.editUsers.value.split(',')
         }
 
-        this.fire('add-users', {ref: this._team.key, users: users});
+        this.fire('add-users', {ref: this._channel.key, users: users});
       },
     });
   </script>

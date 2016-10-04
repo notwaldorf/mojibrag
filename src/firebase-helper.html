@@ -3,7 +3,7 @@
 <script>
 Polymer.FirebaseHelper = {
   _firebaseUpdateUserInfo: function(user) {
-    this.set('_teams', []);
+    this.set('_channels', []);
 
     if (!user)
       return;
@@ -20,15 +20,15 @@ Polymer.FirebaseHelper = {
       this.$.loading.hidden = true;
       this.$.pages.hidden = false;
 
-      // If online, try to update the can/can't edit public teams
-      this._firebaseUpdatePublicTeams();
+      // If online, try to update the can/can't edit public channels
+      this._firebaseUpdatePublicChannels();
 
       if (userInfo) {
         console.log('Existing user:', this.user);
 
-        // Get this user's private teams, if any.
+        // Get this user's private channels, if any.
         if (!this.offline)
-          this._firebaseGetUserTeams(snapshot.val().teams || []);
+          this._firebaseGetUserChannels(snapshot.val().channels || []);
 
       } else {
         console.log('New user!');
@@ -45,53 +45,53 @@ Polymer.FirebaseHelper = {
     }.bind(this));
   },
 
-  _firebaseUpdatePublicTeams: function() {
+  _firebaseUpdatePublicChannels: function() {
     var self = this;
-    for (var i = 0; i < this.publicTeams.length; i++) {
-      firebase.database().ref('/teams/' + this.publicTeams[i].$key).once('value', function(snapshot) {
-        var team = snapshot.val();
+    for (var i = 0; i < this.publicChannels.length; i++) {
+      firebase.database().ref('/channels/' + this.publicChannels[i].$key).once('value', function(snapshot) {
+        var channel = snapshot.val();
         if (!snapshot.val())
           return;
 
         // HACK: Since we want to reuse the same UI code for the pre-online details,
         // reuse the $key property.
-        team.$key = team.key = snapshot.key;
+        channel.$key = channel.key = snapshot.key;
 
         // `this` is the index in the array, i know that's weird but halp?
-        self.set(['publicTeams', Number(this)], team);
+        self.set(['publicChannels', Number(this)], channel);
       }.bind(i));  // lol omg
     }
   },
 
-  _firebaseGetUserTeams: function(teamIds) {
+  _firebaseGetUserChannels: function(channelIds) {
     var self = this;
 
-    for (var i = 0; i < teamIds.length; i++) {
-      firebase.database().ref('/teams/' + teamIds[i]).once('value', function(snapshot) {
-        this._processOneTeam(snapshot.key);
+    for (var i = 0; i < channelIds.length; i++) {
+      firebase.database().ref('/channels/' + channelIds[i]).once('value', function(snapshot) {
+        this._processOneChannel(snapshot.key);
       }.bind(this));
     }
   },
 
-  _processOneTeam: function(teamId) {
-    firebase.database().ref('/teams/' + teamId).once('value', function(snapshot) {
-      // This team may not exist.
+  _processOneChannel: function(channelId) {
+    firebase.database().ref('/channels/' + channelId).once('value', function(snapshot) {
+      // This channel may not exist.
       if (snapshot.val()) {
         // Push instead of set so that we can do this incrementally I guess.
         var obj = snapshot.val();
         obj.key = snapshot.key;
-        this.push('_teams', obj);
+        this.push('_channels', obj);
       }
     }.bind(this));
   },
 
-  _firebaseAddMessage: function(team, message, location) {
-    // Get the team ref from the names -> keys mapping
-    firebase.database().ref('/teamNames/' + team).once('value', function(snapshot) {
-      var teamRef = snapshot.val().id;
+  _firebaseAddMessage: function(channel, message, location) {
+    // Get the channel ref from the names -> keys mapping
+    firebase.database().ref('/channelNames/' + channel).once('value', function(snapshot) {
+      var channelRef = snapshot.val().id;
       var now = new Date().getTime();
 
-      firebase.database().ref('/posts/').child(teamRef)
+      firebase.database().ref('/posts/').child(channelRef)
         .push({
           name: this.user.displayName,
           message: message,
@@ -106,15 +106,15 @@ Polymer.FirebaseHelper = {
     }.bind(this));
   },
 
-  _firebaseLikeMessage: function(post, team) {
-    firebase.database().ref('/posts/' + team).child(post).once('value', function(snapshot) {
+  _firebaseLikeMessage: function(post, channel) {
+    firebase.database().ref('/posts/' + channel).child(post).once('value', function(snapshot) {
       var likes = snapshot.val().likes || 0;
       snapshot.ref.child('likes').set(likes + 1);
     });
   },
 
-  _firebaseUnlikeMessage: function(post, team) {
-    firebase.database().ref('/posts/' + team).child(post).once('value', function(snapshot) {
+  _firebaseUnlikeMessage: function(post, channel) {
+    firebase.database().ref('/posts/' + channel).child(post).once('value', function(snapshot) {
       var likes = snapshot.val().likes || 0;
       if (likes !== 0) {
         snapshot.ref.child('likes').set(likes - 1);
@@ -122,28 +122,28 @@ Polymer.FirebaseHelper = {
     });
   },
 
-  _firebaseDeleteMessage: function(post, team) {
-    firebase.database().ref('/posts/' + team).child(post).remove();
+  _firebaseDeleteMessage: function(post, channel) {
+    firebase.database().ref('/posts/' + channel).child(post).remove();
   },
 
-  _firebaseAddTeam: function(team, users, isPublic) {
+  _firebaseAddChannel: function(channel, users, isPublic) {
     var self = this;
 
-    // Check if the team already exists.
-    firebase.database().ref('/teamNames/' + team).once('value', function(snapshot) {
+    // Check if the channel already exists.
+    firebase.database().ref('/channelNames/' + channel).once('value', function(snapshot) {
       if (snapshot.val()) {
-        self.$.newTeam.showError('Oops! This name is already taken.');
+        self.$.newChannel.showError('Oops! This name is already taken.');
       } else {
-        self.$.newTeam.hide();
+        self.$.newChannel.hide();
 
         // Add this user as an user if they didn't add themselves already
         if (users.indexOf(self.user.email) === -1) {
           users.splice(0, 0, self.user.email);
         }
 
-        // Create the team.
-        var teamObj = {
-          name: team,
+        // Create the channel.
+        var channelObj = {
+          name: channel,
           owner: self.user.uid,
           ownerEmail: self.user.email,
           users: users.length == 0 ? null : users,
@@ -151,37 +151,37 @@ Polymer.FirebaseHelper = {
           createdAt: {'.sv': 'timestamp'}
         }
 
-        var teamRef = firebase.database().ref('/teams/').push(teamObj);
-        teamObj.key = teamRef.key;
+        var channelRef = firebase.database().ref('/channels/').push(channelObj);
+        channelObj.key = channelRef.key;
 
-        // If it's public, also add it to the public teams.
+        // If it's public, also add it to the public channels.
         if (isPublic) {
-          firebase.database().ref('/publicTeams/').child(teamRef.key).set({name:team}).then(function(teamObj, success) {
-            // The team created should be the last one in the list, and we need to ammend
-            // it with the extra data (like what _firebaseUpdatePublicTeams() does on load)
-            this.set(['publicTeams', this.publicTeams.length - 1], teamObj);
-          }.bind(self, teamObj));
+          firebase.database().ref('/publicChannels/').child(channelRef.key).set({name:channel}).then(function(channelObj, success) {
+            // The channel created should be the last one in the list, and we need to ammend
+            // it with the extra data (like what _firebaseUpdatePublicChannels() does on load)
+            this.set(['publicChannels', this.publicChannels.length - 1], channelObj);
+          }.bind(self, channelObj));
         } else {
           // Add it to the UI now because the next steps could be slow.
-          self.push('_teams', teamObj);
+          self.push('_channels', channelObj);
         }
 
         // Also add it in the name -> key mapping.
-        firebase.database().ref('/teamNames/').child(team).set({id:teamRef.key});
+        firebase.database().ref('/channelNames/').child(channel).set({id:channelRef.key});
 
 
         if (isPublic) {
           return;
         }
 
-        // Add this team to this user.
+        // Add this channel to this user.
         firebase.database().ref('/users/' + self.user.uid).once('value', function(snapshot) {
-          var userTeams = snapshot.val().teams || [];
-          userTeams.push(teamRef.key);
-          snapshot.ref.update({teams: userTeams});
+          var userChannels = snapshot.val().channels || [];
+          userChannels.push(channelRef.key);
+          snapshot.ref.update({channels: userChannels});
         });
 
-        // For each of the users in the list, add this team to them.
+        // For each of the users in the list, add this channel to them.
         // The problem is that the user only entered emails, so we have to go
         // through the whole database and match emails(since they're not keys)
         // TODO: figure out if there's a better way.
@@ -189,12 +189,12 @@ Polymer.FirebaseHelper = {
           var allUsers = snapshot.val();
 
           for (var user in allUsers) {
-            // This user is in the new team! (but may be us, so skip us)
+            // This user is in the new channel! (but may be us, so skip us)
             if (allUsers[user].email !== self.user.email &&
               users.indexOf(allUsers[user].email) != -1 ) {
-              var userTeams = allUsers[user].teams || [];
-              userTeams.push(teamRef.key);
-              firebase.database().ref('/users/' + user).update({teams: userTeams});
+              var userChannels = allUsers[user].channels || [];
+              userChannels.push(channelRef.key);
+              firebase.database().ref('/users/' + user).update({channels: userChannels});
             }
           }
         });
@@ -202,21 +202,21 @@ Polymer.FirebaseHelper = {
     });
   },
 
-  _firebaseDeleteTeam: function(ref, teamName) {
+  _firebaseDeleteChannel: function(ref, channelName) {
     var displayedPage = this.$.pages.querySelector('view-posts.iron-selected');
 
     // Delete this from the names -> keys table.
-    firebase.database().ref('/teamNames/').child(teamName).remove();
+    firebase.database().ref('/channelNames/').child(channelName).remove();
 
-    // Delete this from the main teams table.
-    firebase.database().ref('/teams/').child(ref).remove();
+    // Delete this from the main channels table.
+    firebase.database().ref('/channels/').child(ref).remove();
 
-    // Delete this from the public teams table.
-    firebase.database().ref('/publicTeams/').child(ref).remove();
+    // Delete this from the public channels table.
+    firebase.database().ref('/publicChannels/').child(ref).remove();
 
-    this.$.newTeam.hide();
+    this.$.newChannel.hide();
 
-    // Switch to the global team since we're now displaying junk data.
+    // Switch to the global channel since we're now displaying junk data.
     this.set('routeData.page', 'global');
 
     // Delete the old posts list.
@@ -227,75 +227,75 @@ Polymer.FirebaseHelper = {
     // TODO: could optionally delete this from the users too.
 
     // Delete this from the UI.
-    for (var i = 0; i < this.teams.length; i++) {
-      if (this.teams[i].name === teamName) {
-        this.splice('_teams', i, 1);
+    for (var i = 0; i < this.channels.length; i++) {
+      if (this.channels[i].name === channelName) {
+        this.splice('_channels', i, 1);
         return;
       }
     }
   },
 
-  _firebaseRenameTeam: function(ref, oldName, newName) {
+  _firebaseRenameChannel: function(ref, oldName, newName) {
     var self = this;
 
-    // Check if the new team already exists.
-    firebase.database().ref('/teamNames/' + newName).once('value', function(snapshot) {
+    // Check if the new channel already exists.
+    firebase.database().ref('/channelNames/' + newName).once('value', function(snapshot) {
       if (snapshot.val()) {
-        self.$.newTeam.showError('Oops! This name is already taken.');
+        self.$.newChannel.showError('Oops! This name is already taken.');
       } else {
-        // Update the name in the main teams table
-        firebase.database().ref('/teams/').child(ref).update({name: newName})
+        // Update the name in the main channels table
+        firebase.database().ref('/channels/').child(ref).update({name: newName})
             .then(function(success) {
               // Update the name in the names -> keys table.
-              firebase.database().ref('/teamNames/').child(oldName).remove();
-              firebase.database().ref('/teamNames/').child(newName).set({id:ref});
+              firebase.database().ref('/channelNames/').child(oldName).remove();
+              firebase.database().ref('/channelNames/').child(newName).set({id:ref});
 
-              self.$.newTeam.hide();
+              self.$.newChannel.hide();
 
               // Update the name in the UI
-              for (var i = 0; i < self.teams.length; i++) {
-                if (self.teams[i].name === oldName) {
-                  self.set(['_teams', i, 'name'], newName);
+              for (var i = 0; i < self.channels.length; i++) {
+                if (self.channels[i].name === oldName) {
+                  self.set(['_channels', i, 'name'], newName);
                   return;
                 }
               }
             }, function(error) {
               console.log(error)
-              self.$.newTeam.showError('Permission denied. Are you sure you\'re allowed to do this?');
+              self.$.newChannel.showError('Permission denied. Are you sure you\'re allowed to do this?');
             });
       }
     });
   },
 
   _firebaseAddUsers: function(ref, newUsers) {
-    this.$.newTeam.hide();
+    this.$.newChannel.hide();
 
-    // Add these users in the teams database
-    firebase.database().ref('/teams/' + ref).once('value', function(snapshot) {
+    // Add these users in the channels database
+    firebase.database().ref('/channels/' + ref).once('value', function(snapshot) {
       var currentUsers = snapshot.val().users;
       currentUsers = currentUsers.concat(newUsers);
       snapshot.ref.update({users: currentUsers});
     });
 
-    // For each of the users in the list, add this team to them.
+    // For each of the users in the list, add this channel to them.
     firebase.database().ref('/users/').once('value', function(snapshot) {
       var users = snapshot.val();
 
       for (var user in users) {
         if (newUsers.indexOf(users[user].email) != -1 ) {
-          var currentUserTeams = users[user].teams || [];
-          currentUserTeams.push(ref);
-          firebase.database().ref('/users/' + user).update({teams: currentUserTeams});
+          var currentUserChannels = users[user].channels || [];
+          currentUserChannels.push(ref);
+          firebase.database().ref('/users/' + user).update({channels: currentUserChannels});
         }
       }
     });
   },
 
   _firebaseDeleteUsers: function(ref, delUsers) {
-    this.$.newTeam.hide();
+    this.$.newChannel.hide();
 
-    // Remove these users in the teams database
-    firebase.database().ref('/teams/' + ref).once('value', function(snapshot) {
+    // Remove these users in the channels database
+    firebase.database().ref('/channels/' + ref).once('value', function(snapshot) {
       var currentUsers = snapshot.val().users;
 
       for (var user in delUsers) {
@@ -308,16 +308,16 @@ Polymer.FirebaseHelper = {
     });
 
 
-    // For each of the users in the list, remove this team from them.
+    // For each of the users in the list, remove this channel from them.
     firebase.database().ref('/users/').once('value', function(snapshot) {
       var users = snapshot.val();
 
       for (var user in users) {
         if (delUsers.indexOf(users[user].email) != -1 ) {
-          var currentUserTeams = users[user].teams || [];
-          var teamIndex = currentUserTeams.indexOf(ref);
-          currentUserTeams.splice(teamIndex, 1);
-          firebase.database().ref('/users/' + user).update({teams: currentUserTeams});
+          var currentUserChannels = users[user].channels || [];
+          var channelIndex = currentUserChannels.indexOf(ref);
+          currentUserChannels.splice(channelIndex, 1);
+          firebase.database().ref('/users/' + user).update({channels: currentUserChannels});
         }
       }
     });

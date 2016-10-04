@@ -101,7 +101,7 @@
       persisted-data="{{posts}}">
     </app-indexeddb-mirror>
 
-    <h1>[[team]]</h1>
+    <h1>[[channel]]</h1>
     <iron-list items="[[posts]]" as="item" id="list" scroll-target="document">
       <template>
         <div>
@@ -145,7 +145,7 @@
     Polymer({
       is: 'view-posts',
       properties: {
-        team: {
+        channel: {
           type: String
         },
 
@@ -191,17 +191,17 @@
 
         if (button.icon === 'icons:favorite-border') {
           button.icon = 'icons:favorite';
-          this.fire('post-like', {ref: ref, teamRef: this.ref});
+          this.fire('post-like', {ref: ref, channelRef: this.ref});
         } else {
           button.icon = 'icons:favorite-border';
-          this.fire('post-unlike', {ref: ref, teamRef: this.ref});
+          this.fire('post-unlike', {ref: ref, channelRef: this.ref});
         }
       },
 
       _delete: function(event) {
         var button = Polymer.dom(event).localTarget
         var ref = button.ref;
-        this.fire('post-delete', {ref: ref, teamRef: this.ref});
+        this.fire('post-delete', {ref: ref, channelRef: this.ref});
       },
 
       _hasLocation: function(location) {
