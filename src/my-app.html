@@ -161,7 +161,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
 
       attached: function() {
-        firebase.auth().onAuthStateChanged(function(user) {
+        this.$.googleAuth.auth.onAuthStateChanged(function(user) {
           if (!!user) {
             this.importHref(this.resolveUrl('moji-feed.html'), function() {
               this.$.signin.hidden = true;
@@ -177,7 +177,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
 
       login: function() {
-        this.$.googleAuth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
+        this.$.googleAuth.signInWithPopup();
       }
     });
   </script>
