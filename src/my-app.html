@@ -150,9 +150,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         this.addEventListener('language-changed', function(event) {
           this.language = event.detail.value;
         }.bind(this));
-      },
 
-      attached: function() {
         this.$.googleAuth.auth.onAuthStateChanged(function(user) {
           if (!!user) {
             this.importHref(this.resolveUrl('moji-feed.html'), function() {
