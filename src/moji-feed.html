@@ -336,12 +336,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         },
       },
 
-      init: function() {
-        // We went from hidden to visible, so app-layout needs to recompute its size.
-        this._getLocation();
-        this.$.header.fire('iron-resize');
-        this._firebaseUpdateUserInfo(this.user);
+      ready: function() {
         this.loadResources(this.resolveUrl('locales.json'));
+      },
+
+      attached: function() {
+        this._firebaseUpdateUserInfo(this.user);
+        Polymer.RenderStatus.afterNextRender(this, function() {
+          // This looks like work, so do it later.
+          this._getLocation();
+        });
+      },
+
+      resizeHeader: function() {
+        this.$.header.fire('iron-resize');
       },
 
       observers: [

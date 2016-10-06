@@ -117,7 +117,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <p class="footer" inner-h-t-m-l="{{localize('splash-footer')}}"></p>
     </div>
 
-    <moji-feed id="app" offline="[[offline]]" language="[[language]]"></moji-feed>
+    <moji-feed id="feed" offline="[[offline]]" language="[[language]]"></moji-feed>
   </template>
 
   <script>
@@ -135,14 +135,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           notify: true
         },
       },
-
-      // listeners: {
-      //   'status-known-changed': '_statusChanged'
-      // },
-      //
-      // _statusChanged: function(event) {
-      //   var known = event.detail.value;
-      // },
 
       ready: function() {
         this.loadResources(this.resolveUrl('locales.json'));
@@ -164,14 +156,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         this.$.googleAuth.auth.onAuthStateChanged(function(user) {
           if (!!user) {
             this.importHref(this.resolveUrl('moji-feed.html'), function() {
+              this.$.feed.user = user;
               this.$.signin.hidden = true;
-              this.$.app.hidden = false;
-              this.$.app.user = user;
-              this.$.app.init();
-            }, null, false);
+              this.$.feed.hidden = false;
+              // We went from hidden to visible, so app-layout needs to recompute its size.
+              this.$.feed.resizeHeader();
+            });
           } else {
             this.$.signin.hidden = false;
-            this.$.app.hidden = true;
+            this.$.feed.hidden = true;
           }
         }.bind(this));
       },
