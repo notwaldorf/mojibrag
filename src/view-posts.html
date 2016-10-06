@@ -110,7 +110,7 @@
               <img class="avatar" sizing="contain" src="[[item.image]]" title="[[item.email]]">
               <div class="vertical">
                 <!-- <div class="name">[[item.email]]</div> -->
-                <div class="giant">[[item.message]]</div>
+                <div class="giant" title="[[_getTitle(item.original)]]">[[item.message]]</div>
                 <span class="small">
                   <span>[[_getDate(item.createdAt)]]</span>
                   <span hidden$="[[!_hasLocation(item.location)]]">
@@ -165,6 +165,10 @@
           type: Boolean,
           value: false
         }
+      },
+
+      _getTitle: function(title) {
+        return title || '';
       },
 
       _getDate: function(timestamp) {

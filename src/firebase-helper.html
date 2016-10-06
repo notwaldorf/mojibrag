@@ -85,7 +85,7 @@ Polymer.FirebaseHelper = {
     }.bind(this));
   },
 
-  _firebaseAddMessage: function(channel, message, location) {
+  _firebaseAddMessage: function(channel, message, original, location) {
     // Get the channel ref from the names -> keys mapping
     firebase.database().ref('/channelNames/' + channel).once('value', function(snapshot) {
       var channelRef = snapshot.val().id;
@@ -95,6 +95,7 @@ Polymer.FirebaseHelper = {
         .push({
           name: this.user.displayName,
           message: message,
+          original: original,
           email: this.user.email,
           uid: this.user.uid,
           image: this.user.photoURL,

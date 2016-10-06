@@ -410,13 +410,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       _updateUserInfo: function(user) {
         this._firebaseUpdateUserInfo(user);
       },
-      
+
       /*******************************
        * Posts
        *******************************/
       _postNewMessage: function(event) {
         var location = this.location || '';
-        this._firebaseAddMessage(event.detail.channel, event.detail.message, location);
+        this._firebaseAddMessage(event.detail.channel, event.detail.message, event.detail.original, location);
       },
 
       /*******************************

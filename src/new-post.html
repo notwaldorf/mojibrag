@@ -139,7 +139,9 @@
         }
 
         var value = '';
+        var english = '';
         for (var i = 0; i < nodes.length; i++) {
+          english += nodes[i].title + ' ';
           if (nodes[i].tagName === 'SELECT') {
             // Do this instead of .value because we want to maintain whitespace.
             value += nodes[i].options[nodes[i].selectedIndex].textContent;
@@ -150,7 +152,7 @@
           }
         }
 
-        this.fire('new-post', {message: value, channel: this.channel});
+        this.fire('new-post', {message: value, original: english.trim(), channel: this.channel});
         this.$.write.value = 'Write your cool message here! ✌️';
         this._emojify();
       },
@@ -170,8 +172,10 @@
           // Re-add the translated words.
           for (var i = 0; i < words.length; i++ ) {
             var node = this._translateWord(words[i]);
-            if (node)
+            if (node) {
+              node.title = words[i];
               Polymer.dom(this.$.preview).appendChild(node);
+            }
           }
           Polymer.dom(this.$.preview).appendChild(document.createElement('br'));
         }
