@@ -324,6 +324,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         user: {
           type: Object,
+          observer: '_updateUserInfo'
         },
 
         location: {
@@ -338,10 +339,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       ready: function() {
         this.loadResources(this.resolveUrl('locales.json'));
-      },
-
-      attached: function() {
-        this._firebaseUpdateUserInfo(this.user);
         Polymer.RenderStatus.afterNextRender(this, function() {
           // This looks like work, so do it later.
           this._getLocation();
@@ -409,6 +406,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           }
         }
       },
+
+      _updateUserInfo: function(user) {
+        this._firebaseUpdateUserInfo(user);
+      },
+      
       /*******************************
        * Posts
        *******************************/
