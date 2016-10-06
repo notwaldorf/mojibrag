@@ -288,7 +288,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <iron-pages id="pages"
               selected="[[page]]"
               attr-for-selected="name"
-              xfallback-selection="404"
               role="main">
               <template is="dom-repeat" items="[[publicChannels]]">
                 <view-posts name="[[item.name]]" uid="[[user.uid]]" channel="[[item.name]]" ref="[[item.$key]]" offline="[[offline]]"></view-posts>
@@ -296,7 +295,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <template is="dom-repeat" items="[[channels]]">
               <view-posts name="[[item.name]]" uid="[[user.uid]]" channel="[[item.name]]" ref="[[item.key]]" offline="[[offline]]"></view-posts>
             </template>
-            <view-404 name="404"></view-404>
           </iron-pages>
         </div>
       </app-header-layout>
@@ -312,9 +310,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       properties: {
         page: {
-          type: String,
-          reflectToAttribute: true,
-          observer: '_pageChanged'
+          type: String
         },
 
         channels: {
@@ -336,7 +332,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         offline: {
           type: Boolean,
-          value: false,
           observer: '_offlineChanged'
         },
       },
@@ -383,18 +378,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       _selectLanguageChanged: function(event) {
         this.set('queryParams.lang', event.target.value);
         this.fire('language-changed', {value: event.target.value});
-      },
-
-      // TODO: this is borked.
-      _pageChanged: function(page) {
-        // Load page import on demand. Show 404 page if fails
-        // var resolvedPageUrl = this.resolveUrl(page==='404' ? 'view-404.html' : 'view-posts.html');
-        // console.log(resolvedPageUrl)
-        // this.importHref(resolvedPageUrl, null, this._showPage404, true);
-      },
-
-      _showPage404: function() {
-        this.page = '404';
       },
 
       _offlineChanged: function(offline, previous) {

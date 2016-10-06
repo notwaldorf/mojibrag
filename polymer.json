@@ -8,7 +8,6 @@
     "src/new-channel.html",
     "src/channel-item.html",
     "src/view-posts.html",
-    "src/view-404.html",
     "src/firebase-helper.html"
   ],
   "sourceGlobs": [
