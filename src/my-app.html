@@ -107,8 +107,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <div class="signin-view" id="signin" hidden>
       <div class="header">
         <div class="giant">👋🆒🐱</div>
-        <p>{{localize('splash-one')}}<br>
-          {{localize('splash-two')}}</p>
+        <p>{{localize('splash-one')}}<br>{{localize('splash-two')}}</p>
         <br>
         <button on-tap="login" raised hidden$="[[offline]]">{{localize('sign-in')}}</button>
         <div hidden$="[[!offline]]" class="offline">{{localize('splash-offline')}}</div>

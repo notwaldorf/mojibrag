@@ -449,6 +449,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         this._firebaseRenameChannel(event.detail.ref, event.detail.oldName, event.detail.newName);
       },
 
+      /*******************************
+       * Users
+       *******************************/
       _addUsers: function(event) {
         this._firebaseAddUsers(event.detail.ref, event.detail.users);
       },
@@ -457,6 +460,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         this._firebaseDeleteUsers(event.detail.ref, event.detail.users);
       },
 
+      /*******************************
+       * Posts
+       *******************************/
       _postLike: function(event) {
         this._firebaseLikeMessage(event.detail.ref, event.detail.channelRef);
       },
