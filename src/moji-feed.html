@@ -242,11 +242,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           </app-toolbar>
 
           <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
-            <template is="dom-repeat" items="[[publicChannels]]">
+            <template is="dom-repeat" items="[[publicChannels]]" initial-count="10">
               <channel-item public channel="[[item]]" name="[[item.name]]" uid="[[user.uid]]" offline="[[offline]]" language="[[language]]"></channel-item>
             </template>
 
-            <template is="dom-repeat" items="[[channels]]">
+            <template is="dom-repeat" items="[[channels]]" initial-count="10">
               <channel-item channel="[[item]]" name="[[item.name]]" uid="[[user.uid]]" offline="[[offline]]" language="[[language]]"></channel-item>
             </template>
           </iron-selector>
@@ -289,10 +289,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               selected="[[page]]"
               attr-for-selected="name"
               role="main">
-              <template is="dom-repeat" items="[[publicChannels]]">
+              <template is="dom-repeat" items="[[publicChannels]]" initial-count="10">
                 <view-posts name="[[item.name]]" uid="[[user.uid]]" channel="[[item.name]]" ref="[[item.$key]]" offline="[[offline]]"></view-posts>
               </template>
-            <template is="dom-repeat" items="[[channels]]">
+            <template is="dom-repeat" items="[[channels]]" initial-count="10">
               <view-posts name="[[item.name]]" uid="[[user.uid]]" channel="[[item.name]]" ref="[[item.key]]" offline="[[offline]]"></view-posts>
             </template>
           </iron-pages>
