@@ -50,12 +50,23 @@
       .giant {
         font-size: 36px;
         font-weight: 300;
-        padding-right: 30px;
+        padding: 0 50px 0 6px;
       }
 
-      .small {
-        padding-top: 10px;
+      .action-container {
         font-size: 10px;
+        @apply(--layout-horizontal);
+        @apply(--layout-wrap);
+      }
+
+      .hint {
+        font-size: 10px;
+        visibility: hidden;
+        padding-left: 6px;
+      }
+
+      .hint.showing {
+        visibility: visible;
       }
 
       .heart-icon {
@@ -73,7 +84,7 @@
         @apply(--layout-vertical);
       }
 
-      iron-icon.location {
+      iron-icon.action {
         height: 16px;
         vertical-align: middle;
       }
@@ -83,6 +94,8 @@
         border: none;
         outline: none;
         cursor: pointer;
+        margin: 0;
+        padding: 0;
       }
 
       button:hover {
@@ -112,15 +125,21 @@
               <div class="vertical">
                 <!-- <div class="name">[[item.email]]</div> -->
                 <div class="giant" title="[[_getTitle(item.original)]]">[[item.message]]</div>
-                <span class="small">
-                  <span>[[_getDate(item.createdAt)]]</span>
-                  <span hidden$="[[!_hasLocation(item.location)]]">
-                    <iron-icon icon="icons:location" class="location"></iron-icon>
-                    [[item.location]]
+                <div class="hint">[[item.original]]&nbsp;</div>
+
+                <span class="action-container">
+                  <span class="fake-button">
+                    <iron-icon icon="icons:time" class="action"></iron-icon>[[_getDate(item.createdAt)]]
+                  </span>
+                  <span class="fake-button"hidden$="[[!_hasLocation(item.location)]]">
+                    <iron-icon icon="icons:location" class="action"></iron-icon>[[item.location]]
                   </span>
                   <button hidden$="[[!_shouldEdit(item, offline)]]" ref="[[item.$key]]" on-click="_delete">
-                    <iron-icon icon="icons:delete" class="location"></iron-icon>
-                    Delete post
+                    <iron-icon icon="icons:delete" class="action"></iron-icon>Delete post
+                  </button>
+
+                  <button on-click="_showHint" hidden$="[[!_shouldShowHint(item)]]">
+                    <iron-icon icon="icons:help" class="action"></iron-icon>Hint
                   </button>
                 </span>
               </div>
@@ -191,7 +210,7 @@
       },
 
       _like: function(event) {
-        var button = Polymer.dom(event).localTarget
+        var button = this._getEventTarget(event);
         var ref = button.ref;
 
         if (button.icon === 'icons:favorite-border') {
@@ -204,9 +223,18 @@
       },
 
       _delete: function(event) {
-        var button = Polymer.dom(event).localTarget
+        var button = this._getEventTarget(event);
         var ref = button.ref;
         this.fire('post-delete', {ref: ref, channelRef: this.ref});
+      },
+
+      _showHint: function(event) {
+        var button = this._getEventTarget(event);
+
+        // lol.
+        var hintNode = button.parentNode.parentNode.querySelector('.hint');
+        if (hintNode)
+          hintNode.className += ' showing';
       },
 
       _hasLocation: function(location) {
@@ -217,8 +245,16 @@
         return !offline && this.uid === item.uid;
       },
 
-      _computeAnimated: function(item, index) {
-        return index === 0 ? 'bounce' : '';
+      _shouldShowHint: function(item) {
+        return (item.original !== undefined);
+      },
+
+      _getEventTarget: function(event) {
+        var button = Polymer.dom(event).localTarget;
+
+        // TODO: figure out why this is: If you click on the icon, the
+        // rootTarget/localTarget is the icon and not the button
+        return (button.tagName === 'IRON-ICON') ? button.parentNode : button;
       }
     });
   </script>
