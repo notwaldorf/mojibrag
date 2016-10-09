@@ -135,11 +135,11 @@
                     <iron-icon icon="icons:location" class="action"></iron-icon>[[item.location]]
                   </span>
                   <button hidden$="[[!_shouldEdit(item, offline)]]" ref="[[item.$key]]" on-click="_delete">
-                    <iron-icon icon="icons:delete" class="action"></iron-icon>Delete post
+                    <iron-icon icon="icons:delete" class="action"></iron-icon>{{localize('delete-post')}}
                   </button>
 
                   <button on-click="_showHint" hidden$="[[!_shouldShowHint(item)]]">
-                    <iron-icon icon="icons:help" class="action"></iron-icon>Hint
+                    <iron-icon icon="icons:help" class="action"></iron-icon>{{localize('hint-post')}}
                   </button>
                 </span>
               </div>
@@ -164,6 +164,9 @@
 
     Polymer({
       is: 'view-posts',
+      behaviors: [
+        Polymer.AppLocalizeBehavior
+      ],
       properties: {
         channel: {
           type: String
@@ -187,6 +190,10 @@
         }
       },
 
+      attached: function() {
+        this.loadResources(this.resolveUrl('locales.json'));
+      },
+      
       _getTitle: function(title) {
         return title || '';
       },

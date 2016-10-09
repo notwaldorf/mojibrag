@@ -24,7 +24,9 @@
     "delete-channel": "delete channel",
     "rename-channel": "rename channel",
     "no-internet-title": "No internet connection!",
-    "no-internet-subtitle": "You won't be able to manage channels or write new posts."
+    "no-internet-subtitle": "You won't be able to manage channels or write new posts.",
+    "delete-post": "Delete post",
+    "hint-post": "Hint"
   },
   "es": {
     "flag": "🇪🇸",
@@ -51,7 +53,9 @@
     "delete-channel": "eliminar canal",
     "rename-channel": "renombrar canal",
     "no-internet-title": "Sin conexión a internet!",
-    "no-internet-subtitle": "No podrás administrar los canales o escribir nuevos mensajes."
+    "no-internet-subtitle": "No podrás administrar los canales o escribir nuevos mensajes.",
+    "delete-post": "Borrar mensaje",
+    "hint-post": "Indicio"
   },
   "fr": {
     "flag": "🇫🇷",
@@ -78,7 +82,9 @@
     "delete-channel": "supprimer",
     "rename-channel": "renommer",
     "no-internet-title": "Hors-connexion!",
-    "no-internet-subtitle": "Vous ne serez pas en mesure de gérer des chaînes ou d'écrire de nouveaux messages."
+    "no-internet-subtitle": "Vous ne serez pas en mesure de gérer des chaînes ou d'écrire de nouveaux messages.",
+    "delete-post": "Supprimer le message",
+    "hint-post": "Conseil"
   },
   "it": {
     "flag": "🇮🇹",
@@ -105,7 +111,9 @@
     "delete-channel": "rimuovi channel",
     "rename-channel": "rinomina channel",
     "no-internet-title": "Nessuna connessione internet!",
-    "no-internet-subtitle": "Non potrai gestire i channels o scrivere nuovi messaggi."
+    "no-internet-subtitle": "Non potrai gestire i channels o scrivere nuovi messaggi.",
+    "delete-post": "Elimina messaggio",
+    "hint-post": "Il consiglio"
   },
   "al": {
     "flag": "🇦🇱",
@@ -132,7 +140,9 @@
     "delete-channel": "Fshini ekipin",
     "rename-channel": "Riemërtoj ekipin",
     "no-internet-title": "Nuk ka lidhje internet!",
-    "no-internet-subtitle": "Ju nuk do të jetë në gjendje për të menaxhuar ekipe ose shkruani mesazh i ri."
+    "no-internet-subtitle": "Ju nuk do të jetë në gjendje për të menaxhuar ekipe ose shkruani mesazh i ri.",
+    "delete-post": "Fshini mesazh",
+    "hint-post": "Aluzion"
   },
   "ro": {
     "flag": "🇷🇴",
@@ -159,7 +169,9 @@
     "delete-channel": "șterge channel-ul",
     "rename-channel": "renumește channel-ul",
     "no-internet-title": "Nu ai conecțiune la internet!",
-    "no-internet-subtitle": "Nu vei putea compune mesaje noi sau să editezi channel-uri"
+    "no-internet-subtitle": "Nu vei putea compune mesaje noi sau să editezi channel-uri",
+    "delete-post": "Șterge mesajul",
+    "hint-post": "Indiciu"
   },
   "zh": {
    "flag": "🇨🇳",
@@ -186,7 +198,9 @@
    "delete-channel": "刪除團隊",
    "rename-channel": "重命名團隊",
    "no-internet-title": "沒有網絡連接!",
-   "no-internet-subtitle": "您將無法管理團隊或撰寫新文章."
+   "no-internet-subtitle": "您將無法管理團隊或撰寫新文章.",
+   "delete-post": "删除邮件",
+   "hint-post": "暗示"
    },
    "tw": {
    "flag": "🇹🇼",
@@ -213,7 +227,9 @@
    "delete-channel": "刪除頻道",
    "rename-channel": "重新命名頻道",
    "no-internet-title": "沒有網路！",
-   "no-internet-subtitle": "你現在不能修改頻道或寫新訊息。"
+   "no-internet-subtitle": "你現在不能修改頻道或寫新訊息。",
+   "delete-post": "刪除郵件",
+   "hint-post": "暗示"
   },
   "jp": {
     "flag": "🇯🇵",
@@ -240,6 +256,8 @@
     "delete-channel": "チーム削除",
     "rename-channel": "チーム名変更",
     "no-internet-title": "インターネット接続はありません",
-    "no-internet-subtitle": "チーム管理や記事作成はできません。"
+    "no-internet-subtitle": "チーム管理や記事作成はできません。",
+    "delete-post": "メッセージを削除",
+    "hint-post": "ヒント"
   }
 }

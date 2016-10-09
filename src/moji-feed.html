@@ -290,11 +290,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               selected="[[page]]"
               attr-for-selected="name"
               role="main">
-              <template is="dom-repeat" items="[[publicChannels]]" initial-count="10">
-                <view-posts name="[[item.name]]" uid="[[user.uid]]" channel="[[item.name]]" ref="[[item.$key]]" offline="[[offline]]"></view-posts>
-              </template>
+            <template is="dom-repeat" items="[[publicChannels]]" initial-count="10">
+              <view-posts name="[[item.name]]" uid="[[user.uid]]" channel="[[item.name]]" ref="[[item.$key]]" offline="[[offline]]" language="[[language]]"></view-posts>
+            </template>
             <template is="dom-repeat" items="[[channels]]" initial-count="10">
-              <view-posts name="[[item.name]]" uid="[[user.uid]]" channel="[[item.name]]" ref="[[item.key]]" offline="[[offline]]"></view-posts>
+              <view-posts name="[[item.name]]" uid="[[user.uid]]" channel="[[item.name]]" ref="[[item.key]]" offline="[[offline]]" language="[[language]]"></view-posts>
             </template>
           </iron-pages>
         </div>
