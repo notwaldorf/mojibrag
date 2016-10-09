@@ -244,11 +244,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
           <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
             <template is="dom-repeat" items="[[publicChannels]]" initial-count="10">
-              <channel-item public channel="[[item]]" name="[[item.name]]" uid="[[user.uid]]" offline="[[offline]]" language="[[language]]"></channel-item>
+              <channel-item drawer-toggle public channel="[[item]]" name="[[item.name]]" uid="[[user.uid]]" offline="[[offline]]" language="[[language]]"></channel-item>
             </template>
 
             <template is="dom-repeat" items="[[channels]]" initial-count="10">
-              <channel-item channel="[[item]]" name="[[item.name]]" uid="[[user.uid]]" offline="[[offline]]" language="[[language]]"></channel-item>
+              <channel-item drawer-toggle channel="[[item]]" name="[[item.name]]" uid="[[user.uid]]" offline="[[offline]]" language="[[language]]"></channel-item>
             </template>
           </iron-selector>
 
