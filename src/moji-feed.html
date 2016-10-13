@@ -491,18 +491,24 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               var data = JSON.parse(request.responseText);
               var addressComponents = data.results[0].address_components;
 
-              var city, state;
+              var city, state, country;
               for(var i = 0; i < addressComponents.length; i++){
                 if (addressComponents[i].types == 'locality,political') {
                   city = addressComponents[i].long_name;
                 } else if (addressComponents[i].types == 'administrative_area_level_1,political') {
                   state = addressComponents[i].short_name;
+                } else if (addressComponents[i].types == 'country,political') {
+                  country = addressComponents[i].short_name;
                 }
               }
 
               // TODO: this probably changes when you're on mobile and it should
               // be less bad and static.
-              self.location = city + ', ' + state;
+              var location = '';
+              if (city) location += city;
+              if (state) location += ', ' + state;
+              if (country) location += ', ' + country;
+              self.location = location;
               console.log('We have a location!', self.location);
             }
           };
