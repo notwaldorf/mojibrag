@@ -120,7 +120,7 @@
         <paper-button on-click="_renamechannel" hidden$="[[!_edit]]">{{localize('rename-channel')}}</paper-button>
       </span>
 
-      <span class="public-settings" hidden$="[[_edit]]">
+      <span class="public-settings" hidden$="[[_edit]]" title="A private channel is only visible to you and the friends you've added to it. A public channel is visible to everyone, and everyone can post in it.">
         {{localize('private')}} <paper-toggle-button id="public"></paper-toggle-button>{{localize('public')}}
       </span>
     </div>
