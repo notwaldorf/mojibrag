@@ -505,9 +505,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               // TODO: this probably changes when you're on mobile and it should
               // be less bad and static.
               var location = '';
-              if (city) location += city;
-              if (state) location += ', ' + state;
-              if (country) location += ', ' + country;
+              if (city) location += city + ', ';
+              if (state) location += state + ', ';
+              if (country) location += country;
               self.location = location;
               console.log('We have a location!', self.location);
             }
