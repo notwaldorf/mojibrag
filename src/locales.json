@@ -199,7 +199,7 @@
    "rename-channel": "重命名團隊",
    "no-internet-title": "沒有網絡連接!",
    "no-internet-subtitle": "您將無法管理團隊或撰寫新文章.",
-   "delete-post": "删除邮件",
+   "delete-post": "删除",
    "hint-post": "暗示"
    },
    "tw": {
@@ -228,8 +228,8 @@
    "rename-channel": "重新命名頻道",
    "no-internet-title": "沒有網路！",
    "no-internet-subtitle": "你現在不能修改頻道或寫新訊息。",
-   "delete-post": "刪除郵件",
-   "hint-post": "暗示"
+   "delete-post": "刪除",
+   "hint-post": "提示"
   },
   "jp": {
     "flag": "🇯🇵",
