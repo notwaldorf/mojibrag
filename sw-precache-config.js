@@ -15,7 +15,7 @@ module.exports = {
     '/bower_components/emojilib/emojis.json'
   ],
   navigateFallback: '/index.html',
-  navigateFallbackWhitelist: [/^(?!\/__)/],
+  navigateFallbackWhitelist: [/^(?!\/__)/, ' /getProjectConfig/'],
   runtimeCaching: [
     {
       // cache Google user profile pics
