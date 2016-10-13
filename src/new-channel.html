@@ -84,6 +84,14 @@
       .error {
         color: var(--app-error-color);
       }
+
+      .help {
+        font-size: 12px;
+        line-height: 1;
+        padding: 0;
+        margin: 0;
+        color: var(--app-secondary-text-color);
+      }
     </style>
 
     <div class="title" hidden$="[[_edit]]">{{localize('new-channel-header')}}</div>
@@ -100,6 +108,8 @@
     </div>
 
     <input type="email" multiple placeholder="{{localize('channel-users-placeholder')}}" id="newUsers" hidden$="[[_edit]]">
+    <span class="help">🆘 If you want to add users to your private channel, they need to have signed in to mojibrag already. If they
+      haven't, asked them to sign in first, and add them after!</span>
 
     <div class="horizontal-reverse">
       <span>
