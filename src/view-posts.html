@@ -1,6 +1,7 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/iron-list/iron-list.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/app-localize-behavior/app-localize-behavior.html">
 <link rel="import" href="my-icons.html">
 
 <dom-module id="view-posts">
@@ -190,10 +191,6 @@
         }
       },
 
-      attached: function() {
-        this.loadResources(this.resolveUrl('locales.json'));
-      },
-      
       _getTitle: function(title) {
         return title || '';
       },
