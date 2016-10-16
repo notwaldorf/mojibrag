@@ -26,7 +26,8 @@
     "no-internet-title": "No internet connection!",
     "no-internet-subtitle": "You won't be able to manage channels or write new posts.",
     "delete-post": "Delete post",
-    "hint-post": "Hint"
+    "hint-post": "Hint",
+    "private-channel-hint": "🆘 If you want to add users to your private channel, they need to have signed in to mojibrag already. If they haven't, asked them to sign in first, and add them after!"
   },
   "es": {
     "flag": "🇪🇸",
@@ -55,7 +56,8 @@
     "no-internet-title": "Sin conexión a internet!",
     "no-internet-subtitle": "No podrás administrar los canales o escribir nuevos mensajes.",
     "delete-post": "Borrar mensaje",
-    "hint-post": "Indicio"
+    "hint-post": "Indicio",
+    "private-channel-hint": "🆘 If you want to add users to your private channel, they need to have signed in to mojibrag already. If they haven't, asked them to sign in first, and add them after!"
   },
   "fr": {
     "flag": "🇫🇷",
@@ -84,7 +86,8 @@
     "no-internet-title": "Pas de connexion !",
     "no-internet-subtitle": "Vous ne serez pas en mesure de gérer des canaux ou d'écrire de nouveaux messages.",
     "delete-post": "Supprimer le message",
-    "hint-post": "Indice"
+    "hint-post": "Indice",
+    "private-channel-hint": "🆘 If you want to add users to your private channel, they need to have signed in to mojibrag already. If they haven't, asked them to sign in first, and add them after!"
   },
   "it": {
     "flag": "🇮🇹",
@@ -113,7 +116,8 @@
     "no-internet-title": "Nessuna connessione internet!",
     "no-internet-subtitle": "Non potrai gestire i channels o scrivere nuovi messaggi.",
     "delete-post": "Elimina messaggio",
-    "hint-post": "Il consiglio"
+    "hint-post": "Il consiglio",
+    "private-channel-hint": "🆘 If you want to add users to your private channel, they need to have signed in to mojibrag already. If they haven't, asked them to sign in first, and add them after!"
   },
   "al": {
     "flag": "🇦🇱",
@@ -142,7 +146,8 @@
     "no-internet-title": "Nuk ka lidhje internet!",
     "no-internet-subtitle": "Ju nuk do të jetë në gjendje për të menaxhuar ekipe ose shkruani mesazh i ri.",
     "delete-post": "Fshini mesazh",
-    "hint-post": "Aluzion"
+    "hint-post": "Aluzion",
+    "private-channel-hint": "🆘 If you want to add users to your private channel, they need to have signed in to mojibrag already. If they haven't, asked them to sign in first, and add them after!"
   },
   "ro": {
     "flag": "🇷🇴",
@@ -171,7 +176,8 @@
     "no-internet-title": "Nu ai conecțiune la internet!",
     "no-internet-subtitle": "Nu vei putea compune mesaje noi sau să editezi channel-uri",
     "delete-post": "Șterge mesajul",
-    "hint-post": "Indiciu"
+    "hint-post": "Indiciu",
+    "private-channel-hint": "🆘 If you want to add users to your private channel, they need to have signed in to mojibrag already. If they haven't, asked them to sign in first, and add them after!"
   },
   "zh": {
    "flag": "🇨🇳",
@@ -200,7 +206,8 @@
    "no-internet-title": "沒有網絡連接!",
    "no-internet-subtitle": "您將無法管理團隊或撰寫新文章.",
    "delete-post": "删除",
-   "hint-post": "暗示"
+   "hint-post": "暗示",
+   "private-channel-hint": "🆘 If you want to add users to your private channel, they need to have signed in to mojibrag already. If they haven't, asked them to sign in first, and add them after!"
    },
    "tw": {
    "flag": "🇹🇼",
@@ -229,7 +236,8 @@
    "no-internet-title": "沒有網路！",
    "no-internet-subtitle": "你現在不能修改頻道或寫新訊息。",
    "delete-post": "刪除",
-   "hint-post": "提示"
+   "hint-post": "提示",
+   "private-channel-hint": "🆘 If you want to add users to your private channel, they need to have signed in to mojibrag already. If they haven't, asked them to sign in first, and add them after!"
   },
   "jp": {
     "flag": "🇯🇵",
@@ -258,7 +266,8 @@
     "no-internet-title": "インターネット接続はありません",
     "no-internet-subtitle": "チーム管理や記事作成はできません。",
     "delete-post": "メッセージを削除",
-    "hint-post": "ヒント"
+    "hint-post": "ヒント",
+    "private-channel-hint": "🆘 If you want to add users to your private channel, they need to have signed in to mojibrag already. If they haven't, asked them to sign in first, and add them after!"
   },
   "ua": {
     "flag": "🇺🇦",
@@ -287,7 +296,8 @@
     "no-internet-title": "Немає Інтернет-з'єднання!",
     "no-internet-subtitle": "Ви не зможете керувати каналами та дописувати.",
     "delete-post": "Видалити допис",
-    "hint-post": "Підказка"
+    "hint-post": "Підказка",
+    "private-channel-hint": "🆘 If you want to add users to your private channel, they need to have signed in to mojibrag already. If they haven't, asked them to sign in first, and add them after!"
   },
   "br": {
     "flag": "🇧🇷",
@@ -316,7 +326,8 @@
     "no-internet-title": "Sem conexão com a internet!",
     "no-internet-subtitle": "Você não será capaz de gerenciar os canais ou escrever novas mensagens.",
     "delete-post": "Deletar mensagem",
-    "hint-post": "Sugestões"
+    "hint-post": "Sugestões",
+    "private-channel-hint": "🆘 If you want to add users to your private channel, they need to have signed in to mojibrag already. If they haven't, asked them to sign in first, and add them after!"
   },
   "de": {
     "flag": "🇩🇪",
