@@ -109,7 +109,8 @@
     <firebase-query
       data="{{_fbPosts}}"
       path="/posts/{{ref}}"
-      order-by-child="index">
+      order-by-child="index"
+      limit-to-first="100">
     </firebase-query>
     <app-indexeddb-mirror
       session="[[uid]]"
