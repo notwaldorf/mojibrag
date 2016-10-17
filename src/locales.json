@@ -27,7 +27,7 @@
     "no-internet-subtitle": "You won't be able to manage channels or write new posts.",
     "delete-post": "Delete post",
     "hint-post": "Hint",
-    "private-channel-hint": "🆘 If you want to add users to your private channel, they need to have signed in to mojibrag already. If they haven't, asked them to sign in first, and add them after!"
+    "private-channel-hint": "🆘 If you want to add users to your private channel, they need to have signed in to mojibrag already. If they haven't, ask them to sign in first, and add them after!"
   },
   "es": {
     "flag": "🇪🇸",
@@ -57,7 +57,7 @@
     "no-internet-subtitle": "No podrás administrar los canales o escribir nuevos mensajes.",
     "delete-post": "Borrar mensaje",
     "hint-post": "Indicio",
-    "private-channel-hint": "🆘 If you want to add users to your private channel, they need to have signed in to mojibrag already. If they haven't, asked them to sign in first, and add them after!"
+    "private-channel-hint": "🆘 If you want to add users to your private channel, they need to have signed in to mojibrag already. If they haven't, ask them to sign in first, and add them after!"
   },
   "fr": {
     "flag": "🇫🇷",
@@ -87,7 +87,7 @@
     "no-internet-subtitle": "Vous ne serez pas en mesure de gérer des canaux ou d'écrire de nouveaux messages.",
     "delete-post": "Supprimer le message",
     "hint-post": "Indice",
-    "private-channel-hint": "🆘 If you want to add users to your private channel, they need to have signed in to mojibrag already. If they haven't, asked them to sign in first, and add them after!"
+    "private-channel-hint": "🆘 If you want to add users to your private channel, they need to have signed in to mojibrag already. If they haven't, ask them to sign in first, and add them after!"
   },
   "it": {
     "flag": "🇮🇹",
@@ -117,7 +117,7 @@
     "no-internet-subtitle": "Non potrai gestire i channels o scrivere nuovi messaggi.",
     "delete-post": "Elimina messaggio",
     "hint-post": "Il consiglio",
-    "private-channel-hint": "🆘 If you want to add users to your private channel, they need to have signed in to mojibrag already. If they haven't, asked them to sign in first, and add them after!"
+    "private-channel-hint": "🆘 If you want to add users to your private channel, they need to have signed in to mojibrag already. If they haven't, ask them to sign in first, and add them after!"
   },
   "al": {
     "flag": "🇦🇱",
@@ -147,7 +147,7 @@
     "no-internet-subtitle": "Ju nuk do të jetë në gjendje për të menaxhuar ekipe ose shkruani mesazh i ri.",
     "delete-post": "Fshini mesazh",
     "hint-post": "Aluzion",
-    "private-channel-hint": "🆘 If you want to add users to your private channel, they need to have signed in to mojibrag already. If they haven't, asked them to sign in first, and add them after!"
+    "private-channel-hint": "🆘 If you want to add users to your private channel, they need to have signed in to mojibrag already. If they haven't, ask them to sign in first, and add them after!"
   },
   "ro": {
     "flag": "🇷🇴",
@@ -177,7 +177,7 @@
     "no-internet-subtitle": "Nu vei putea compune mesaje noi sau să editezi channel-uri",
     "delete-post": "Șterge mesajul",
     "hint-post": "Indiciu",
-    "private-channel-hint": "🆘 If you want to add users to your private channel, they need to have signed in to mojibrag already. If they haven't, asked them to sign in first, and add them after!"
+    "private-channel-hint": "🆘 If you want to add users to your private channel, they need to have signed in to mojibrag already. If they haven't, ask them to sign in first, and add them after!"
   },
   "zh": {
    "flag": "🇨🇳",
@@ -207,7 +207,7 @@
    "no-internet-subtitle": "您將無法管理團隊或撰寫新文章.",
    "delete-post": "删除",
    "hint-post": "暗示",
-   "private-channel-hint": "🆘 If you want to add users to your private channel, they need to have signed in to mojibrag already. If they haven't, asked them to sign in first, and add them after!"
+   "private-channel-hint": "🆘 If you want to add users to your private channel, they need to have signed in to mojibrag already. If they haven't, ask them to sign in first, and add them after!"
    },
    "tw": {
    "flag": "🇹🇼",
@@ -237,7 +237,7 @@
    "no-internet-subtitle": "你現在不能修改頻道或寫新訊息。",
    "delete-post": "刪除",
    "hint-post": "提示",
-   "private-channel-hint": "🆘 If you want to add users to your private channel, they need to have signed in to mojibrag already. If they haven't, asked them to sign in first, and add them after!"
+   "private-channel-hint": "🆘 If you want to add users to your private channel, they need to have signed in to mojibrag already. If they haven't, ask them to sign in first, and add them after!"
   },
   "jp": {
     "flag": "🇯🇵",
@@ -267,7 +267,7 @@
     "no-internet-subtitle": "チーム管理や記事作成はできません。",
     "delete-post": "メッセージを削除",
     "hint-post": "ヒント",
-    "private-channel-hint": "🆘 If you want to add users to your private channel, they need to have signed in to mojibrag already. If they haven't, asked them to sign in first, and add them after!"
+    "private-channel-hint": "🆘 If you want to add users to your private channel, they need to have signed in to mojibrag already. If they haven't, ask them to sign in first, and add them after!"
   },
   "ua": {
     "flag": "🇺🇦",
@@ -297,7 +297,7 @@
     "no-internet-subtitle": "Ви не зможете керувати каналами та дописувати.",
     "delete-post": "Видалити допис",
     "hint-post": "Підказка",
-    "private-channel-hint": "🆘 If you want to add users to your private channel, they need to have signed in to mojibrag already. If they haven't, asked them to sign in first, and add them after!"
+    "private-channel-hint": "🆘 If you want to add users to your private channel, they need to have signed in to mojibrag already. If they haven't, ask them to sign in first, and add them after!"
   },
   "br": {
     "flag": "🇧🇷",
@@ -327,7 +327,7 @@
     "no-internet-subtitle": "Você não será capaz de gerenciar os canais ou escrever novas mensagens.",
     "delete-post": "Deletar mensagem",
     "hint-post": "Sugestões",
-    "private-channel-hint": "🆘 If you want to add users to your private channel, they need to have signed in to mojibrag already. If they haven't, asked them to sign in first, and add them after!"
+    "private-channel-hint": "🆘 If you want to add users to your private channel, they need to have signed in to mojibrag already. If they haven't, ask them to sign in first, and add them after!"
   },
   "de": {
     "flag": "🇩🇪",
@@ -388,5 +388,35 @@
     "delete-post": "Ta bort inlägg",
     "hint-post": "Tips",
     "private-channel-hint": "🆘 Om du vill lägga till användare till din privata kanal måste de först ha loggat in på mojibrag. Om de inte har loggat in be dem göra det innan du försöker lägga till dem igen!"
+  },
+  "sw": {
+    "flag": "🇹🇿",
+    "splash-one": "📢  vitu. Tumia ✨🙊😂🔥.",
+    "splash-two": "(tunaulizia eneo lako ili tuweze 📍 📝 zako)",
+    "splash-offline": "Haupo mtandaoni, kwa hiyo huwezi kusaini ndani ili kuangalia posti. Rudi usaini ndani ukiwa mtandaoni",
+    "splash-footer": "Imetengenezwa na 🙈 na <a href='https://twitter.com/notwaldorf'>Monica</a>. Ipate hii <a href='https://github.com/notwaldorf/mojibrag'>GitHub</a>.",
+    "sign-out": "Saini nje",
+    "sign-in": "Saini ndani na Google",
+    "create-channel-button": "Tengeneza chaneli",
+    "new-post-header": "Andika posti mpya",
+    "new-post-sample": "Andika ujumbe wako noma hapa!",
+    "new-post-preview-header": "Preview (unachochapisha kinatafsiriwa kuwa emoji)",
+    "in-channel": "Ndani ya chaneli",
+    "post-button": "Posti!",
+    "new-channel-header": "Tengeneza chaneli mpya",
+    "edit-channel-header": "Hariri chaneli zilizopo",
+    "channel-name-placeholder": "jina la chaneli",
+    "channel-users-placeholder": "watumiaji, barua-pepe zilizo tenganishwa na mkato",
+    "private": "binafsi",
+    "public": "umma",
+    "cancel": "sitisha",
+    "create": "tengeneza!",
+    "delete-channel": "futa chaneli",
+  "rename-channel": "badili jina la chaneli",
+    "no-internet-title": "Hakuna mwunganisho na intaneti!",
+    "no-internet-subtitle": "Hataweza kusimamia chaneli wala kuandika posti mpya.",
+    "delete-post": "Futa posti",
+    "hint-post": "Dokeza",
+    "private-channel-hint": "🆘 Ukitaka kuongeza watumiaji kwenye chaneli binafsi, wanahitaji kuwa wamesaini ndani ya mojibrag teyari. Kama bado, waambie wajisajili kwanza, na uwajumuishe baada ya hapo!"
   }
 }
