@@ -169,7 +169,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <script>
       var query = window.location.search;
       var language = window.location.search.split('=')[1];
+<<<<<<< HEAD
       var allowed = ['en', 'fr', 'it', 'es', 'al', 'ro', 'zh', 'tw', 'jp', 'ua', 'br', 'de', 'sv', 'fi', 'mk', 'sw'];
+=======
+      var allowed = ['en', 'fr', 'it', 'es', 'al', 'ro', 'zh-cn', 'zh-tw', 'jp', 'ua', 'br', 'de'];
+
+>>>>>>> Better localization for Chinese language
       if (allowed.indexOf(language) != -1) {
         app.language = language;
       } else {
