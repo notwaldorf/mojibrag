@@ -179,72 +179,7 @@
     "hint-post": "Indiciu",
     "private-channel-hint": "🆘 If you want to add users to your private channel, they need to have signed in to mojibrag already. If they haven't, ask them to sign in first, and add them after!"
   },
-<<<<<<< HEAD
-<<<<<<< HEAD
-  "zh": {
-   "flag": "🇨🇳",
-   "splash-one": "用 ✨🙊😂🔥，📢 話",
-   "splash-two": "(我們只要求你的定位來 📍 你的 📝)",
-   "splash-offline": "你現在處於離線狀態所以不能登入瀏覽。有網路的時候再回來吧!",
-   "splash-footer": "<a href='https://twitter.com/notwaldorf'>Monica</a> 出品，用 🙈 製作。到 <a href='https://github.com/notwaldorf/mojibrag'>GitHub</a> 找這個程式。",
-   "sign-out": "退出",
-   "sign-in": "登入 Google",
-   "create-channel-button": "建立團隊",
-   "new-post-header": "編寫新信息",
-   "new-post-sample": "Write your cool message here! In english 😅",
-   "new-post-preview-header": "預覽 (您鍵入的內容被翻譯成表情符號)",
-   "in-channel": "在團隊",
-   "post-button": "發送!",
-   "new-channel-header": "建立新團隊",
-   "edit-channel-header": "更新現有團隊",
-   "channel-name-placeholder": "隊名",
-   "channel-users-placeholder": "用戶, 逗號分隔的電子郵件",
-   "private": "私人",
-   "public": "公眾",
-   "cancel": "取消",
-   "create": "建立!",
-   "delete-channel": "刪除團隊",
-   "rename-channel": "重命名團隊",
-   "no-internet-title": "沒有網絡連接!",
-   "no-internet-subtitle": "您將無法管理團隊或撰寫新文章.",
-   "delete-post": "删除",
-   "hint-post": "暗示",
-   "private-channel-hint": "🆘 If you want to add users to your private channel, they need to have signed in to mojibrag already. If they haven't, ask them to sign in first, and add them after!"
-   },
-   "tw": {
-   "flag": "🇹🇼",
-   "splash-one": "用 ✨🙊😂🔥📢 話",
-   "splash-two": "(定位資訊只會被用來 📍 你的 📝)",
-   "splash-offline": "你現在沒有網路所以不能登入。等有網路的時候再回來吧！",
-   "splash-footer": "<a href='https://twitter.com/notwaldorf'>Monica</a> 用 🙈 出品。到 <a href='https://github.com/notwaldorf/mojibrag'>GitHub</a> 看程式碼。",
-   "sign-out": "登出",
-   "sign-in": "用 Google 登入",
-   "create-channel-button": "新增頻道",
-   "new-post-header": "寫新訊息",
-   "new-post-sample": "Write your cool message here! In english 😅",
-   "new-post-preview-header": "預覽 (訊息會被翻譯成表情符號)",
-   "in-channel": "所在頻道",
-   "post-button": "送出！",
-   "new-channel-header": "新增頻道",
-   "edit-channel-header": "更新頻道",
-   "channel-name-placeholder": "頻道名稱",
-   "channel-users-placeholder": "使用者，逗號分隔電子信箱",
-   "private": "私人",
-   "public": "公開",
-   "cancel": "取消",
-   "create": "新增!",
-   "delete-channel": "刪除頻道",
-   "rename-channel": "重新命名頻道",
-   "no-internet-title": "沒有網路！",
-   "no-internet-subtitle": "你現在不能修改頻道或寫新訊息。",
-   "delete-post": "刪除",
-   "hint-post": "提示",
-   "private-channel-hint": "🆘 If you want to add users to your private channel, they need to have signed in to mojibrag already. If they haven't, ask them to sign in first, and add them after!"
-=======
-  "zh-cn": {
-=======
   "cn": {
->>>>>>> CN and TW instead of ZH-CN and ZH-TW
     "flag": "🇨🇳",
     "splash-one": "用 ✨🙊😂🔥，📢 话",
     "splash-two": "（我们只要求你的定位来 📍 你的 📝）",
@@ -303,7 +238,6 @@
     "delete-post": "刪除",
     "hint-post": "提示",
     "private-channel-hint": "🆘 If you want to add users to your private channel, they need to have signed in to mojibrag already. If they haven't, asked them to sign in first, and add them after!"
->>>>>>> Better localization for Chinese language
   },
   "jp": {
     "flag": "🇯🇵",
