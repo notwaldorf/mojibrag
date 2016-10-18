@@ -180,6 +180,7 @@
     "private-channel-hint": "🆘 If you want to add users to your private channel, they need to have signed in to mojibrag already. If they haven't, ask them to sign in first, and add them after!"
   },
 <<<<<<< HEAD
+<<<<<<< HEAD
   "zh": {
    "flag": "🇨🇳",
    "splash-one": "用 ✨🙊😂🔥，📢 話",
@@ -241,6 +242,9 @@
    "private-channel-hint": "🆘 If you want to add users to your private channel, they need to have signed in to mojibrag already. If they haven't, ask them to sign in first, and add them after!"
 =======
   "zh-cn": {
+=======
+  "cn": {
+>>>>>>> CN and TW instead of ZH-CN and ZH-TW
     "flag": "🇨🇳",
     "splash-one": "用 ✨🙊😂🔥，📢 话",
     "splash-two": "（我们只要求你的定位来 📍 你的 📝）",
@@ -270,7 +274,7 @@
     "hint-post": "暗示",
     "private-channel-hint": "🆘 If you want to add users to your private channel, they need to have signed in to mojibrag already. If they haven't, asked them to sign in first, and add them after!"
    },
-   "zh-tw": {
+   "tw": {
     "flag": "🇹🇼",
     "splash-one": "用 ✨🙊😂🔥📢 話",
     "splash-two": "（定位資訊只會被用來 📍 你的 📝）",
