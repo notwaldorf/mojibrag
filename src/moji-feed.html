@@ -57,6 +57,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         height: 100%;
       }
 
+      .scrollable-list {
+        /*
+           64px is the height of header
+           and 72px is the height of create channel button
+                    with all margins
+        */
+        height: calc(100% - 64px - 72px);
+        overflow: auto;
+      }
+
       .main-content {
         padding: 10px;
         max-width: 540px;
@@ -150,7 +160,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       @media (max-width: 620px) {
         .drawer-background {
-          padding-right: 36px;  /* the left/right 16px padding when it's not this size */
           margin-right: 0;
           background: white;
         }
@@ -249,15 +258,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             </span>
           </app-toolbar>
 
-          <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
-            <template is="dom-repeat" items="[[publicChannels]]" initial-count="10">
-              <channel-item drawer-toggle public channel="[[item]]" name="[[item.name]]" uid="[[user.uid]]" offline="[[offline]]" language="[[language]]"></channel-item>
-            </template>
+          <div class="scrollable-list">
+            <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
+              <template is="dom-repeat" items="[[publicChannels]]" initial-count="10">
+                <channel-item drawer-toggle public channel="[[item]]" name="[[item.name]]" uid="[[user.uid]]" offline="[[offline]]" language="[[language]]"></channel-item>
+              </template>
 
-            <template is="dom-repeat" items="[[channels]]" initial-count="10">
-              <channel-item drawer-toggle channel="[[item]]" name="[[item.name]]" uid="[[user.uid]]" offline="[[offline]]" language="[[language]]"></channel-item>
-            </template>
-          </iron-selector>
+              <template is="dom-repeat" items="[[channels]]" initial-count="10">
+                <channel-item drawer-toggle channel="[[item]]" name="[[item.name]]" uid="[[user.uid]]" offline="[[offline]]" language="[[language]]"></channel-item>
+              </template>
+            </iron-selector>
+          </div>
 
           <paper-button raised hidden$="[[offline]]" id="createChannelButton"
               on-click="_showCreateChannel" class="create-channel">
