@@ -163,6 +163,11 @@
       },
 
       _emojify: function() {
+        var selectedEmoji = {}
+        Array.prototype.each.call(this.$.preview.querySelectorAll('select'), function(e){
+          selectedEmoji[e.title] = e.value
+        })
+
         this.$.preview.innerHTML = '';
 
         var allLines = this.$.write.value.split('\n');
@@ -179,6 +184,10 @@
             var node = this._translateWord(words[i]);
             if (node) {
               node.title = words[i];
+              if (selectedEmoji[words[i]]) {
+                node.value = selectedEmoji[words[i]]
+              }
+
               Polymer.dom(this.$.preview).appendChild(node);
             }
           }
