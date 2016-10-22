@@ -163,10 +163,10 @@
       },
 
       _emojify: function() {
-        var selectedEmoji = {}
-        Array.prototype.each.call(this.$.preview.querySelectorAll('select'), function(e){
-          selectedEmoji[e.title] = e.value
-        })
+        var selectedEmoji = {};
+        Array.prototype.each.call(this.$.preview.querySelectorAll('select'), function (e){
+          selectedEmoji[e.title] = e.value;
+        });
 
         this.$.preview.innerHTML = '';
 
@@ -185,7 +185,7 @@
             if (node) {
               node.title = words[i];
               if (selectedEmoji[words[i]]) {
-                node.value = selectedEmoji[words[i]]
+                node.value = selectedEmoji[words[i]];
               }
 
               Polymer.dom(this.$.preview).appendChild(node);
