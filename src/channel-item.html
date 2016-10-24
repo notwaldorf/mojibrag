@@ -51,6 +51,7 @@
     <a href="/[[channel.name]]?lang=[[language]]">
       <span style="padding:8px 0;">
         <iron-icon class="channel-settings" icon="icons:public" hidden$=[[!public]]></iron-icon>
+        <iron-icon class="channel-settings" icon="icons:private" hidden$=[[public]]></iron-icon>
         <span>[[channel.name]]</span>
       </span>
       <paper-icon-button class="channel-settings" channel="[[channel]]" icon="icons:settings"
