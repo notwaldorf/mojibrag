@@ -164,7 +164,9 @@
 
       _emojify: function() {
         var selectedEmoji = {};
-        Array.prototype.each.call(this.$.preview.querySelectorAll('select'), function (e){
+
+        var selects = this.$.preview.querySelectorAll('select');
+        Array.prototype.forEach.call(selects, function (e){
           selectedEmoji[e.title] = e.value;
         });
 
