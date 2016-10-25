@@ -403,6 +403,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       _selectLanguageChanged: function(event) {
         this.set('queryParams.lang', event.target.value);
         this.fire('language-changed', {value: event.target.value});
+        switch (event.target.value) {
+          case "he":
+          case "ar":
+          case "ff":
+          case "fa":
+          case "yi":
+          case "ur":
+            document.body.style.setProperty("direction", "rtl");
+            break;
+          default:
+            document.body.style.setProperty("direction","ltr");
+        }
       },
 
       _offlineChanged: function(offline, previous) {
