@@ -43,6 +43,11 @@
         color: rgba(0, 0, 0, 0.9);
       }
 
+      .channel-name {
+        word-break: break-all;
+        word-wrap: break-word;
+      }
+
       iron-icon {
         vertical-align: middle;
       }
@@ -52,7 +57,7 @@
       <span style="padding:8px 0;">
         <iron-icon class="channel-settings" icon="icons:public" hidden$=[[!public]]></iron-icon>
         <iron-icon class="channel-settings" icon="icons:private" hidden$=[[public]]></iron-icon>
-        <span>[[channel.name]]</span>
+        <span class="channel-name">[[channel.name]]</span>
       </span>
       <paper-icon-button class="channel-settings" channel="[[channel]]" icon="icons:settings"
           on-click="_showEditChannel" hidden$="[[!_shouldShowChannelSettings(channel, uid, offline)]]">
