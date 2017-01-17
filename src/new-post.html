@@ -46,13 +46,13 @@
       }
 
       paper-button {
+        color: var(--app-secondary-color);
+        display: block;
+        float: right;
+        font-size: 14px;
         margin: 0;
         padding: 0;
-        font-size: 14px;
-        color: var(--app-secondary-color);
-        @apply(--layout-flex);
-        @apply(--layout-flex-auto);
-        float: right;
+        text-align: center;
       }
 
       select {
@@ -86,6 +86,15 @@
         font-weight: 300;
         font-size: 14px;
       }
+
+      .title-ellipsis {
+        display: block;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        width: auto;
+      }
+
     </style>
 
     <div class="title">{{localize('new-post-header')}}</div>
@@ -94,8 +103,12 @@
     <div id="preview" tabindex="0"></div>
 
     <div class="bottom">
-      <span class="title">{{localize('in-channel')}}: [[channel]]</span>
       <paper-button on-click="_post">{{localize('post-button')}}</paper-button>
+      <span 
+        class="title title-ellipsis"
+        title="{{localize('in-channel')}}: [[channel]]">
+        {{localize('in-channel')}}: [[channel]]
+      </span>
     </div>
 
   </template>

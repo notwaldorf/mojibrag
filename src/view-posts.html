@@ -20,10 +20,12 @@
         position: static;
       }
 
-      h1 {
+      .channel-name {
         color: white;
         letter-spacing: 2px;
         font-weight: 500;
+        word-wrap: break-word;
+        word-break: break-all;
       }
 
       .item {
@@ -119,7 +121,7 @@
       persisted-data="{{posts}}">
     </app-indexeddb-mirror>
 
-    <h1>[[channel]]</h1>
+    <h1 class="channel-name">[[channel]]</h1>
     <iron-list items="[[posts]]" as="item" id="list" scroll-target="document">
       <template>
         <div>

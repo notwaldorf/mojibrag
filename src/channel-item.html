@@ -6,7 +6,6 @@
       :host {
         display: block;
         box-sizing: border-box;
-        padding-left: 16px;
       }
 
       :host(.iron-selected) {
@@ -23,40 +22,56 @@
 
       a {
         box-sizing: border-box;
-        width: 100%;
-        text-decoration: none;
         color: #455A64;
+        display: block;
         font-weight: 300;
-        @apply(--layout-horizontal);
-        @apply(--layout-justified);
-        vertical-align: middle;
-        text-align: left;
+        text-decoration: none;
+        width: 100%;
       }
 
-      .channel-settings {
-        display: inline-block;
-        vertical-align: middle;
+      .channel-icon {
+        display: block;
         color: rgba(0, 0, 0, 0.4);
       }
 
-      .channel-settings:hover {
+      .channel-icon:hover {
         color: rgba(0, 0, 0, 0.9);
       }
 
-      iron-icon {
-        vertical-align: middle;
+      .channel-icon__left {
+        float: left;
+        padding: 8px; /* Put it here to deal \w paper-icon-button internal paddings */
+
+      }
+
+      .channel-icon__right {
+        float: right;
+      }
+
+      .channel-name {
+        display: block;
+        overflow: hidden;
+        padding: 8px; /* Put it here to deal \w paper-icon-button internal paddings */
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        width: auto;
       }
     </style>
 
     <a href="/[[channel.name]]?lang=[[language]]">
-      <span style="padding:8px 0;">
-        <iron-icon class="channel-settings" icon="icons:public" hidden$=[[!public]]></iron-icon>
-        <iron-icon class="channel-settings" icon="icons:private" hidden$=[[public]]></iron-icon>
-        <span>[[channel.name]]</span>
-      </span>
-      <paper-icon-button class="channel-settings" channel="[[channel]]" icon="icons:settings"
-          on-click="_showEditChannel" hidden$="[[!_shouldShowChannelSettings(channel, uid, offline)]]">
+      <iron-icon 
+        class="channel-icon channel-icon__left"
+        icon$=[[_getIconName(public)]]>
+      </iron-icon>
+      <paper-icon-button 
+        class="channel-icon channel-icon__right" 
+        channel="[[channel]]" 
+        icon="icons:settings"
+        on-click="_showEditChannel" 
+        hidden$="[[!_shouldShowChannelSettings(channel, uid, offline)]]">
       </paper-icon-button>
+
+      <span class="channel-name" title="[[channel.name]]">[[channel.name]]</span>
     </a>
 
   </template>
@@ -92,6 +107,10 @@
       _shouldShowChannelSettings: function(channel, uid, offline) {
         return !offline && (channel.owner === uid);
       },
+
+      _getIconName: function(isPublic) {
+        return 'icons:' + (isPublic ? 'public' : 'private');
+      }
     });
   </script>
 </dom-module>
