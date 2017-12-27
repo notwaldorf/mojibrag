@@ -88,7 +88,7 @@
     "no-internet-subtitle": "No podrás administrar los canales o escribir nuevos mensajes.",
     "delete-post": "Borrar mensaje",
     "hint-post": "Indicio",
-    "private-channel-hint": "🆘 If you want to add users to your private channel, they need to have signed in to mojibrag already. If they haven't, ask them to sign in first, and add them after!"
+    "private-channel-hint": "🆘 Si quieres agregar usuarios a tu canal privado, ya deben estar registrados en mojibrag. Si no es así, ¡pídeles que se unan y después agrégalos!"
   },
   "fr": {
     "flag": "🇫🇷",
